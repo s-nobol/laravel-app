@@ -20,7 +20,19 @@ Route::get('/{any?}', function () {
 
 //$ cd laravel-app
 //$ php artisan serve --port=8080
+//$ npm run watch    常時起動
+
 //$ npm install  インストール
 //$ npm run dev  起動
-//$ npm run watch    常時起動
 //$ npm run prod
+
+// git :username s-nobol
+// Username for 'https://github.com':  s-nobol
+// Password for 'https://s-nobol@github.com':  kiyo1301
+
+// README.ファイル作成
+// .env追加
+
+// git add -A
+// git commit -m ".env追加"
+// git push origin master
