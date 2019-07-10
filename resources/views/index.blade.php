@@ -19,8 +19,8 @@
 
 <body>
 
-    <h2 class="text-success text-center">おめでとうございますTestViewが表示されました</h2>
-    <div class="text-center">
+    <h2 class="text-success text-center">Vue.jsによるログイン（エラーの場合はnode.jsインストール）</h2>
+    <div class="">
         <div id="app"></div>
     </div>
 </body>

@@ -1,29 +1,58 @@
 <template>
   <div>
-      <h2 >App1-{{ title }}</h2>
-      <div>
-      <button @click="onChangeTitle" class="btn btn-primary">タイトル変更</button>
+    <header>
+      <Navbar />
+    </header>
+    <main>
+      <div class="container">
+        <RouterView />
       </div>
+    </main>
+    <Footer />
   </div>
 </template>
 
 <script>
+import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
+import { NOT_FOUND, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from './util'
 
 export default {
-    created(){
-        console.log("App.vue起動")
-    },
-    data(){
-        return{
-            title: "これが表示されれはVue.jsは起動している"
-        }
-    },
-    methods:{
-        onChangeTitle(){
-            console.log("タイトルの変更")
-            this.title ="Vue.jsによってタイトルが変更されました"
-        }
+  components: {
+    Navbar,
+    Footer
+  },
+  computed: {
+    errorCode () {
+      return this.$store.state.error.code
     }
+  },
+  watch: {
+    errorCode: {
+      async handler (val) {
+          if (val === INTERNAL_SERVER_ERROR) {
+              this.$router.push('/500')
+              
+          } else if (val === UNAUTHORIZED) {
+            
+              // トークンをリフレッシュ
+              await axios.get('/api/refresh-token')
+              
+              // ストアのuserをクリア
+              this.$store.commit('auth/setUser', null)
+              this.$router.push('/login')
+              
+          } else if (val === NOT_FOUND) {
+              this.$router.push('/not-found')
+          }
+          
+      },
+      immediate: true
+    },
     
+    $route () {
+      this.$store.commit('error/setCode', null)
+    }
+  }
 }
 </script>
