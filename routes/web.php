@@ -36,3 +36,7 @@ Route::get('/{any?}', function () {
 // git add -A
 // git commit -m ".env追加"
 // git push origin master
+
+// Laravel .env はGitにアップロードできないので
+// .env.exampleのファイルに本番用のコードを書きデプロイ後コピーする 
+// vue.js にボタン追加
