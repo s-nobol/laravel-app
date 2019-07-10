@@ -13,6 +13,26 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/user', function () {
+    return Auth::user();
+});
+
+Auth::routes();
+
+// api/login Auth\LoginController@login
+
+// Vou-router　login,作成
+// php artisan serve --port=8080
+// npm run watch 
+// php artisan migrate:rollback
+
+
+// トークンリフレッシュ
+Route::get('/reflesh-tiken', function(Request $request){
+    $request->session()->regenerateToken();
+    return response()->json();
 });

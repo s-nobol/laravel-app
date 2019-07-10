@@ -10,7 +10,7 @@ const mutations = {
   },
   
   setMessage(state, message) {
-    state.code = message
+    state.message = message
   }
 
 }

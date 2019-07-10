@@ -53,6 +53,8 @@ const actions = {
         console.log("バリテーションエラー",response)
         context.commit('setRegisterErrorMessages', response.data.errors)
     } else {
+        // エラーコード
+        context.commit('error/setMessage', response.data.message, { root: true })
         context.commit('error/setCode', response.status, { root: true })
     }
   },
@@ -73,9 +75,12 @@ const actions = {
     context.commit('setApiStatus', false)
     if (response.status === UNPROCESSABLE_ENTITY) {
         console.log("バリテーションエラー",response)
-      context.commit('setLoginErrorMessages', response.data.errors)
+        context.commit('setLoginErrorMessages', response.data.errors)
     } else {
-      context.commit('error/setCode', response.status, { root: true })
+      
+        // エラーコード
+        context.commit('error/setMessage', response.data.message, { root: true })
+        context.commit('error/setCode', response.status, { root: true })
     }
   },
 
