@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer ">
+    <footer class="footer bg-white p-3">
         <div class="container">
         
             <button v-if="isLogin" class="btn" @click="logout">Logout</button>
@@ -26,7 +26,7 @@ export default {
         async logout () {
             await this.$store.dispatch('auth/logout')
             if (this.apiStatus) {
-                this.$router.push('/login')
+                // this.$router.push('/login')
             }
         }
     }

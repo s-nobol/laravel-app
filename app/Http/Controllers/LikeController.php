@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Like;
+use App\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class LikeController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // $this->authorizeResource(Post::class, 'post');   
+    }
+    
+    
+    public function store(Post $post)
+    {
+        $post->likes()->detach(Auth::user()->id);
+        $post->likes()->attach(Auth::user()->id);
+        return  'いいね追加';
+    }
+
+
+
+    public function destroy(Post $post)
+    {
+        $post->likes()->detach(Auth::user()->id);
+        return 'いいね削除';
+    }
+}

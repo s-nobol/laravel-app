@@ -40,6 +40,4 @@ Route::get('/{any?}', function () {
 // Laravel .env はGitにアップロードできないので
 // .env.exampleのファイルに本番用のコードを書きデプロイ後コピーする 
 // vue.js にボタン追加
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

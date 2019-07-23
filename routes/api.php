@@ -17,22 +17,46 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::get('/user', function () {
-    return Auth::user();
-});
-
-Auth::routes();
-
-// api/login Auth\LoginController@login
-
 // Vou-router　login,作成
 // php artisan serve --port=8080
 // npm run watch 
 // php artisan migrate:rollback
 
+Route::get('/user', function () {
+    return Auth::user();
+});
 
 // トークンリフレッシュ
 Route::get('/reflesh-tiken', function(Request $request){
     $request->session()->regenerateToken();
     return response()->json();
 });
+
+Auth::routes();
+
+
+
+// ユーザーページ作成?
+Route::resource('users', 'UserController');
+
+
+// 記事作成編集
+Route::resource('posts', 'PostController');
+
+// コメント機能
+Route::get('/posts/{post}/comments', 'CommentController@view');
+Route::post('/posts/{post}/comments', 'CommentController@store');
+Route::delete('/posts/{post}/comments', 'CommentController@destroy');
+
+// いいね機能
+Route::put('/posts/{post}/likes', 'LikeController@store');
+Route::delete('/posts/{post}/likes', 'LikeController@destroy');
+
+// カテゴリ機能
+
+
+// データベース検索機能
+Route::get('/db/{id}', 'DatabaseController@getDatabase');
+
+
+// Post作成
