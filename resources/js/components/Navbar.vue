@@ -3,9 +3,7 @@
     <nav class="navbar bg-white">
     
         <div class="container ">
-            <RouterLink class="navbar__brand" to="/">
-              Vuesplash
-            </RouterLink>
+            <RouterLink class="navbar__brand" to="/">ホーム</RouterLink>
             
             <div class="">
                 <button v-if="isLogin"  class="btn btn-primary" @click="showForm = ! showForm" >記事の作成</button>

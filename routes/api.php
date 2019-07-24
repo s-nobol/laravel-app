@@ -40,6 +40,7 @@ Auth::routes();
 Route::resource('users', 'UserController');
 
 
+
 // 記事作成編集
 Route::resource('posts', 'PostController');
 
@@ -49,8 +50,8 @@ Route::post('/posts/{post}/comments', 'CommentController@store');
 Route::delete('/posts/{post}/comments', 'CommentController@destroy');
 
 // いいね機能
-Route::put('/posts/{post}/likes', 'LikeController@store');
-Route::delete('/posts/{post}/likes', 'LikeController@destroy');
+Route::put('/posts/{post}/like', 'LikeController@store');
+Route::delete('/posts/{post}/like', 'LikeController@destroy');
 
 // カテゴリ機能
 
@@ -58,5 +59,14 @@ Route::delete('/posts/{post}/likes', 'LikeController@destroy');
 // データベース検索機能
 Route::get('/db/{id}', 'DatabaseController@getDatabase');
 
+// メッセージ機能の作成
+// php artisan make:migration create_messages_table --create=Messages
+// php artisan make:request MessagesRequest
+// php artisan make:model Message
+Route::get('/messages', 'DatabaseController@getmessages');
+Route::post('/messages', 'DatabaseController@addmessages');
+Route::delete('/messages/{message}', 'DatabaseController@deletemessages');
 
-// Post作成
+
+// user 編集ページ
+// like_form作成

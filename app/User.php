@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,24 +20,24 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
+    
+    protected $appends = [ 'user_by_create', ];
+    protected $visible = [
+        'id', 'name', 'email', 'user_by_create',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+
+    protected $hidden = [ 'password', 'remember_token', ];
+
+    protected $casts = [ 'email_verified_at' => 'datetime', ];
+    
+    public function getUserByCreateAttribute(){
+        if (Auth::guest()) {
+            return false;
+        }
+        return $this->id == Auth::user()->id;
+
+    }
     
     public function posts()
     {

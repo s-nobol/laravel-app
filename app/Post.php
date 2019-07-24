@@ -15,7 +15,7 @@ class Post extends Model
     
     protected $appends = [ 'user_by_create','user_by_liked','likes_count' ];
     protected $visible = [
-        'id', 'title', 'description',
+        'id', 'title', 'description','created_at',
         'user', 'user_by_create', 'comments',
         'user_by_liked','likes_count'
     ];

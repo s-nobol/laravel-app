@@ -8,6 +8,7 @@ const state = {
 }
 
 const getters = {
+  user:  state => state.user ? state.user : null,
   check: state => !! state.user,
   username: state => state.user ? state.user.name : ''
 }

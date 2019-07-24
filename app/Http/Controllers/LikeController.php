@@ -20,7 +20,10 @@ class LikeController extends Controller
     {
         $post->likes()->detach(Auth::user()->id);
         $post->likes()->attach(Auth::user()->id);
-        return  'いいね追加';
+        
+        $post = Post::find($post->id);
+        return  $post;
+        
     }
 
 
@@ -28,6 +31,8 @@ class LikeController extends Controller
     public function destroy(Post $post)
     {
         $post->likes()->detach(Auth::user()->id);
-        return 'いいね削除';
+        
+        $post = Post::find($post->id);
+        return  $post;
     }
 }

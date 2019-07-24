@@ -27,8 +27,8 @@ class PostController extends Controller
     
     public function show(Post $post)
     {
-        // return $post->with(['user','likes'])->first();
-        return $post;
+        return $post->with(['user','likes'])->first();
+        // return $post;
     }
 
 
