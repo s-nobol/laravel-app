@@ -1,28 +1,37 @@
 <template>
-  <div>
+ <div>
+        
+        <!--ヘッダー-->
+        <header>
+            <Navbar />
+        </header>
+        
+        
+        <!--フラッシュ-->
+        <transition name="fade" >
+            <div v-if="message">
+                <div class=" container alert" :class="messageType" >{{ message }}</div>
+            </div>
+        </transition >
+        
+        
+        <!--メイン-->
+        <main>
+            <div class="container">
+                <RouterView />
+            </div>
+        </main>
+        
+        
+        <!--フッター-->
+        <Footer />
+        
+        <!--モーダル（ログイン専用のモーダルにする）--> 
+        <transition name="fade" >
+            <Modal v-if="modal"  @close="onCloseModal" />
+        </transition >
     
-    
-    <!--ヘッダー-->
-    <header>
-      <Navbar />
-    </header>
-    
-    <!--メイン-->
-    <main>
-      <div class="container">
-        <RouterView />
-      </div>
-    </main>
-    
-    <!--フッター-->
-    <!--<Footer2 />-->
-    
-    <!--モーダル（ログイン専用のモーダルにする）--> 
-    <transition name="fade" >
-        <Modal v-if="modal"  @close="onCloseModal" />
-    </transition >
-    
-  </div>
+ </div>
 </template>
 
 <style type="text/css">
@@ -52,6 +61,12 @@ export default {
         }
     },
     computed: {
+        message(){
+            return this.$store.state.message.content
+        },
+        messageType(){
+            return this.$store.state.message.type
+        },
         errorCode () {
             return this.$store.state.error.code
         }
@@ -89,6 +104,8 @@ export default {
         $route () {
             this.$store.commit('error/setCode', null)
         }
+    },
+    created(){
     }
 }
 </script>

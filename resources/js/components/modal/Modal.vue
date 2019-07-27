@@ -5,40 +5,44 @@
      <div class="modal modal-overlay" @click.self="$emit('close')">
  
         <!--モーダルの中身-->
-        <div class="modal-window">
+        <div class="modal-window w-25">
             <div class="modal-content p-3">
                 
                     <!--ログイン-->
                     <div v-if="modal === 1">
-                    
                         <form class="form" @submit.prevent="login">
                         
-                        <!--エラーメッセージ-->
-                        <div v-if="loginErrors" class="errors text-danger mt-2">
-                            <ul v-if="loginErrors.email">
-                                <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
-                            </ul>
-                            <ul v-if="loginErrors.password">
-                                <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
-                            </ul>
-                        </div>
-                        
+                            <h3>ログイン</h3>
+                            
+                            <!--エラーメッセージ-->
+                            <div v-if="loginErrors" class="errors text-danger mt-2">
+                                <ul v-if="loginErrors.email">
+                                    <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+                                </ul>
+                                <ul v-if="loginErrors.password">
+                                    <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+                                </ul>
+                            </div>
+                            
                             <div class="mt-2">
                                 <label for="login-email">メールアドレス</label></br>
-                                <input type="text"  v-model="loginForm.email">
+                                <input type="text"  v-model="loginForm.email" class="w-100">
                             </div>
                     
                             <div class="mt-2">
-                                <label for="login-password">Password</label></br>
-                                <input type="password"  v-model="loginForm.password">
+                                <label for="login-password">パスワード</label>
+                                <small class="text-primary" @click="onResetPassword">パスワードを忘れた</small>
+                                <input type="password"  v-model="loginForm.password"  class="w-100">
                             </div>
                             
                             <div class="mt-2">
                                 <button type="submit"  class="btn btn-primary">login</button>
                             </div>
-      </form>
                             
+                      </form>
                     </div>
+                    
+                    
                                         
                     <!--新規登録-->
                     <div v-if="modal === 2">
@@ -85,11 +89,11 @@
                     </form>
                     
                     </div>
-                    
             </div>
         </div>
+        
+        
     </div>
-
 </div>
 </template>
 
@@ -119,11 +123,11 @@ export default{
             required: true
         }
     },
-     data () {
+    data () {
         return {
             loginForm: {
                 email: '123@example.com',
-                password: '123123123'
+                password: '123123123',
             },      
             registerForm: {
                 name: '123',
@@ -150,7 +154,8 @@ export default{
             await this.$store.dispatch('auth/login', this.loginForm)
             
             if (this.apiStatus) {
-                this.$router.push('/')
+                // this.$router.push('/')
+                // window.location.reload();//ページのリロード
             }
         },
         async register () {
@@ -158,9 +163,15 @@ export default{
             await this.$store.dispatch('auth/register', this.registerForm)
             
             if (this.apiStatus) {
-                this.$router.push('/')
+                // this.$router.push('/')
+                window.location.reload(); //ページのリロード
             }
         },
+        onResetPassword(){
+            this.$emit('close')
+            this.$router.push('/password_reset')
+        },
+        
         clearError () {
             this.$store.commit('auth/setLoginErrorMessages', null)
         }

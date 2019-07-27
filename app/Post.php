@@ -15,7 +15,7 @@ class Post extends Model
     
     protected $appends = [ 'user_by_create','user_by_liked','likes_count' ];
     protected $visible = [
-        'id', 'title', 'description','created_at',
+        'id', 'token','title', 'description','created_at',
         'user', 'user_by_create', 'comments',
         'user_by_liked','likes_count'
     ];
@@ -29,7 +29,7 @@ class Post extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        if (! array_get($this->attributes, 'id')) {
+        if (! array_get($this->attributes, 'token')) {
             $this->setId();
         }
     }
@@ -37,7 +37,7 @@ class Post extends Model
     /** ランダムなID値をid属性に代入する */
     private function setId()
     {
-        $this->attributes['id'] = $this->getRandomId();
+        $this->attributes['token'] = $this->getRandomId();
     }
 
     /**ランダムなID値を生成する @return string*/

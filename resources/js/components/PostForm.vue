@@ -1,6 +1,7 @@
 <template>
 <div v-show="value" class=" bg-white">
-    <div class="container">
+
+    <div v-if="currentUser"  class="container">
     
         <form class="mt-3"  @submit.prevent="createPost">
             <h3>PostFrom</h3>
@@ -60,6 +61,11 @@ export default {
             description: ''
         }
     },
+    computed: {
+        currentUser () {
+            return this.$store.getters['auth/currentUser']
+        },
+    },
     methods: {
         
         async createPost(){
@@ -72,7 +78,12 @@ export default {
             
             const response = await axios.post('/api/posts', formData)
             if (response.status === 201) {
-                this.items = response.data
+                // メッセージ登録
+                this.$store.commit('message/setContent', {
+                        content: '写真が投稿されました！',
+                        type: 'success',
+                        timeout: 3000
+                })
             }
             this.reset()
             this.$emit('input', false)
@@ -124,7 +135,8 @@ export default {
     },
     created(){
         console.log("Postform起動")
-    }
+    },
+    
   
 }
 </script>

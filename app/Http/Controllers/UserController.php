@@ -14,7 +14,14 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user = User::where('id', $user->id)->with(['posts'])->first();
+        return $user;
+    }
+
+    public function view(string $id)
+    {
         //
+        $user = User::find($id);
         return $user;
     }
 

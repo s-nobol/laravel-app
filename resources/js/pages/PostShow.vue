@@ -9,15 +9,20 @@
             <img src="/image.jpg"></img>
         </div>
         
+        
+        
         <!--記事のステータス-->
         <div class="mt-3">
+        
             <h4 class="d-inline-block">
                 <b>記事のステータス</b>
-                
             </h4>
-            <div v-if="post.user_by_create" class="d-inline-block">
-                <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
-                <button class="btn btn-danger" @click="postDelete">削除</button>
+            
+            <div v-if="currentUser" class="d-inline-block">
+                <div v-if="post.user.id === currentUser.id">
+                    <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
+                    <button class="btn btn-danger" @click="postDelete">削除</button>
+                </div>
             </div>
             
             <p v-if="Mode" class="text-success">編集モード</p>
@@ -28,6 +33,8 @@
                 <span>{{ post.description }}</span></br>
             </div>
         </div>
+        
+        
         
         <!--編集モード時-->
         <div v-if="Mode" class="mt-3" >
@@ -51,6 +58,8 @@
             </form>
         </div>
         
+        
+        
         <!--いいねボタン-->
         <div class="mt-3 ">
             <button 
@@ -61,6 +70,8 @@
             </button>
         </div>
         
+        
+        
         <!--ホームボタン-->
         <!--<div class="mt-3"><i class="fas fa-home text-primary"></i></div>-->
         
@@ -68,14 +79,16 @@
         <div class="mt-3"><span>通報する</span> </div>
         
         
-        <button class="btn btn-dark mt-3">投稿者</button></br>
+        
         
         <!--投稿者-->
-        <div class="mt-3 bg-whitesmoke pt-3">
+        <button class="btn btn-dark mt-3">投稿者</button></br>
+        
+        <div class="mt-3 bg-whitesmoke pt-3 ">
             
             <!--ユーザープロフィール-->
             <RouterLink :to="`/users/${post.user.id}`" >
-                <img src="/noimage.jpg" style="width: 100px;"></img></br>
+                <img src="/noimage.jpg" style="width: 100px;" class="rounded-circle"></img></br>
                 <h3><b>{{ post.user.name }}</b></h3>
                 <span class="text-dark"><i class="fas fa-map-marker-alt"></i>福岡県</span>
             </RouterLink>
@@ -86,9 +99,12 @@
         <!--コメント-->
         <div class="mt-3">
             <button class="btn btn-dark mt-3">コメント</button></br>
+            <Comment :post="post"/>
         </div>
+        
+        
+        
     </div>
-
 </div>
 </template>
 
@@ -106,25 +122,18 @@ input[type="text"]:focus {
   border-bottom: 1px solid #ff9900;
 }
 
-/*ダイアログ*/
-/*#dialog {*/
-/*    width: 250px;*/
-/*    margin: auto;*/
-/*    margin-top: 40vh;*/
-/*    padding: 30px 20px;*/
-/*    display: none;*/
-/*    text-align: center;*/
-/*    border: 1px solid #aaa;*/
-/*    box-shadow: 2px 2px 4px #888;*/
-/*}*/
 </style>
 
 <script>
 
+import Comment from '../components/Comment.vue'
 // import Modal from '../components/modal/Modal.vue'
 
 export default {
-    // components:{Modal},
+    components:{
+        Comment,
+        // Modal,
+        },
     props: {
         id:{
             type: String,
@@ -135,19 +144,18 @@ export default {
         return{
             Mode: false, 
             post: null,
-            
         }
     },
     computed: {
         currentUser () {
-            return this.$store.state.auth.user
+            return this.$store.getters['auth/currentUser']
         },
     },
     methods:{
         
         // post
         async getPost(){
-            const response = await axios.get(`/api/posts/${ this.id }`)
+            const response = await axios.get(`/api/posts/${ this.id }/view`)
             console.log("記事を一覧受信",response)
             if (response.status === 200) {
                 this.post = response.data
@@ -158,13 +166,23 @@ export default {
             const response = await axios.put(`/api/posts/${ this.id }` , this.post )
             console.log("記事の編集を受信",response)
             if (response.status === 200) {
-                this.post = response.data
+                this.post = response.data 
+                this.$store.commit('message/setContent', {   // メッセージ登録
+                        content: '記事を編集しました',
+                        type: 'success',
+                        timeout: 3000
+                })
             }
             this.Mode = false
             
         },
         async postDelete(){
-             console.log("記事の削除")
+            console.log("記事の削除")
+            this.$store.commit('message/setContent', {   // メッセージ登録
+                content: '記事を削除しました',
+                type: 'danger',
+                timeout: 3000
+            })
             // const response = await axios.delete(`/api/posts/${ this.id }`)
             // console.log("記事を一覧受信",response)
             // if (response.status === 200) {
@@ -205,7 +223,9 @@ export default {
             
         },
         
-        
+        //通報ボタン
+        async onClickReport(){
+        }
     },
     
     watch: {

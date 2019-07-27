@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Post;
+use  App\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,7 @@ class CommentController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth')->except(['view']);
+        // $this->middleware('auth')->except(['view']);
         // $this->authorizeResource(Comment::class, 'comment');   
     }
 
@@ -23,22 +24,23 @@ class CommentController extends Controller
     public function view(string $id)
     {   
         $comment = Comment::where('post_id', $id)->with(['user'])->get();
+        // $comment = Comment::where('post_id', $id)->get();
         return $comment;
     }
 
 
-    public function store(Request $request, Post $post)
+    public function store(CommentRequest $request, Post $post)
     {   
-        Auth::user()->comments()->create($request->all());
-        return $request;
+        $comment = Auth::user()->comments()->create($request->all());
+        return $comment;
     }
 
 
 
     public function destroy(Comment $comment)
     {
-        //$comment->delete();
-        return "コメント削除しました";
+        $comment->delete();
+        return  $comment;
     }
 }
 

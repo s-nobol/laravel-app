@@ -15,7 +15,8 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->string('id')->primary();  //普通のIDに戻す bigIncrements('id'); 
+            // $table->string('id')->primary();  //普通のIDに戻す 
+            $table->bigIncrements('id'); 
             $table->string('token');  //トークンの追加
             $table->unsignedInteger('user_id'); 
             $table->string('title');

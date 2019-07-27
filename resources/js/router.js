@@ -12,6 +12,9 @@ import About from './pages/About.vue'
 import Admin from './pages/Admin.vue'
 import PostShow from './pages/PostShow.vue'
 import UserShow from './pages/UserShow.vue'
+import PasswordReset from './pages/PasswordReset.vue'
+
+import Test from './Test.vue'
 
 
 // VueRouterプラグインを使用する
@@ -25,6 +28,9 @@ const routes = [
   { path: '/users/:id',  component: UserShow, props: true },
   { path: '/about', component: About},
   { path: '/admin', component: Admin},
+  { path: '/password_reset',  component: PasswordReset },
+  { path: '/api/password/reset/:token',  component: PasswordReset, props: true },
+  { path: '/test', component: Test},
   // {
   //   path: '/login', component: Login,
   //   beforeEnter (to, from, next) {

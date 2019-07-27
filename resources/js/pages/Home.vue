@@ -5,7 +5,7 @@
         
         <div>
             <div v-for="post in posts" class="d-inline-block">
-                <RouterLink :to="`/posts/${post.id}`"  >
+                <RouterLink :to="`/posts/${post.token}`"  >
                     <div>
                         <img src="/image.jpg" style="width: 200px"></img>
                     </div>
@@ -31,7 +31,6 @@ export default {
     methods:{
     
         async getPost(){
-        
             const response = await axios.get(`/api/posts`)
             console.log("記事を一覧受信",response)
             this.posts = response.data

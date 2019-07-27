@@ -12,11 +12,11 @@ class Comment extends Model
         'content', 'post_id',
     ];
     
-    protected $appends = [ 'user_by_create', ];
+    // protected $appends = [ 'user_by_create', ];
     
     /** JSONに含める属性 */
     protected $visible = [
-        'user', 'content','id','user_by_create',
+        'user', 'content','id','created_at',
     ];
 
     /**

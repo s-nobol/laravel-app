@@ -1,28 +1,34 @@
 <template>
-<div>
+<div class="text-center">
 
-    <!--<h3 v-if="currentUser">ログインユーザー{{ currentUser }}</h3>-->
-
-    <div v-if="user" class="text-center">
+    <h1>UserShow.vue</h1>
+    <!--<h3>{{ user.id }}:::{{ currentUser.id}}</h3>-->
     
-        <h1>UserShow.vue</h1>
+    <div v-if="user">
+    
         
         <!--画像-->
         <div class="text-center">
             <img src="/noimage.jpg" style="width: 150px;"></img>
         </div>
         
+        
+        
         <!--ユーザーのステータス-->
         <div　v-if="true"  class="mt-3 text-center">
             <h4><b>ユーザーのステータス</b></h4>
             
-            <div v-if="user.user_by_create" class="">
-                <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
+            <div v-if="currentUser" class="">
+                <div v-if="user.id === currentUser.id ">
+                    <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
+                </div>
             </div>
             
             <span>ユーザー名:{{ user.name}}</span><br>
             <span>メールアドレス:{{ user.email }}</span><br>
         </div>
+        
+        
         
         <!--編集フォーム-->
         <div v-if="Mode" class="mt-3 " >
@@ -40,27 +46,22 @@
                     <input type="text"  class="bg-light " v-model="user.email " />
                 </div>
                 
+                <RouterLink to="/password_reset">パスワードの変更</RouterLink>
+                    
                 <div class="mt-3" >
                     <input type="submit" value="Submit" class="btn btn-primary"/>
                 </div>
             </form>
+            
         </div>
         
         
-        
-        <!--コメント-->
-        <div class="mt-3">
-        </div>
     </div>
 </div>
 </template>
-<style type="text/css">
-/*.bg-gainsboro{*/
-/*        background-color: gainsboro;*/
-/*}*/
-</style>
-<script>
 
+
+<script>
 // import Modal from '../components/modal/Modal.vue'
 
 export default {
@@ -79,7 +80,8 @@ export default {
     },
     methods:{
          async getUser(){
-                const response = await axios.get(`/api/users/${ this.id }`)
+                console.log("ユーザーID",this.id)
+                const response = await axios.get(`/api/users/${ this.id }/view`)
                 console.log("ユーザーを受信",response)
                 if (response.status === 200) {
                     this.user = response.data
@@ -91,22 +93,28 @@ export default {
                 console.log("ユーザーを受信",response)
                 if (response.status === 200) {
                     this.user = response.data
+                   
+                    this.$store.commit('message/setContent', {   // メッセージ登録
+                            content: 'ユーザーを編集しました',
+                            type: 'success',
+                            timeout: 3000
+                    })
                 }
         },
     },
     computed: {
         currentUser () {
-            return this.$store.state.auth.user
+            return this.$store.getters['auth/currentUser']
         },
     },
     created(){
-        this.getUser
+        // this.getUser()
     },
     watch: {
         $route: { 
             async handler () {
-                this.getUser()
                 console.log("UserShow.vue表示")
+                this.getUser()
             },
             immediate: true
         }

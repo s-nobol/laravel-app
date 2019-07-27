@@ -27,10 +27,17 @@ class PostController extends Controller
     
     public function show(Post $post)
     {
-        return $post->with(['user','likes'])->first();
-        // return $post;
+        
+        $post = Post::where('id', $post->id)->with(['user'])->first();
+        return $post;
     }
 
+    public function view(string $token){
+        
+        // return $token;
+        $post = Post::where('token', $token)->with(['user'])->first();
+        return $post;
+    }
 
     public function create() {
         //

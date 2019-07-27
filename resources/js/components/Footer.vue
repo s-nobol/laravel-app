@@ -2,9 +2,14 @@
     <footer class="footer bg-white p-3">
         <div class="container">
         
-            <button v-if="isLogin" class="btn" @click="logout">Logout</button>
-            <RouterLink v-else class="text-primary" to="/login">ログイン : 新規投稿
-            </RouterLink>
+            <!--<button v-if="isLogin" class="btn" @click="logout">Logout</button>-->
+            <!--<RouterLink v-else class="text-primary" to="/login">ログイン : 新規投稿-->
+            <!--</RouterLink>-->
+            
+            <div class="text-center">
+                <RouterLink  to="/about">このサイトについて
+                </RouterLink>
+            </div>
         </div>
     </footer>
   

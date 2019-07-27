@@ -45,7 +45,6 @@
 <script>
 
 import Modal from './modal/Modal.vue'
-
 import PostForm from './PostForm.vue'
 
 export default {
@@ -70,13 +69,14 @@ export default {
     },
     methods:{
         
-      
-        
         async logout () {
             await this.$store.dispatch('auth/logout')
             if (this.apiStatus) {
+                
+                // this.showForm = false //もし必要なら追加
                 console.log("logout")
-                this.$router.push('/')
+                // this.$router.push('/')
+                // window.location.reload();
             }
         },
         onCloseModal() {

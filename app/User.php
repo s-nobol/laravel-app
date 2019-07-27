@@ -23,7 +23,7 @@ class User extends Authenticatable
     
     protected $appends = [ 'user_by_create', ];
     protected $visible = [
-        'id', 'name', 'email', 'user_by_create',
+        'id', 'name', 'email', 'user_by_create','posts',
     ];
 
 
