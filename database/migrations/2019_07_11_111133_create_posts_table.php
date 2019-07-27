@@ -24,7 +24,7 @@ class CreatePostsTable extends Migration
             $table->string('image')->nullable(); //ファイル名（ファイルパス）
             $table->timestamps();
             
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
