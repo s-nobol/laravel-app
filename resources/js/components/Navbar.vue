@@ -4,31 +4,39 @@
     
         <div class="container ">
             <RouterLink class="navbar__brand" to="/">ホーム</RouterLink>
-            
             <div class="">
-                <button v-if="isLogin"  class="btn btn-primary" @click="showForm = ! showForm" >記事の作成</button>
-                <span v-if="isLogin" class="navbar__item" @click="dropdown = ! dropdown ">{{ username }}</span>
+            
+            
+                <button v-if="currentUser"  class="btn btn-primary" @click="showForm = ! showForm" >記事の作成</button>
+                <span v-if="currentUser" class="navbar__item" @click="dropdown = ! dropdown ">{{ currentUser.name }}</span>
                 
-                <button v-if="isLogin"  @click="logout" class="btn" >ログアウト</button>
+                <button v-if="currentUser"  @click="logout" class="btn" >ログアウト</button>
+                
+                
                 
                 <div v-else class="">
-                
-                
                     <!--モーダルクラス作成-->
                     <button @click="modal = 1" class="btn ">ログイン</button>
                     <button @click="modal = 2" class="btn btn-primary">新規登録</button>
                                 
-                    <transition name="fade" >
-                        <Modal v-if="modal" :modal="modal" @close="onCloseModal" />
-                    </transition >
                 </div>
+                
+                
             </div>
-        
         </div>
-        
     </nav>
+    
+    <!--モーダル-->
+    <transition name="fade" >
+        <Modal v-if="modal" :modal="modal" @close="onCloseModal" />
+    </transition >
+    
     <!--記事投稿画面-->
-    <PostForm v-model="showForm"/>
+    <transition name="slide_down">
+        <div v-if="showForm" class="post-form">
+            <PostForm v-model="showForm"/>
+        </div>
+    </transition >
 </div>
    
 </template>
@@ -39,6 +47,17 @@
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.post-form{
+    height: 300px;
+    overflow-y: auto;
+    overflow: hidden;
+}
+.slide_down-enter-active, .slide_down-leave-active {
+    transition: all .5s;
+}
+.slide_down-enter, .slide_down-leave-to {
+    height: 0;
 }
 </style>
 
@@ -60,27 +79,20 @@ export default {
         apiStatus () {
             return this.$store.state.auth.apiStatus
         },
-        isLogin () {
-            return this.$store.getters['auth/check']
-        },
-        username () {
-            return this.$store.getters['auth/username']
+        currentUser(){
+            return this.$store.getters['auth/currentUser']
         }
     },
     methods:{
-        
         async logout () {
             await this.$store.dispatch('auth/logout')
             if (this.apiStatus) {
-                
-                // this.showForm = false //もし必要なら追加
                 console.log("logout")
-                // this.$router.push('/')
                 // window.location.reload();
             }
         },
         onCloseModal() {
-          this.modal = false
+            this.modal = false
         },
     },
 }

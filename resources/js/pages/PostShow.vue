@@ -204,7 +204,7 @@ export default {
             }
         },
         async like(){
-            const response = await axios.put(`/api/posts/${ this.id }/like`)
+            const response = await axios.put(`/api/posts/${ this.post.id }/like`)
             console.log("like", response)
             if (response.status === 200) {
                 this.post.likes_count  = response.data.likes_count
@@ -214,7 +214,7 @@ export default {
         async unlike(){
             
             this.sending = true
-            const response = await axios.delete(`/api/posts/${ this.id }/like`)
+            const response = await axios.delete(`/api/posts/${ this.post.id }/like`)
             console.log("unlike", response)
             if (response.status === 200) {
                 this.post.likes_count  = response.data.likes_count

@@ -11,8 +11,7 @@ class LikeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        // $this->authorizeResource(Post::class, 'post');   
+        $this->middleware('auth'); 
     }
     
     
@@ -31,7 +30,6 @@ class LikeController extends Controller
     public function destroy(Post $post)
     {
         $post->likes()->detach(Auth::user()->id);
-        
         $post = Post::find($post->id);
         return  $post;
     }

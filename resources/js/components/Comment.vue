@@ -1,8 +1,16 @@
 <template>
 <div class="mt-2 mb-5  w-75 m-auto">
     
-    <!--コメント送信フォーム-->
-    <div class="mt-3">
+    
+    <!--コメント送信フォーム(ゲストユーザー用)-->
+    <div v-if="! currentUser">
+        <div>
+            <p class="mt-3 border-bottom">ログインユーザーしかコメントはできません</p>
+        </div>
+    </div>
+    
+    <!--コメント送信フォーム(ログインユーザー用)-->
+    <div v-if="currentUser" class="mt-3" >
         <form @submit.prevent="addComment">
             
             <!--コメントエラー-->
@@ -27,26 +35,32 @@
     
     <!--コメント一覧-->
     <div v-if="comments.length > 0" >
-        <b>コメント一覧</b></br>
+        <!--<b>コメント一覧</b></br>-->
         
         <div v-for="comment in comments"  class="mt-2">
         
-            <!--コメントView-->
             <div class="media">
-                <img v-if="comment.id === post.user.id" src="/noimage.jpg" class="mr-3" alt="" style="width: 50px;">
+            
+                <!--非作成ユーザー-->
+                <img v-if="comment.id !== post.user.id" src="/noimage.jpg" class="ml-3" alt="" style="width: 50px;">
                 <div class="media-body text-left bg-whitesmoke p-3 pl-4 rounded-pill">
                     <div>
-                        <small>ユーザー名:{{ comment.user.name }}</small>
-                        <small>作成時間:{{ comment.created_at }}</small>
+                        <!--<small>ユーザー名:{{ comment.user.name }}</small>-->
+                        <!--<small>作成時間:{{ comment.created_at }}</small>-->
                     </div>
                     
                     <span>{{ comment.content }}</span>
                 </div>
-                <img v-if="comment.id !== post.user.id" src="/noimage.jpg" class="ml-3" alt="" style="width: 50px;">
-                <button v-if="comment.user.id === currentUser.id"
+                
+                <!--記事作成ユーザー-->
+                <img v-if="comment.id === post.user.id" src="/noimage.jpg" class="mr-3" alt="" style="width: 50px;">
+                <div v-if="currentUser">
+                <button
+                    v-if="comment.user.id === currentUser.id"
                     class="btn btn-danger p-1" 
                     @click="deleteComment(comment)" 
                     >削除</button>
+                </div>
             </div>
             
             
@@ -82,6 +96,7 @@ export default {
     },
     methods: {
         async getComment(){
+            console.log("コメント受信", this.post.id)
             const response = await axios.get(`/api/posts/${this.post.id}/comments`)
             console.log("コメント受信",response)
             

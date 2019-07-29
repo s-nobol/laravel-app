@@ -8,8 +8,8 @@
         
         
         <!--フラッシュ-->
-        <transition name="fade" >
-            <div v-if="message">
+        <transition name="slide_down" >
+            <div v-if="message" class="flash-form">
                 <div class=" container alert" :class="messageType" >{{ message }}</div>
             </div>
         </transition >
@@ -40,6 +40,19 @@
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+
+.flash-form{
+    height: 50px;
+    overflow-y: auto;
+    overflow: hidden;
+}
+.slide_down-enter-active, .slide_down-leave-active {
+    transition: all .5s;
+}
+.slide_down-enter, .slide_down-leave-to {
+    height: 0;
 }
 </style>
 

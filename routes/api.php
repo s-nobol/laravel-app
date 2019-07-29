@@ -66,10 +66,11 @@ Route::get('/messages', 'DatabaseController@getmessages');
 Route::post('/messages', 'DatabaseController@addmessages');
 Route::delete('/messages/{message}', 'DatabaseController@deletemessages');
 
+// postFormアコーディオンは現状態でいい
 
-// AWSEC2にデプロイ
+// ブラんち作成
+// コメント通報機能（Report）
+// ユーザーロール及びプロフィール情報ついか　
 
+// ページネーションは最後
 
-//エラーメッセージの統一
-
-// ビデオの再生
