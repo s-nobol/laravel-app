@@ -47,7 +47,6 @@ export default {
         
         //メッセージの作成
         async addMessage(){
-            console.log("",this.messageForm)
             const response = await axios.post(`/api/messages`, this.messageForm)
             console.log("記事を一覧受信",response)
             // this.tab.length

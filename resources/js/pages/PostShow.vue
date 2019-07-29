@@ -15,7 +15,7 @@
         <div class="mt-3">
         
             <h4 class="d-inline-block">
-                <b>記事のステータス</b>
+                <!--<b>記事のステータス</b>-->
             </h4>
             
             <div v-if="currentUser" class="d-inline-block">
@@ -76,9 +76,10 @@
         <!--<div class="mt-3"><i class="fas fa-home text-primary"></i></div>-->
         
         <!--通報ボタン-->
-        <div class="mt-3"><span>通報する</span> </div>
-        
-        
+        <div v-if="currentUser" class="mt-3"><span @click="reportModal = ! reportModal">通報する</span> </div>
+        <transition name="fade" >
+            <Report v-if="reportModal" :id="post.id" @close="onCloseReport"/>
+        </transition>
         
         
         <!--投稿者-->
@@ -99,7 +100,7 @@
         <!--コメント-->
         <div class="mt-3">
             <button class="btn btn-dark mt-3">コメント</button></br>
-            <Comment :post="post"/>
+            <Comment :post="post" />
         </div>
         
         
@@ -121,17 +122,23 @@ input[type="text"]:focus {
   outline: 0;
   border-bottom: 1px solid #ff9900;
 }
-
+.fade-leave-active,.fade-enter-active{
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
 
 <script>
 
 import Comment from '../components/Comment.vue'
+import Report from '../components/modal/Report.vue'
 // import Modal from '../components/modal/Modal.vue'
 
 export default {
     components:{
-        Comment,
+        Comment, Report
         // Modal,
         },
     props: {
@@ -144,6 +151,7 @@ export default {
         return{
             Mode: false, 
             post: null,
+            reportModal: false
         }
     },
     computed: {
@@ -224,8 +232,14 @@ export default {
         },
         
         //通報ボタン
-        async onClickReport(){
-        }
+        async onReport(){
+            // this.reportModal = true
+        },
+        
+        onCloseReport() {
+            console.log("通報する閉じる")
+            this.reportModal = false
+        },
     },
     
     watch: {

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h1>Admin.vue</h1>
+    <h1>管理者</h1>
     
     <div class="row">
         
@@ -9,6 +9,7 @@
             <p :class="{ 'text-primary' : tab === 0}" @click="tab = 0">メニュー</p>
             <p :class="{ 'text-primary' : tab === 1}" @click="tab = 1">データベース</p>
             <p :class="{ 'text-primary' : tab === 2}" @click="tab = 2">メッセージの作成</p>
+            <p :class="{ 'text-primary' : tab === 3}" @click="tab = 3">通報</p>
         </div>
         
         <!--view-->
@@ -30,6 +31,11 @@
                 <Message />
             </div>
             
+            <!--タブ4-->
+            <div v-if=" tab === 3">
+                <Report />
+            </div>
+            
         </div>
     </div>
     
@@ -39,11 +45,12 @@
 
 <script>
 
-import DataBase from '../components/DataBase.vue'
-import Message from '../components/Message.vue'
+import DataBase from '../components/admin/DataBase.vue'
+import Message from '../components/admin/Message.vue'
+import Report from '../components/admin/Report.vue'
 
 export default {
-    components:{ DataBase, Message },
+    components:{ DataBase, Message, Report },
     data(){
         return{
             tab: 1,

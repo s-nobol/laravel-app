@@ -68,9 +68,15 @@ Route::delete('/messages/{message}', 'DatabaseController@deletemessages');
 
 // postFormアコーディオンは現状態でいい
 
-// ブラんち作成
-// コメント通報機能（Report）
-// ユーザーロール及びプロフィール情報ついか　
+// 通報機能（Report）
+// php artisan make:model Report --all
+// php artisan make:request ReportRequest
+Route::resource('reports', 'ReportController');
+// adminをで通報を編集できるようにする
 
+
+
+// ユーザーロール及びプロフィール情報ついか　
+//git chckeout -b user-profile 
 // ページネーションは最後
 
