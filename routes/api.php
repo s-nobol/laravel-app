@@ -22,6 +22,8 @@ use Illuminate\Http\Request;
 // npm run watch 
 // php artisan migrate:rollback
 
+// $git push -u origin 作成したブランチ名
+
 Route::get('/user', function () {
     return Auth::user();
 });
@@ -38,6 +40,10 @@ Auth::routes();
 
 // ユーザーページ作成?
 Route::resource('users', 'UserController');
+Route::get('/users/{user}/likes', 'UserController@user_likes');
+Route::put('/users/{user}/details', 'UserController@update2');
+
+
 Route::get('/users/{id}/view', 'UserController@view');
 
 
@@ -45,6 +51,7 @@ Route::get('/users/{id}/view', 'UserController@view');
 // 記事作成編集
 Route::resource('posts', 'PostController');
 Route::get('/posts/{id}/view', 'PostController@view');
+// Route::get('/posts/{id}/view', 'PostController@view');//ランキング
 
 // コメント機能
 Route::get('/posts/{post}/comments', 'CommentController@view');
@@ -72,11 +79,11 @@ Route::delete('/messages/{message}', 'DatabaseController@deletemessages');
 // php artisan make:model Report --all
 // php artisan make:request ReportRequest
 Route::resource('reports', 'ReportController');
-// adminをで通報を編集できるようにする
 
 
 
-// ユーザーロール及びプロフィール情報ついか　
-//git chckeout -b user-profile 
-// ページネーションは最後
+// コメントページネーション
+
+// 全体的なViewの修正
+
 

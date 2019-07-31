@@ -23,7 +23,8 @@ class User extends Authenticatable
     
     protected $appends = [ 'user_by_create', ];
     protected $visible = [
-        'id', 'name', 'email', 'user_by_create','posts',
+        'id', 'name', 'email','message','address', 'sex', 'birthday',
+        'posts', 'comments', 'user_by_create','likes'
     ];
 
 
@@ -43,8 +44,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Post');
     }
+    
     public function comments()
     {
         return $this->hasMany('App\Comment');
+    }
+    public function likes(){
+        return $this->belongsToMany('App\Post', 'likes')->withTimestamps();
     }
 }

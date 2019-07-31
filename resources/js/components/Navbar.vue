@@ -4,15 +4,17 @@
     
         <div class="container ">
             <RouterLink class="navbar__brand" to="/">ホーム</RouterLink>
-            <div class="">
             
-            
-                <button v-if="currentUser"  class="btn btn-primary" @click="showForm = ! showForm" >記事の作成</button>
-                <span v-if="currentUser" class="navbar__item" @click="dropdown = ! dropdown ">{{ currentUser.name }}</span>
-                
-                <button v-if="currentUser"  @click="logout" class="btn" >ログアウト</button>
-                
-                
+                <div v-if="currentUser">
+                    <button v-if="currentUser"  class="btn btn-primary" @click="showForm = ! showForm" >記事の作成</button>
+                    
+                    <RouterLink class="" :to="`/users/${currentUser.id}`">
+                        <img src="/noimage.jpg" class="rounded-circle" style="width: 30px;"></img>
+                    </RouterLink>
+                    <span v-if="currentUser" class="navbar__item" @click="dropdown = ! dropdown ">{{ currentUser.name }}</span>
+                    <button v-if="currentUser"  @click="logout" class="btn" >ログアウト</button>
+                    
+                </div>
                 
                 <div v-else class="">
                     <!--モーダルクラス作成-->
@@ -22,7 +24,6 @@
                 </div>
                 
                 
-            </div>
         </div>
     </nav>
     

@@ -12,6 +12,7 @@ import About from './pages/About.vue'
 import Admin from './pages/Admin.vue'
 import PostShow from './pages/PostShow.vue'
 import UserShow from './pages/UserShow.vue'
+import UserEdit from './pages/UserEdit.vue'
 import PasswordReset from './pages/PasswordReset.vue'
 
 import Test from './Test.vue'
@@ -26,6 +27,7 @@ const routes = [
   { path: '/posts', component: Home },
   { path: '/posts/:id',  component: PostShow, props: true },
   { path: '/users/:id',  component: UserShow, props: true },
+  { path: '/users/:id/edit',  component: UserEdit, props: true },
   { path: '/about', component: About},
   { path: '/admin', component: Admin},
   { path: '/password_reset',  component: PasswordReset },

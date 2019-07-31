@@ -23,7 +23,9 @@
             <!--コメント内容-->
             <textarea class="form-control" rows="3"  v-model="commentContent"
             :class="{ 'border border-danger' : commentErrors }"></textarea>
-            <div class="text-right">
+            
+            <!--コメントボタン-->
+            <div class="text-right mt-3">
                 <input type="submit" value="送信" class="btn btn-primary"/>
             </div>
             

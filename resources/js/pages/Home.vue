@@ -12,6 +12,10 @@
                 </RouterLink>
             </div>
         </div>
+        
+        <div class="text-center mt-4 mb-4">
+            <button class="btn btn-success"><b>もっと読む</b></button>
+        </div>
     
     </div>
 
