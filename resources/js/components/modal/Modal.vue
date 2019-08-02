@@ -242,7 +242,7 @@ export default{
                 // メッセージ登録
                 this.$store.commit('message/setContent', {
                         content: 'ログインしました！',
-                        type: 'success',
+                        type: 'info',
                         timeout: 5000
                 })
             }
@@ -258,7 +258,7 @@ export default{
                 // メッセージ登録
                 this.$store.commit('message/setContent', {
                         content: 'ユーザーが登録されました！',
-                        type: 'success',
+                        type: 'info',
                         timeout: 5000
                 })
             }

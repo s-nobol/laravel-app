@@ -51,7 +51,7 @@
                         <!--<small>作成時間:{{ comment.created_at }}</small>-->
                     </div>
                     
-                    <span>{{ comment.content }}</span>
+                    <span>{{ comment.id }} {{ comment.content }}</span>
                 </div>
                 
                 <!--記事作成ユーザー-->
@@ -68,6 +68,11 @@
             
         </div>
         
+        <!--ページネーション-->
+        <div v-if="lastPage > 1" >
+            <button @click="onPrev" class="btn btn-primary">前へ</button>
+            <button @click="onNext" class="btn btn-primary">次へ</button>
+        </div>
     </div>
   
     
@@ -89,6 +94,9 @@ export default {
             comments: [],
             commentContent: '',
             commentErrors: null,
+            
+            currentPage: 0,
+            lastPage: 0
         }
     }, 
     computed: {
@@ -99,11 +107,14 @@ export default {
     methods: {
         async getComment(){
             console.log("コメント受信", this.post.id)
-            const response = await axios.get(`/api/posts/${this.post.id}/comments`)
-            console.log("コメント受信",response)
+            console.log("コメントページ", this.currentPage)
             
+            const response = await axios.get(`/api/posts/${this.post.id}/comments?page=${this.currentPage}`)
+            console.log("コメント受信",response)
             if(response.status === 200 ){
-                this.comments = response.data
+                this.comments = response.data.data
+                this.currentPage = response.data.current_page
+                this.lastPage = response.data.last_page
               
             }
         },
@@ -157,7 +168,20 @@ export default {
                 })
             }
             
-        }
+        },
+        
+        
+        // ページネーション
+        onNext(){
+            this.currentPage += 1
+            console.log("page-next", this.currentPage )
+            this.getComment()
+        },
+        onPrev(){
+            this.currentPage -=1
+            console.log("page-prev", this.currentPage )
+            this.getComment()
+        },
     },
     created(){
         this.getComment()

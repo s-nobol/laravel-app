@@ -3,23 +3,41 @@
         <h1>Home.vue</h1>
         
         
-        <div>
-            <div v-for="post in posts" class="d-inline-block">
-                <RouterLink :to="`/posts/${post.token}`"  >
-                    <div>
-                        <img src="/image.jpg" style="width: 200px"></img>
+        <div v-if="posts.length > 0">
+        
+            <transition-group name="list" tag="div">
+            <div v-for="post in posts" :key="post.id" class="d-inline-block">
+                <RouterLink :to="`/posts/${post.token}`" >
+                    <div>{{ post.id }}
+                        <img src="/image.jpg" style="width: 200px" class="list-image"></img>
                     </div>
                 </RouterLink>
             </div>
+            </transition-group>
+            
         </div>
         
-        <div class="text-center mt-4 mb-4">
-            <button class="btn btn-success"><b>もっと読む</b></button>
+        <!--要素の最底辺-->
+        <div id="imageButtom"class="mt-3 border-top" style="height: 500px;">
+            <span>画像の最低ライン</span>
+            <span v-if="loading" class="text-info">読み込み中</span>
         </div>
     
     </div>
 
 </template>
+
+
+<style type="text/css">
+.list-enter-active, .list-leave-active {
+  transition: all 1.3s;
+}
+.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>
+
 
 <script>
 
@@ -29,28 +47,96 @@ export default {
     // components:{Modal},
     data(){
         return{
-            posts: null,
+            posts: [],
+            loading: false,
+            
+            // ページネーション
+            currentPage: 0,
+            lastPage: 0,
+            
+            // スクロール
+            scrollTop: 0,
+            scrollBottom: null,
         }
     },
     methods:{
     
+      
+        
         async getPost(){
-            const response = await axios.get(`/api/posts`)
+            
+            // ローディング開始
+            this.loading = true
+            
+            
+            const response = await axios.get(`/api/posts?page=${this.currentPage+1}`)
             console.log("記事を一覧受信",response)
-            this.posts = response.data
+            
+            // ページの更新
+            this.currentPage = response.data.current_page
+            this.lastPage = response.data.last_page
+            
+            // もしなら
+            if(this.lastPage === this.currentPage){
+                
+            }
+            
+            var time = 0
+            var num = 0
+            var posts_count = response.data.data.length
+            
+            for (var i = 0; i < posts_count; i++) {
+                time = time + 100
+                setTimeout(()=>{
+                    
+                    // 記事をリストに追加
+                    this.posts.push(response.data.data[num])
+                    num += 1
+                    
+                    
+                    //記事の読み込み終了
+                    if(num === posts_count){
+                        this.getScrollButtom()
+                        this.loading = false
+                    }
+                    
+                }, time )
+                
+            }
         },
         
+        
+        handleScroll() {
+            this.scrollTop = window.scrollY;
+            if(this.scrollTop+500 > this.scrollBottom ){
+                
+                if(this.loading){
+                    console.log("ローディング中", this.scrollBottom)
+                    return false
+                }
+                
+                this.getPost()
+            }
+        },
+        
+        //画像の最底辺取得
+        //名前変更した方がいいかも？
+        getScrollButtom(){
+            var imageButtom = document.getElementById("imageButtom")
+            this.scrollBottom =  imageButtom.offsetTop;
+        },
     
     },
-    
     watch: {
         $route: {
             async handler () {
-                await this.getPost()
+                this.getPost()
+                window.addEventListener('scroll', this.handleScroll); //スクロールイベント取得
+                
             },
             immediate: true
         }
     }
     
-    }
+}
 </script>

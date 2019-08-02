@@ -88,29 +88,41 @@
             </div>
             
             <!--タブテーブル-->
-            <div v-if="tab === 0">
-                <div v-if="user.posts.length > 0 " class="text-left">
-                    <div v-for="post in user.posts" class="d-inline-block">
-                        <RouterLink :to="`/posts/${post.token}`"  >
-                            <div>
-                                <img src="/image.jpg" style="width: 200px"></img>
-                            </div>
-                        </RouterLink>
-                    </div>
-                </div>
-            </div>
+            <!--<div v-if="tab === 0">-->
+                
+            <!--    <div v-if="user.posts.length > 0 " class="text-left">-->
+            <!--        <div v-for="post in user.posts" class="d-inline-block">-->
+            <!--            <RouterLink :to="`/posts/${post.token}`"  >-->
+            <!--                <div>-->
+            <!--                    <img src="/image.jpg" style="width: 200px"></img>-->
+            <!--                </div>-->
+            <!--            </RouterLink>-->
+            <!--        </div>-->
+            <!--    </div>-->
+            <!--</div>-->
             
-            <div v-if="tab >  0 " >
-                <!--<h2>ユーザー写真以外</h2>-->
+            <!--<div v-if="tab >  0 " >-->
                 <div v-if="posts.length > 0 " class="text-left">
-                    <div v-for="post in posts" class="d-inline-block">
+                
+                    <transition-group name="list" tag="div">
+                    <div v-for="post in posts" :key="post.id" class="d-inline-block">
                         <RouterLink :to="`/posts/${post.token}`"  >
                             <div>
                                 <img src="/image.jpg" style="width: 200px"></img>
                             </div>
                         </RouterLink>
                     </div>
+                    </transition-group>
+                
                 </div>
+                
+                
+            <!--</div>-->
+            
+            <!--要素の最底辺-->
+            <div id="imageButtom"class="mt-3 border-top" style="height: 500px;">
+                <span>画像の最低ライン</span>
+                <span v-if="loading" class="text-info">読み込み中</span>
             </div>
             
            
@@ -134,6 +146,14 @@
 /*.slide_down-enter, .slide_down-leave-to {*/
 /*    height: 0;*/
 /*}*/
+
+.list-enter-active, .list-leave-active {
+  transition: all 1.3s;
+}
+.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
 </style>
 
 <script>
@@ -152,7 +172,17 @@ export default {
             Mode: false,
             user: null,
             tab: 0,
+            
             posts: [],
+            loading: false,
+            
+            // ページネーション
+            currentPage: 0,
+            lastPage: 0,
+            
+            // スクロール
+            scrollTop: 0,
+            scrollBottom: null,
         }
     },
     computed: {
@@ -180,8 +210,8 @@ export default {
                     this.user = response.data
                    
                     this.$store.commit('message/setContent', {   // メッセージ登録
-                            content: 'ユーザーを編集しました',
-                            type: 'success',
+                            content: 'ユーザーを情報を編集しました',
+                            type: 'user-edit',
                             timeout: 3000
                     })
                 }
@@ -189,38 +219,104 @@ export default {
         
         
         // タブの選択
-        onChangeTab(num){
-            this.tab = num
-            if (num === 1) {
-                this.getLikePost()
-            }else if (num === 2 ) {
-                this.getOtherPost()
+        onChangeTab(select){
+            if(this.tab !== select )
+            { 
+                this.tab = select
+                this.resetPage()
+                this.getPost()
+            }
+            return false
+            
+        },
+        
+        // すべての記事取得をまとめる
+        async getPost(){
+            // ローディング開始
+            this.loading = true
+            
+            // ユーザーの記事
+            if(this.tab === 0){ 
+                var response = await axios.get(`/api/users/${ this.id }/posts?page=${this.currentPage + 1}`) 
+            }
+            // ユーザーのいいねした記事
+            else if(this.tab === 1){ 
+                var response = await axios.get(`/api/users/${ this.id }/likes?page=${this.currentPage + 1}`) 
+            }
+            // みんなの記事
+            else if(this.tab === 2){ 
+                var response = await axios.get(`/api/posts?page=${this.currentPage + 1}`)  
+            }
+            
+            
+            console.log("記事を受信", response)
+            if (response.status === 200) {
+                
+                // ページの更新
+                this.currentPage = response.data.current_page
+                this.lastPage = response.data.last_page
+                this.addPost(response.data)
             }
         },
         
-        //ユーザーがいいねを押した記事
-        async getLikePost(){
-            console.log("id",this.id)
-                const response = await axios.get(`/api/users/${ this.id }/likes`)
-                console.log("like記事を受信",response)
-                if (response.status === 200) {
-                    this.posts = response.data
-                }
+        // 記事の追加
+        addPost(reponse_data){
+            var time = 0
+            var num = 0
+            var posts_count = reponse_data.data.length
+            
+            for (var i = 0; i < posts_count; i++) {
+                time = time + 100
+                setTimeout(()=>{
+                    
+                    // 記事をリストに追加
+                    this.posts.push(reponse_data.data[num])
+                    num += 1
+    
+                    
+                    //記事の読み込み終了
+                    if(num === posts_count){
+                        this.getScrollButtom()
+                        this.loading = false
+                    }
+                    
+                }, time )
+                
+            }
         },
         
-        //みんなの記事
-        async getOtherPost(){
-                const response = await axios.get(`/api/posts`)
-                console.log("記事を受信",response)
-                if (response.status === 200) {
-                    this.posts = response.data
+        handleScroll() {
+            this.scrollTop = window.scrollY;
+            if(this.scrollTop+500 > this.scrollBottom ){
+                
+                if(this.loading){
+                    console.log("ローディング中", this.scrollBottom)
+                    return false
                 }
+                
+                this.getPost()
+            }
         },
+        
+        //画像の最底辺取得
+        getScrollButtom(){
+            var imageButtom = document.getElementById("imageButtom")
+            this.scrollBottom =  imageButtom.offsetTop;
+        },
+        
+        // ページのリセット
+        resetPage(){
+            this.posts = []
+            this.currentPage = 0
+            this.lastPage = 0
+        }
     },
     watch: {
         $route: { 
             async handler () {
                 this.getUser()
+                this.getPost()
+                window.addEventListener('scroll', this.handleScroll); //スクロールイベント取得
             },
             immediate: true
         }

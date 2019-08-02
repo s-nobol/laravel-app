@@ -6,7 +6,7 @@ const state = {
 const mutations = {
   setContent (state, { content, type, timeout }) {
     state.content = content
-    state.type = 'alert-'+type
+    state.type = 'frash-'+type
 
     if (typeof timeout === 'undefined') {
       timeout = 3000

@@ -14,15 +14,10 @@ class UsersTableSeeder extends Seeder
     {
         
         // ログインユーザー
-        // DB::table('users')->insert([
-        //     'name' => '123',
-        //     'email' => '123@example.com',
-        //     'password' => bcrypt('123123123'),
-        // ]);
       
         
         // 10のユーザーとPost作成
-        factory(App\User::class, 10)->create()->each(function ($user) {
+        factory(App\User::class, 50)->create()->each(function ($user) {
                 $user->posts()->save(factory(App\Post::class)->make());
                 $user->comments()->save(factory(App\Comment::class)->make());
         });

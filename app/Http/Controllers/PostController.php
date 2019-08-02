@@ -21,8 +21,11 @@ class PostController extends Controller
     public function index()
     {
         
-        return Post::with(['user','likes'])->get();
-        // return Post::all();
+        // return Post::with(['user','likes'])->get();
+        return Post::take(15)
+            ->orderBy('id', 'desc')
+            ->paginate();
+            
     }
     
     public function show(Post $post)

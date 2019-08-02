@@ -20,11 +20,21 @@ class CommentController extends Controller
     }
 
 
-    // コメント一覧
+    // 記事のコメント一覧
     public function view(string $id)
     {   
-        $comment = Comment::where('post_id', $id)->with(['user'])->get();
-        // $comment = Comment::where('post_id', $id)->get();
+        $comment = Comment::where('post_id', $id)
+            ->orderBy('id', 'desc')
+            ->with(['user'])
+            ->paginate();
+            
+        return $comment;
+    } 
+    
+    // ユーザーの作成したコメント一覧
+    public function show(string $id)
+    {   
+        $comment = Comment::where('post_id', $id);
         return $comment;
     }
 
@@ -43,12 +53,3 @@ class CommentController extends Controller
         return  $comment;
     }
 }
-
-
-
-// コメント作成メゾット(予備)
-// $comment = new Comment();
-// $comment->content = $request->content;
-// $comment->user_id = Auth::user()->id;
-// $post->comments()->save($comment);
-// return $request->all();

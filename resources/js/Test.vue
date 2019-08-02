@@ -1,40 +1,43 @@
 <template>
 <div>
-    <div class=" frash1">
-        <div class="p-3">これはアラートメッセージです</div>
-    </div>
-    
-    <div class="frash2">
-        <div class="p-3">これはアラートメッセージです</div>
-    </div>
-    
-    <div class="frash3">
-        <div class="p-3">これはアラートメッセージです</div>
-    </div>
-    <div class="frash4">
-        <div class="p-3">これはアラートメッセージです</div>
-    </div>
-    
+
+        <span @click="onClickButtonForm">吹き出しボタン</span>
+        
+        <button @click="onClickButtonErrors">エラーチェックボタン</button>
+        <div class="w-25 bg-danger">吹き出し
+            <div v-if="form" class="">
+            <!--吹き出し-->
+                <div  class="postForm bg-white">
+                    <span>これは吹き出し</span>
+                </div>
+            </div>
+        </div>
     
 </div>
 </template>
+
 <style type="text/css">
-.frash1{
-    color: white;
-    background-color: #5bd1d7;
-}
-.frash2{
-    color: white;
-    background-color: #348498;
-}
-.frash3{
-    color: white;
-    background-color: #ff502f;
-}.frash4{
-    color: #348498;
-    background-color: #F4F4F4;
-}
-/*#f5ede1*/
+.postForm{
+    
+    /*位置情報?サイズ*/
+    position:  relative; 
+    top: 15px;
+    right: 50px;
+    z-index: 1;
+    width: 200px; /* 幅 */
+    padding: 10px;
+    
+    /*吹き出しボーダー*/
+    border: solid #fff 2px;
+    border-radius: 15px;
+    
+    background-color: white;
+    
+    /*影*/
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    border-radius: 2px;
+    transition: 3s;
+} 
 </style>
 
 <script>
@@ -42,20 +45,29 @@ export default {
 
     data() {
         return {
-            mause: false
+            mause: false,
+            form: false
         }
     },
     methods:{
-        hoverImage(){}
+        onClickButtonErrors(){
+            // this.$store.commit('error/setCode', 404)
+            this.$store.commit('error/setCode', 500)
+            // this.$store.commit('error/setCode', 401)
+        },
+        onClickButtonForm(){
+            this.form = ! this.form
+            console.log("form",this.form)
+        },
+    //   hoverImage(){}
     }, 
     
 }
 
+// </script1>
 
-</script>
 
-
-<script>
+// <script1>
 // リストを一つずつ表示
 // <transition-group name="list" tag="span">
 //     <span v-for="(item, index) in items" 

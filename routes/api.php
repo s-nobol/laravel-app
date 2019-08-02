@@ -40,7 +40,8 @@ Auth::routes();
 
 // ユーザーページ作成?
 Route::resource('users', 'UserController');
-Route::get('/users/{user}/likes', 'UserController@user_likes');
+Route::get('/users/{user}/posts', 'UserController@user_posts');
+Route::get('/users/{user}/likes', 'UserController@user_like_posts');
 Route::put('/users/{user}/details', 'UserController@update2');
 
 
@@ -82,8 +83,13 @@ Route::resource('reports', 'ReportController');
 
 
 
-// コメントページネーション
+// postFormを完成させる
 
+// カテゴリーカラム作成
+// ステータスエラーを作成する(postForm commentなど)
+
+
+// 401 403などのアクセス権限がページは後日修正
 // 全体的なViewの修正
 
 

@@ -24,7 +24,7 @@
         
         
         <!--フッター-->
-        <Footer />
+        <!--<Footer />-->
         
         <!--モーダル（ログイン専用のモーダルにする）--> 
         <transition name="fade" >
@@ -99,14 +99,14 @@ export default {
                   
                     await axios.get('/api/refresh-token')
                     this.$store.commit('auth/setUser', null)
-                    // ログインView表示
-                    this.modal = 1
-                    
+                    // this.modal = 1
+                    this.$router.push('/401')
                 } else if (val === NOT_FOUND) {
                     this.$router.push('/not-found')
                     
                 } else if (val === 401 ){
-                    this.modal = 1
+                    // this.modal = 1
+                    this.$router.push('/401')
                 }
                 this.$store.commit('error/setCode', null)
                 

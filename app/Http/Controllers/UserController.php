@@ -7,6 +7,9 @@ use App\User;
 use App\Post;
 use App\Like;
 use App\Http\Requests\UserEditRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -17,10 +20,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $users = User::where('id', $user->id)->with(['posts'])->first();
-        // $user = User::where('id', $user->id);
-    // $photo = Photo::where('id', $id)->with(['owner'])->first();
-        // return $user->with(['posts'])->get();
+        $users = User::where('id', $user->id)->first();
         return $users;
     }
 
@@ -32,9 +32,22 @@ class UserController extends Controller
     }
     
     
-    public function user_likes(User $user)
+    // ユーザーの記事取得
+    public function user_posts(User $user)
     {        
-        $likes = $user->likes;
+        // $posts = $user->with(['posts'])
+        $posts = $user->posts()
+            ->orderBy('id', 'desc')
+            ->paginate();
+        return $posts;
+    } 
+    
+    // ユーザーがいいねした記事取得
+    public function user_like_posts(User $user)
+    {        
+        $likes = $user->likes()
+            ->orderBy('id', 'desc')
+            ->paginate();
         return $likes;
     }
     

@@ -141,15 +141,6 @@
 .bg-whitesmoke{
         background-color: whitesmoke;
 }
-/*後で編集*/
-/*input[type="text"] {*/
-/*    border: none;*/
-/*  border-bottom: 1px solid lightgray;*/
-/*}*/
-/*input[type="text"]:focus {*/
-/*  outline: 0;*/
-/*  border-bottom: 1px solid #ff9900;*/
-/*}*/
 .fade-leave-active,.fade-enter-active{
   transition: opacity .5s;
 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     //
+    protected $perPage = 5; // この値を少なくすれば動作確認しやすいですね
     protected $fillable = [
         'content', 'post_id',
     ];
