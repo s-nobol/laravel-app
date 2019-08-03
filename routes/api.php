@@ -64,6 +64,7 @@ Route::put('/posts/{post}/like', 'LikeController@store');
 Route::delete('/posts/{post}/like', 'LikeController@destroy');
 
 // カテゴリ機能
+Route::get('/categorys', 'CategoryController@index');
 
 
 // データベース検索機能
@@ -83,13 +84,8 @@ Route::resource('reports', 'ReportController');
 
 
 
-// postFormを完成させる
 
-// カテゴリーカラム作成
-// ステータスエラーを作成する(postForm commentなど)
-
-
-// 401 403などのアクセス権限がページは後日修正
 // 全体的なViewの修正
 
-
+// ポリシーステータスエラーの作成
+// ステータスエラーを作成する(postForm commentなど)

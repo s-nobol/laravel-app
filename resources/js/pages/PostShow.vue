@@ -28,6 +28,10 @@
             
         </div>
         
+        <!--カテゴリー-->
+        <div class="mb-3">
+            <span class="btn btn-dark">{{ post.category.name }}</span>
+        </div>
         
         <!--タイトル-->
         <h1 class="p-0 m-0">{{ post.title }}</h1>

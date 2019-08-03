@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
@@ -31,14 +32,14 @@ class PostController extends Controller
     public function show(Post $post)
     {
         
-        $post = Post::where('id', $post->id)->with(['user'])->first();
+        $post = Post::where('id', $post->id)->with(['user','category'])->first();
         return $post;
     }
 
     public function view(string $token){
         
         // return $token;
-        $post = Post::where('token', $token)->with(['user'])->first();
+        $post = Post::where('token', $token)->with(['user','category'])->first();
         return $post;
     }
 
@@ -68,6 +69,7 @@ class PostController extends Controller
         
         //記事の作成
         $post = new Post();
+        $post->category_id = $request->category_id;
         $post->title = $request->title;
         $post->description = $request->description;
         return Auth::user()->posts()->save($post);

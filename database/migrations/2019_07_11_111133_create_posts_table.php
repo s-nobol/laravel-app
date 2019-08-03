@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id'); 
             $table->string('token');  //トークンの追加
             $table->unsignedInteger('user_id'); 
+            $table->unsignedInteger('category_id'); 
             $table->string('title');
             $table->text('description');
             $table->string('image')->nullable(); //ファイル名（ファイルパス）

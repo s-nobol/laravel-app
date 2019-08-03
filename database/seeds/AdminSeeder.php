@@ -17,6 +17,7 @@ class AdminSeeder extends Seeder
             'name' => '123',
             'email' => '123@example.com',
             'password' => bcrypt('123123123'),
+            'role' => 3 ,//ユーザーにレベル3の権限
         ]);
       
     }

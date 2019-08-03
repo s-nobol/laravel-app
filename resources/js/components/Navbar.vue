@@ -22,7 +22,7 @@
                     <!--記事投稿画面-->
                     <transition name="fade">
                         <div v-if="showForm"  class="post-form ">
-                            <PostForm v-model="showForm" @cansel="onCansel"/>
+                            <PostForm v-model="showForm" @close="onCloseForm"/>
                         </div>
                     </transition >
                                 
@@ -118,8 +118,9 @@ export default {
         onCloseModal() {
             this.modal = false
         },
-        onCansel(){
-            this.showForm = true
+        onCloseForm(){
+            console.log("closeForm")
+            this.showForm = false
         },
     },
 }

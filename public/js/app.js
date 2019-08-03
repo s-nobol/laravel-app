@@ -2639,8 +2639,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onCloseModal: function onCloseModal() {
       this.modal = false;
     },
-    onCansel: function onCansel() {
-      this.showForm = true;
+    onCloseForm: function onCloseForm() {
+      console.log("closeForm");
+      this.showForm = false;
     }
   }
 });
@@ -2784,6 +2785,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -2795,6 +2798,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       image: null,
       preview: null,
+      categorys: [],
+      category: 1,
       title: '',
       description: '',
       errors: null,
@@ -2818,17 +2823,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 formData = new FormData();
                 formData.append('image', this.image);
+                formData.append('category_id', Number(this.category));
                 formData.append('title', this.title);
                 formData.append('description', this.description);
-                console.log("記事の作成送信", formData);
                 _context.next = 7;
                 return axios.post('/api/posts', formData);
 
               case 7:
                 response = _context.sent;
+                console.log("記事の作成受信", response);
 
                 if (!(response.status === 201)) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
 
@@ -2838,17 +2844,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   type: 'success',
                   timeout: 3000
                 });
+                this.$emit('close');
                 this.reset();
-                this.$emit('input', false);
                 return _context.abrupt("return", false);
 
-              case 13:
+              case 14:
                 // バリテーションエラー
                 if (response.status === 422) {
                   this.errors = response.data.errors;
                 }
 
-              case 14:
+              case 15:
               case "end":
                 return _context.stop();
             }
@@ -2861,6 +2867,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return createPost;
+    }(),
+    // カテゴリー取得
+    getCategory: function () {
+      var _getCategory = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.get('/api/categorys');
+
+              case 2:
+                response = _context2.sent;
+                console.log("カテゴリー取得", response);
+
+                if (response.status === 200) {
+                  this.categorys = response.data;
+                }
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function getCategory() {
+        return _getCategory.apply(this, arguments);
+      }
+
+      return getCategory;
     }(),
     // 画面アップロード
     onFileChange: function onFileChange(event) {
@@ -2911,6 +2952,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   created: function created() {
+    this.getCategory();
     console.log("Postform起動");
   },
   destroyed: function destroyed() {
@@ -4587,6 +4629,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
 //
 //
 //
@@ -8583,7 +8629,7 @@ var render = function() {
                             { staticClass: "post-form " },
                             [
                               _c("PostForm", {
-                                on: { cansel: _vm.onCansel },
+                                on: { close: _vm.onCloseForm },
                                 model: {
                                   value: _vm.showForm,
                                   callback: function($$v) {
@@ -8742,19 +8788,60 @@ var render = function() {
                         _vm.errors
                           ? _c("div", [
                               _c("div", { staticClass: "mt-2" }, [
-                                _c("label", { attrs: { for: "" } }, [
-                                  _vm._v("カテゴリー")
-                                ]),
+                                _vm.errors.category
+                                  ? _c("span", { staticClass: "text-danger" }, [
+                                      _vm._v("カテゴリーを選択してください")
+                                    ])
+                                  : _vm._e(),
                                 _vm._v(" "),
-                                _c("select", { attrs: { name: "", id: "" } }, [
-                                  _c("option", { attrs: { value: "123" } }, [
-                                    _vm._v("123")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "123" } }, [
-                                    _vm._v("12,k,j3")
-                                  ])
-                                ])
+                                !_vm.errors.category
+                                  ? _c(
+                                      "label",
+                                      { attrs: { label: "", for: "" } },
+                                      [_vm._v("カテゴリー")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.category,
+                                        expression: "category"
+                                      }
+                                    ],
+                                    attrs: { name: "" },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.category = $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      }
+                                    }
+                                  },
+                                  _vm._l(_vm.categorys, function(item) {
+                                    return _c(
+                                      "option",
+                                      { domProps: { value: item.id } },
+                                      [_vm._v(_vm._s(item.name))]
+                                    )
+                                  }),
+                                  0
+                                )
                               ]),
                               _vm._v(" "),
                               _c("div", { staticClass: "mt-2" }, [
@@ -8873,15 +8960,46 @@ var render = function() {
                                   _vm._v("カテゴリー")
                                 ]),
                                 _vm._v(" "),
-                                _c("select", { attrs: { name: "", id: "" } }, [
-                                  _c("option", { attrs: { value: "123" } }, [
-                                    _vm._v("123")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { value: "123" } }, [
-                                    _vm._v("12,k,j3")
-                                  ])
-                                ])
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.category,
+                                        expression: "category"
+                                      }
+                                    ],
+                                    attrs: { name: "" },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.category = $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      }
+                                    }
+                                  },
+                                  _vm._l(_vm.categorys, function(item) {
+                                    return _c(
+                                      "option",
+                                      { domProps: { value: item.id } },
+                                      [_vm._v(_vm._s(item.name))]
+                                    )
+                                  }),
+                                  0
+                                )
                               ]),
                               _vm._v(" "),
                               _c("div", { staticClass: "mt-2" }, [
@@ -10710,6 +10828,12 @@ var render = function() {
                     _vm._v("編集モード")
                   ])
                 : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-3" }, [
+              _c("span", { staticClass: "btn btn-dark" }, [
+                _vm._v(_vm._s(_vm.post.category.name))
+              ])
             ]),
             _vm._v(" "),
             _c("h1", { staticClass: "p-0 m-0" }, [

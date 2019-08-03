@@ -9,6 +9,7 @@ $factory->define(Post::class, function (Faker $faker) {
     return [  
         'token' => Str::random(10),
         'title' => $faker->sentence(rand(1,4)), 
+        'category_id' =>  rand(1, 10),
         'description' => $faker->realText(100), // 512文字の文章
         'image' => null,
         

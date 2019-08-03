@@ -22,11 +22,14 @@
             
                 <div v-if="errors">
                         <!--タブ・カテゴリーなど-->
-                        <div class="mt-2">
-                            <label for="">カテゴリー</label>
-                            <select name="" id="">
-                            <option value="123">123</option>
-                            <option value="123">12,k,j3</option>
+                        <div class="mt-2"> 
+                                <span v-if="errors.category"  class="text-danger">カテゴリーを選択してください</span>
+                            
+                                <label v-if="! errors.category" label for="">カテゴリー</label>
+                            
+                            
+                            <select name="" v-model="category">
+                            <option v-for="item in categorys" :value="item.id">{{ item.name }}</option>
                             </select>
                         </div>
                         
@@ -66,9 +69,8 @@
                         <!--タブ・カテゴリーなど-->
                         <div class="mt-2">
                             <label for="">カテゴリー</label>
-                            <select name="" id="">
-                            <option value="123">123</option>
-                            <option value="123">12,k,j3</option>
+                            <select name="" v-model="category">
+                            <option v-for="item in categorys" :value="item.id">{{ item.name }}</option>
                             </select>
                         </div>
                         
@@ -130,6 +132,8 @@ export default {
         return{
             image: null,
             preview: null,
+            categorys: [],
+            category: 1,
             title: '',
             description: '',
             errors: null,
@@ -143,16 +147,17 @@ export default {
         },
     },
     methods: {
-        
         async createPost(){
             
             const formData = new FormData()
             formData.append('image', this.image)
+            formData.append('category_id', Number(this.category))
             formData.append('title', this.title)
             formData.append('description', this.description )
-            console.log("記事の作成送信", formData)
+            
             
             const response = await axios.post('/api/posts', formData)
+            console.log("記事の作成受信", response)
             if (response.status === 201) {
                 // メッセージ登録
                 this.$store.commit('message/setContent', {
@@ -160,13 +165,22 @@ export default {
                         type: 'success',
                         timeout: 3000
                 })
+                this.$emit('close')
                 this.reset()
-                this.$emit('input', false)
                 return false
             }
             // バリテーションエラー
             if (response.status === 422) {
                 this.errors = response.data.errors
+            }
+        },
+        
+        // カテゴリー取得
+        async getCategory(){
+            const response = await axios.get('/api/categorys')
+            console.log("カテゴリー取得", response)
+            if (response.status === 200) {
+                this.categorys = response.data
             }
         },
         
@@ -215,7 +229,8 @@ export default {
     
     },
     created(){
-        console.log("Postform起動")
+        this.getCategory()
+        console.log("Postform起動" )
     },
     destroyed(){
         console.log("Postform終了")

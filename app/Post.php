@@ -16,8 +16,8 @@ class Post extends Model
     
     protected $appends = [ 'user_by_create','user_by_liked','likes_count' ];
     protected $visible = [
-        'id', 'token','title', 'description','created_at',
-        'user', 'user_by_create', 'comments',
+        'id', 'token','title', 'description', 'created_at',
+        'user','category', 'user_by_create', 'comments',
         'user_by_liked','likes_count'
     ];
 
@@ -89,6 +89,10 @@ class Post extends Model
         return $this->belongsTo('App\User', 'user_id', 'id', 'users');
     }
     
+    public function category(){
+        return $this->belongsTo('App\Category', 'category_id', 'id', 'categories');
+    }
+    
     public function comments(){
         return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
@@ -96,4 +100,5 @@ class Post extends Model
     public function likes(){
         return $this->belongsToMany('App\User', 'likes')->withTimestamps();
     }
+    
 }
