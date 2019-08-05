@@ -173,6 +173,7 @@ export default {
             if (response.status === 422) {
                 this.errors = response.data.errors
             }
+            
         },
         
         // カテゴリー取得

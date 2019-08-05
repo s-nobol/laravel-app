@@ -52,7 +52,7 @@ Route::get('/users/{id}/view', 'UserController@view');
 // 記事作成編集
 Route::resource('posts', 'PostController');
 Route::get('/posts/{id}/view', 'PostController@view');
-// Route::get('/posts/{id}/view', 'PostController@view');//ランキング
+
 
 // コメント機能
 Route::get('/posts/{post}/comments', 'CommentController@view');
@@ -85,7 +85,9 @@ Route::resource('reports', 'ReportController');
 
 
 
-// 全体的なViewの修正
+// laravel-test-app.mlドメインの作成
 
-// ポリシーステータスエラーの作成
-// ステータスエラーを作成する(postForm commentなど)
+
+// ミドルウェアをルートへ登録
+
+// AWS　ERB

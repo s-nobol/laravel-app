@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             
             $table->string('image')->nullable(); //ファイル名（ファイルパス）
-            $table->string('message')->nullable(); //一言
+            $table->text('message')->nullable(); //一言
             $table->string('address')->nullable(); //住所
             $table->integer('sex')->nullable(); //性別( 0: 男, 1: 女 )
             $table->date('birthday')->nullable(); //性別

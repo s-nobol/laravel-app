@@ -3,9 +3,12 @@
 
 // Variables
 @import 'variables';
-
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// image-form
+@import 'image';
+@import 'animetion';
 
 
 .bg-whitesmoke{
@@ -52,3 +55,72 @@
     color: 	#0F6331;
     background-color:  #FFDF61;
 } 
+
+// 背景色
+.bg-success2{
+    color: white;
+    background-color: #5bd1d7;
+}
+.bg-info2{
+    color: #348498;
+    background-color: #F4F4F4;
+}
+.bg-danger2{
+    color: white;
+    background-color: #ff502f;
+}
+.bg-edit2{
+    color: white;
+    background-color: #348498;
+}
+.bg-post-edit2{
+    color: white;
+    background-color: #3871A1;
+} 
+.bg-user-edit2{
+    color: white;
+    background-color: #38BD67;
+}
+.bg-warning2{
+    color: 	#0F6331;
+    background-color:  #FFDF61;
+} 
+
+// text-color
+.text-success2{
+    color:  #5bd1d7;
+}
+.text-info2{
+    color: #F4F4F4;
+}
+.text-danger2{
+    color: #ff502f;
+}
+.text-edit2{
+    color: #348498; 
+}
+.text-post-edit2{
+    color: #3871A1;
+} 
+.text-user-edit2{
+    color: #38BD67;
+}
+.text-warning2{
+    color: 	#FFDF61;
+} 
+
+.text-whitesmoke{
+    color: whitesmoke;
+}
+
+.tab-color{
+    color: white;
+    transition-duration: 0.7s;
+    /*background-color: #3871A1;*/
+    background-color: #5bd1d7;
+}
+.tab-color-select{
+    color: #3871A1; 
+    transition-duration: 0.7s;
+    background-color: white;
+}

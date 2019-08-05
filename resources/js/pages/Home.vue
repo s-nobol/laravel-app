@@ -1,15 +1,16 @@
 <template>
     <div>
-        <h1>Home.vue</h1>
-        
-        
+    
+    
+        <!--<h1>ホーム</h1>-->
         <div v-if="posts.length > 0">
         
             <transition-group name="list" tag="div">
-            <div v-for="post in posts" :key="post.id" class="d-inline-block">
+            <div v-for="post in posts" :key="post.id" class="d-inline-block p-1" style="width: 20%;" >
                 <RouterLink :to="`/posts/${post.token}`" >
-                    <div>{{ post.id }}
-                        <img src="/image.jpg" style="width: 200px" class="list-image"></img>
+                    <div >
+                        {{ post.id }}
+                        <img src="/image.jpg" style="width: 100%;" class="list-image"></img>
                     </div>
                 </RouterLink>
             </div>

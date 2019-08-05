@@ -5,9 +5,6 @@ import VueRouter from 'vue-router'
 // ページコンポーネントをインポートする
 
 import Home from './pages/Home.vue'
-import NotFound from './pages/errors/NotFound.vue'
-import ServerError from './pages/errors/ServerError.vue' //サーバーエラー
-import Unauthorized from './pages/errors/Unauthorized.vue'//アクセス権限がありません
 
 
 
@@ -17,6 +14,12 @@ import PostShow from './pages/PostShow.vue'
 import UserShow from './pages/UserShow.vue'
 import UserEdit from './pages/UserEdit.vue'
 import PasswordReset from './pages/PasswordReset.vue'
+
+// エラーページ
+import Unauthorized from './pages/errors/Unauthorized.vue'//アクセス権限がありません
+import NoCurrentUser from './pages/errors/403.vue'
+import NotFound from './pages/errors/NotFound.vue'
+import ServerError from './pages/errors/ServerError.vue' //サーバーエラー
 
 import Test from './Test.vue'
 
@@ -48,7 +51,8 @@ const routes = [
   // },
   // { path: '/postscreate',  component: PostCreate, props: true },
   // { path: '/posts/:id/edit',  component: PostEdit, props: true  },
-  { path: '/401', component: Unauthorized }, //アクセス権限（後日修正）
+  { path: '/401', component: Unauthorized }, //アクセス権限（ログインユーザー）
+  { path: '/403', component: NoCurrentUser }, //アクセス権限（クライアントユーザー）
   { path: '/404', component: NotFound }, //notfund
   { path: '/500', component: ServerError }, //ServerErrors
   { path: '*',  component: NotFound }

@@ -4,11 +4,11 @@
     
         <div class="m-auto w-75" style="">
                 <!--m-auto w-75-->
-                <RouterLink class="navbar-brand" to="/">ホーム</RouterLink>
+                <RouterLink class="navbar-brand text-dark" to="/"><b>ホーム</b></RouterLink>
                 
                 <div v-if="currentUser" class=" nav-item float-right">
                     <div class=" float-right">
-                        <button v-if="currentUser"  class="btn btn-primary"
+                        <button  class="btn btn-primary"
                             @click="showForm = ! showForm" >記事の作成</button>
                         
                         <RouterLink class="" :to="`/users/${currentUser.id}`">

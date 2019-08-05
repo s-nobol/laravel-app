@@ -7,12 +7,19 @@ use App\User;
 use App\Post;
 use App\Like;
 use App\Http\Requests\UserEditRequest;
+use App\Http\Requests\UserEdit2Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+    
+    public function __construct()
+    {
+        // $this->middleware('auth')->except(['index','show']);// show store edit update delete(ログインユーザーのみ) 
+        // $this->authorizeResource(User::class, 'user');   // edit update delete(作成ユーザーのみ) 
+    }
     
     public function index() {
     }
@@ -58,17 +65,30 @@ class UserController extends Controller
     }
     
     
-
-    public function update(Request $request, User $user)
+    public function update(UserEditRequest $request, User $user)
     {
         $user->fill($request->all())->save();
         return $user;
     }
     
-    public function update2(UserEditRequest $request, User $user)
+    
+    public function update2(UserEdit2Request $request, User $user)
     {
-        // $user->fill($request->all())->save();
+        // 自作ポリシー
+        if(Auth::user()->id != $user->id){
+            // return $user;
+            return abort(403);
+        }
+        
+        $user->fill($request->all())->save();
+        $user = User::find($user->id);
         return $user;
+    }
+    
+    
+    public function testup(UserEdit2Request $request){
+    // public function testup( User $user){
+        return "成功";
     }
 
     public function destroy($id)

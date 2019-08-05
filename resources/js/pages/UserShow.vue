@@ -1,123 +1,197 @@
 <template>
 <div class="text-center">
 
-    <h1>UserShow.vue</h1>
-    <!--<h3>{{ user.id }}:::{{ currentUser.id}}</h3>-->
-    
-    <div v-if="user" class="bg-white">
-    
+        <!--<h1>ユーザー詳細ページ</h1>-->
+        <!--<h3>{{ user.id }}:::{{ currentUser.id}}</h3>-->
         
-        <!--画像-->
-        <div class="text-center">
-            <img src="/noimage.jpg" style="width: 150px;" class="rounded-circle mt-5"></img>
-        </div>
+        <div v-if="user" class="bg-white text-center">
         
-        
-        
-        <!--ユーザーのステータス-->
-        <div　v-if="true"  class="mt-3 text-center">
             
-            <div v-if="currentUser" class="">
-                <div v-if="user.id === currentUser.id ">
-                    <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
+            <!--画像-->
+            <div class=" mt-5">
+                <div class="m-auto rounded-circle image-form" style="width: 150px;">
+                    <img src="/noimage.jpg"  
+                        class="image  "  
+                        :class="{'image-hover' : imageHover }"
+                        @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
                 </div>
             </div>
             
-            <h4><b>{{ user.name }}</b></h4>
-            <!--<h6><b>メールアドレス:{{ user.email }}</b></h6>-->
-            <h6><b>男性</b></h6>
-            <h6><b>住所:福岡</b></h6>
-        </div>
-        
-        
-        
-        <!--編集フォーム-->
-        <transition name="slide_down">
-        <div v-if="Mode" class=" user-form" >
-            <form  @submit.prevent="editUser">
             
-                <div class="mt-3" >
-                    <h4>名前</h4>
-                    <input type="text" class=" bg-light " v-model="user.name" autofocus/>
+            
+            <!--ユーザーのステータス-->
+            <div　v-if="true"  class="mt-3 text-center">
+                
+                <div v-if="currentUser" class="">
+                    <div v-if="user.id === currentUser.id ">
+                        <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
+                    </div>
                 </div>
                 
-                <div class="mt-3" >
-                    <h5>メールアドレス</h5>
-                    <input type="text"  class="bg-light " v-model="user.email " />
-                </div>
                 
-                <!--<RouterLink to="/password_reset">パスワードの変更</RouterLink>-->
-                <RouterLink :to="`/users/${id}/edit`">詳細設定</RouterLink>
+                <!--ユーザーステータス-->
+                
+                <!--名前-->
+                <h4><b>{{ user.name }}</b></h4>
+                
+                <!--性別-->
+                <h6 v-if="user.sex">
+                    <span v-if="user.sex == 0 "><b>男性</b></span>
+                    <span v-if="user.sex == 1 "><b>女性</b></span>
+                </h6>
+                
+                <!--住所-->
+                <h6 v-if="user.address">
+                    <b><i class="fas fa-map-marker-alt fa-lg  m-1"></i>{{ user.address }}</b>
+                </h6>
+                
+                <!--一言-->
+                <div v-if="user.message" class="m-auto w-25">
+                    <span>{{ user.message }}</span>
+                </div>
+            </div>
+            
+            
+            <!--編集フォーム-->
+            <transition name="slide_down">
+            <div v-if="Mode" class=" user-form " >
+                <form  @submit.prevent="editUser" class="m-auto w-25 border-top">
+                
+                    <!--エラーメッセージ-->
+                    <div v-if="errors">
+                      <p class="text-danger">入力に誤りがあります</p>
+                    </div>
                     
-                <div class="mt-3" >
-                    <input type="submit" value="Submit" class="btn btn-primary"/>
-                </div>
-            </form>
+                    <!--名前-->
+                    <div class="mt-3" >
+                        <b>名前</b></br>
+                        <input type="text" class="border bg-light " v-model="user.name" autofocus/>
+                    </div>
+                    
+                    <!--性別-->
+                    <div class="mt-3">
+                        <b>性別</b></br>
+                        男<input type="radio" name="sex" value="0" v-model="user.sex">
+                        女<input type="radio" name="sex" value="1" v-model="user.sex">
+                    </div>
+                    
+                    <!--住所-->
+                    <div class="mt-3">
+                        <b>住所</b></br>
+                        <select name="pref" class="border bg-light p-1"  v-model="user.address">
+                        <option value="">選択してください</option>
+                        <option value="北海道">北海道</option>
+                        <option value="青森県">青森県</option>
+                        <option value="岩手県">岩手県</option>
+                        <option value="宮城県">宮城県</option>
+                        <option value="秋田県">秋田県</option>
+                        <option value="山形県">山形県</option>
+                        <option value="福島県">福島県</option>
+                        <option value="茨城県">茨城県</option>
+                        <option value="栃木県">栃木県</option>
+                        <option value="群馬県">群馬県</option>
+                        <option value="埼玉県">埼玉県</option>
+                        <option value="千葉県">千葉県</option>
+                        <option value="東京都" selected>東京都</option>
+                        <option value="神奈川県">神奈川県</option>
+                        <option value="新潟県">新潟県</option>
+                        <option value="富山県">富山県</option>
+                        <option value="石川県">石川県</option>
+                        <option value="福井県">福井県</option>
+                        <option value="山梨県">山梨県</option>
+                        <option value="長野県">長野県</option>
+                        <option value="岐阜県">岐阜県</option>
+                        <option value="静岡県">静岡県</option>
+                        <option value="愛知県">愛知県</option>
+                        <option value="三重県">三重県</option>
+                        <option value="滋賀県">滋賀県</option>
+                        <option value="京都府">京都府</option>
+                        <option value="大阪府">大阪府</option>
+                        <option value="兵庫県">兵庫県</option>
+                        <option value="奈良県">奈良県</option>
+                        <option value="和歌山県">和歌山県</option>
+                        <option value="鳥取県">鳥取県</option>
+                        <option value="島根県">島根県</option>
+                        <option value="岡山県">岡山県</option>
+                        <option value="広島県">広島県</option>
+                        <option value="山口県">山口県</option>
+                        <option value="徳島県">徳島県</option>
+                        <option value="香川県">香川県</option>
+                        <option value="愛媛県">愛媛県</option>
+                        <option value="高知県">高知県</option>
+                        <option value="福岡県">福岡県</option>
+                        <option value="佐賀県">佐賀県</option>
+                        <option value="長崎県">長崎県</option>
+                        <option value="熊本県">熊本県</option>
+                        <option value="大分県">大分県</option>
+                        <option value="宮崎県">宮崎県</option>
+                        <option value="鹿児島県">鹿児島県</option>
+                        <option value="沖縄県">沖縄県</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div class="mt-3"> 
+                        <RouterLink :to="`/users/${id}/edit`">詳細設定</RouterLink>
+                    </div>
+                        
+                    <div class="mt-3" >
+                        <input type="submit" value="Submit" class="btn btn-primary"/>
+                    </div>
+                </form>
+                
+            </div>
+            </transition>
             
-        </div>
-        </transition>
         
         
         <!--記事の一覧-->
         <div class="mt-5">
-            <div class="row m-0">
-            
+            <div class="m-auto w-75 row">
+                
+                
+                
                 <!--自分の写真-->
                 <div 
-                    class="col-4 bg-primary" 
-                    :class="{ 'bg-white ' : tab === 0 }"
+                    class="w-30 tab-color" 
+                    :class="{ 'tab-color-select' : tab === 0 }"
                     @click="onChangeTab(0)">
                     <h5 class="text-center p-2" >自分の写真</h5>
                 </div>
                 
                 <!--いいねした写真-->
                 <div
-                    class="col-4  bg-primary" 
-                    :class="{ 'bg-white ' : tab === 1 }"
+                    class="w-30 tab-color" 
+                    :class="{ 'tab-color-select' : tab === 1 }"
                     @click="onChangeTab(1)">
                     <h5 class="text-center p-2">いいねした写真</h5>
                 </div>
                 
                 <!--みんなの写真-->
                 <div 
-                    class="col-4  bg-primary"
-                    :class="{ 'bg-white ' : tab === 2 }"
+                    class="w-30  tab-color"
+                    :class="{ 'tab-color-select ' : tab === 2 }"
                     @click="onChangeTab(2)">
                     <h5 class="text-center p-2">みんなの写真</h5>
                 </div>
+            
             </div>
             
-            <!--タブテーブル-->
-            <!--<div v-if="tab === 0">-->
-                
-            <!--    <div v-if="user.posts.length > 0 " class="text-left">-->
-            <!--        <div v-for="post in user.posts" class="d-inline-block">-->
-            <!--            <RouterLink :to="`/posts/${post.token}`"  >-->
-            <!--                <div>-->
-            <!--                    <img src="/image.jpg" style="width: 200px"></img>-->
-            <!--                </div>-->
-            <!--            </RouterLink>-->
-            <!--        </div>-->
-            <!--    </div>-->
-            <!--</div>-->
+        
+            <div v-if="posts.length > 0 " class="text-left">
             
-            <!--<div v-if="tab >  0 " >-->
-                <div v-if="posts.length > 0 " class="text-left">
-                
-                    <transition-group name="list" tag="div">
-                    <div v-for="post in posts" :key="post.id" class="d-inline-block">
-                        <RouterLink :to="`/posts/${post.token}`"  >
-                            <div>
-                                <img src="/image.jpg" style="width: 200px"></img>
-                            </div>
-                        </RouterLink>
-                    </div>
-                    </transition-group>
-                
+                <transition-group name="list" tag="div">
+                <div v-for="post in posts" :key="post.id" class="d-inline-block" style="width: 20%;">
+                    <RouterLink :to="`/posts/${post.token}`"  >
+                        <div>
+                            <img src="/image.jpg" class="p-1" style="width: 100%"></img>
+                        </div>
+                    </RouterLink>
                 </div>
-                
-                
-            <!--</div>-->
+                </transition-group>
+            
+            </div>
+            
             
             <!--要素の最底辺-->
             <div id="imageButtom"class="mt-3 border-top" style="height: 500px;">
@@ -135,17 +209,16 @@
 <style type="text/css">
     
 .user-form{
-    height: 200px;
+    height: 330px;
     /*overflow-y: auto;*/
     overflow: hidden;
 }
 
-/*.slide_down-enter-active, .slide_down-leave-active {*/
-/*    transition: all .5s;*/
-/*}*/
-/*.slide_down-enter, .slide_down-leave-to {*/
-/*    height: 0;*/
-/*}*/
+/*タブの色*/
+.w-30{
+    width: 33%;
+}
+
 
 .list-enter-active, .list-leave-active {
   transition: all 1.3s;
@@ -171,6 +244,8 @@ export default {
         return{
             Mode: false,
             user: null,
+            errors :null,
+            imageHover: false,
             tab: 0,
             
             posts: [],
@@ -214,6 +289,14 @@ export default {
                             type: 'user-edit',
                             timeout: 3000
                     })
+                    
+                    this.Mode = false
+                }
+                if(response.status === 422){
+                    this.errors = response.data.errors
+                }
+                if(response.status !== 200){
+                    this.$store.commit('error/setCode', response.status)
                 }
         },
         
@@ -309,7 +392,15 @@ export default {
             this.posts = []
             this.currentPage = 0
             this.lastPage = 0
-        }
+        },
+        
+        
+        // ユーザーマウスオーバー
+        onHoverImage(){
+            this.imageHover = true
+        },
+        onDownImage(){
+            this.imageHover = false}
     },
     watch: {
         $route: { 

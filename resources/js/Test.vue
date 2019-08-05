@@ -4,41 +4,11 @@
         <span @click="onClickButtonForm">吹き出しボタン</span>
         
         <button @click="onClickButtonErrors">エラーチェックボタン</button>
-        <div class="w-25 bg-danger">吹き出し
-            <div v-if="form" class="">
-            <!--吹き出し-->
-                <div  class="postForm bg-white">
-                    <span>これは吹き出し</span>
-                </div>
-            </div>
-        </div>
+       
     
 </div>
 </template>
 
-<style type="text/css">
-.postForm{
-    
-    /*位置情報?サイズ*/
-    position:  relative; 
-    top: 15px;
-    right: 50px;
-    z-index: 1;
-    width: 200px; /* 幅 */
-    padding: 10px;
-    
-    /*吹き出しボーダー*/
-    border: solid #fff 2px;
-    border-radius: 15px;
-    
-    background-color: white;
-    
-    /*影*/
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    border-radius: 2px;
-    transition: 3s;
-} 
-</style>
 
 <script>
 export default {
@@ -46,14 +16,36 @@ export default {
     data() {
         return {
             mause: false,
-            form: false
+            form: false,
+            user: {
+                name: '123',
+                email: '123@example.com',
+                sex: 0,
+                address: '住所',
+                message: 'これはテストメッセージです',
+            },
+            id: 51//ログインユーザーのID
         }
     },
     methods:{
         onClickButtonErrors(){
-            // this.$store.commit('error/setCode', 404)
-            this.$store.commit('error/setCode', 500)
-            // this.$store.commit('error/setCode', 401)
+           
+            this.userEdit()
+        },
+        
+        async userEdit(){
+            // Route::put('/users/{user}/details', 'UserController@update2');
+            // user-update-1
+            console.log("送信", this.user )
+            // const response = await axios.put(`/api/users/${this.id}` , this.user )
+            
+            //user-update-2
+            const response = await axios.get(`/api/messages`, this.user )
+            console.log(response)
+        
+            if(response.status !== 200){
+                this.$store.commit('error/setCode', response.status)
+            }
         },
         onClickButtonForm(){
             this.form = ! this.form

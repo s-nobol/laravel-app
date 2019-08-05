@@ -117,12 +117,6 @@ export default{
             
         }
     },
-    computed: {
-        apiStatus () {
-            return this.$store.state.auth.apiStatus
-        },
-      
-    },
     methods: {
         async report () {
             

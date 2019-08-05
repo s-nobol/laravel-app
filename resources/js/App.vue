@@ -1,5 +1,5 @@
 <template>
- <div>
+ <div class="bg-white">
         
         <!--ヘッダー-->
         <header>
@@ -17,7 +17,7 @@
         
         <!--メイン-->
         <main>
-            <div class="container">
+            <div class="">
                 <RouterView />
             </div>
         </main>
@@ -92,21 +92,29 @@ export default {
     watch: {
         errorCode: {
             async handler (val) {
+                
+                // サーバーエラー
                 if (val === INTERNAL_SERVER_ERROR) {
                     this.$router.push('/500')
                     
+                // ログインエラー
                 } else if (val === UNAUTHORIZED) {
                   
                     await axios.get('/api/refresh-token')
                     this.$store.commit('auth/setUser', null)
-                    // this.modal = 1
                     this.$router.push('/401')
+                    
+                // クライアントユーザーエラー
+                } else if( val === 401 ){
+                    this.$router.push('/401')
+                } else if(val === 403 ){
+                    this.$router.push('/403')
+                
+                // ページエラー
                 } else if (val === NOT_FOUND) {
                     this.$router.push('/not-found')
                     
-                } else if (val === 401 ){
-                    // this.modal = 1
-                    this.$router.push('/401')
+                }else{
                 }
                 this.$store.commit('error/setCode', null)
                 

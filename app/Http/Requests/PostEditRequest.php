@@ -3,10 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 
-class UserEditRequest extends FormRequest
+class PostEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,19 +23,16 @@ class UserEditRequest extends FormRequest
      */
     public function rules()
     {
-        
         return [
-            'name' => 'required|max:250',
-            'sex' => 'required',
-            'address' => 'required',
-            // 'birthday' => 'required',
+            //
+            'title' => 'required|max:250',
+            'description' => 'required|max:250'
         ];
     }
     public function messages() {
         return [
         "required" => "必須項目です。",
-        "max" => "250文字以内で入力してください。",
-        "unique" => "メールアドレスはすでにしています"
+        "max" => "250文字以内で入力してください。"
         ];
     }
 }

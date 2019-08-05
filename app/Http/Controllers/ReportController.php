@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     
+    public function __construct()
+    {
+        $this->middleware('auth'); //(ログインユーザーのみ)
+    }
      
     //  通報モデルは記事の削除と同時に削除したい
     public function index()
@@ -25,7 +25,7 @@ class ReportController extends Controller
     {
         //
         Report::create($request->all());
-        return "通報した";
+        return "通報しました";
     }
 
     public function show(Report $report)

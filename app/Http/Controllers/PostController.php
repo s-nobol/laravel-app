@@ -6,6 +6,7 @@ use App\Post;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Http\Requests\PostEditRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -15,8 +16,8 @@ class PostController extends Controller
     
     public function __construct()
     {
-        // $this->middleware('auth')->except(['index','show']);
-        // $this->authorizeResource(Post::class, 'post');   
+        $this->middleware('auth')->except(['index','show','view']); //store update delete(ログインユーザーのみ)
+        $this->authorizeResource(Post::class, 'post');    // update delete(作成ユユーザーのみ) 
     }
 
     public function index()
@@ -31,14 +32,13 @@ class PostController extends Controller
     
     public function show(Post $post)
     {
-        
-        $post = Post::where('id', $post->id)->with(['user','category'])->first();
+        $post = Post::where('token', $post)->with(['user','category'])->first();
         return $post;
     }
-
+    
+    // post-showの代わり
     public function view(string $token){
         
-        // return $token;
         $post = Post::where('token', $token)->with(['user','category'])->first();
         return $post;
     }
@@ -86,12 +86,11 @@ class PostController extends Controller
     }
 
 
-    public function update(PostRequest $request, Post $post)
+    public function update(PostEditRequest $request, Post $post)
     {
-        //
-        // $post
-        $post->fill($request->all())->save();;
-        
+    
+        $post->fill($request->all())->save();
+        $post = Post::where('token', $post->token)->with(['user','category'])->first();
         return $post;
     }
 
@@ -99,5 +98,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        // $post->delete;
+        return "記事を削除しました";
     }
 }

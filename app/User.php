@@ -18,12 +18,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','sex','address','message',
     ];
     
     protected $appends = [ 'user_by_create', ];
     protected $visible = [
-        'id', 'name', 'email','message','address', 'sex', 'birthday',
+        'id', 'name', 'email','message','address', 'sex','role', 'birthday',
         'posts', 'comments', 'user_by_create','likes'
     ];
 
