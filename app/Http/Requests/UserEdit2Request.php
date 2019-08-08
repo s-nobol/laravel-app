@@ -29,6 +29,7 @@ class UserEdit2Request extends FormRequest
         $user = Auth::user();
         
         return [
+            
             'name' => 'required|max:250',
             'email' => [
                 'required',

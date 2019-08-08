@@ -7,14 +7,30 @@
                      
        
             <!--画像フォーム-->
-            <div v-if="! preview "class="dashed text-center"  style="height: 250px; width: 380px;"
+            <div v-if="errors" class="w-100">
+                <div v-if="errors.image">
+                    <!--<span v-for="msg in errors.image" class="text-danger">{{ msg }}</span>-->
+                    <p class="text-danger ">アップロードできませんでした。</p>
+                </div>
+            </div>
+            
+            <div v-if="! preview " class="dashed text-center bg-light"  style="height: 250px; width: 380px; "
+                @click="imageForm"
                 @dragleave.prevent @dragover.prevent @drop.prevent="onDrop">
-                <input type="file" class="p-3 " @change="onFileChange"/>
+                
+                <p class="mt-5 text-white"><i class="far fa-image fa-7x"></i></p>
+                <p class="mt-2">
+                    <span>画像ファイルを選択してください</span></br>
+                    <span>ドラックアンドドロップも可能です</span>
+                </p>
+                
+                <input type="file" class="w-100 bg-danger h-100 " style="display:none;"
+                    id="input-file" @change="onFileChange"/>
             </div>
             
             <!--プレビュー-->
             <div v-if="preview">
-                <img :src="preview" alt="" style="height: 200px;" >
+                <img :src="preview" alt="" style="max-height: 400px; max-width: 100%;" >
             </div>
             
             <transition name="slide_down">
@@ -147,6 +163,15 @@ export default {
         },
     },
     methods: {
+        // カテゴリー取得
+        async getCategory(){
+            const response = await axios.get('/api/categorys')
+            console.log("カテゴリー取得", response)
+            if (response.status === 200) {
+                this.categorys = response.data
+            }
+        },
+        
         async createPost(){
             
             const formData = new FormData()
@@ -172,20 +197,20 @@ export default {
             // バリテーションエラー
             if (response.status === 422) {
                 this.errors = response.data.errors
+                
+                if(this.errors.image){
+                    this.reset()
+                }
             }
             
         },
         
-        // カテゴリー取得
-        async getCategory(){
-            const response = await axios.get('/api/categorys')
-            console.log("カテゴリー取得", response)
-            if (response.status === 200) {
-                this.categorys = response.data
-            }
-        },
         
         // 画面アップロード
+        imageForm(){
+            // 画像フォームがクリックされればinput起動
+            document.getElementById('input-file').click();
+        },
         onFileChange (event) {
             if(event.target.files.length === 0 && ! event.target.files[0].type.match('image.*')) {
                 this.reset()
@@ -198,6 +223,7 @@ export default {
             }
             reader.readAsDataURL(event.target.files[0])
             this.image = event.target.files[0]
+            this.getCategory() //カテゴリーの取得
         },
         
         // ドラックアンドドロップ
@@ -221,6 +247,8 @@ export default {
                 
                 reader.readAsDataURL(event.dataTransfer.files[0])
                 this.image = event.dataTransfer.files[0]
+                
+                this.getCategory() //カテゴリーの取得
         },
         reset () {
             this.preview = ''
@@ -230,7 +258,7 @@ export default {
     
     },
     created(){
-        this.getCategory()
+        // this.getCategory()
         console.log("Postform起動" )
     },
     destroyed(){

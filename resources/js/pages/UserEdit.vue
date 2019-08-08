@@ -16,7 +16,9 @@
                     
                 <!--画像-->
                 <div class="text-center border-bottom mb-5 p-5">
+                
                     <h4><b>プロフィール画像の編集</b></h4>
+                    
                     <div class="m-auto">
                         
                         <!--エラーメッセージ-->
@@ -27,20 +29,60 @@
                         </div>
                     
                         <!--もし画像があれば表示-->
-                        <img　v-if="! image" src="/noimage.jpg" 
-                            style="width: 150px;" 
-                            class="rounded-circle mt-5"
-                            @dragleave.prevent @dragover.prevent @drop.prevent="onDrop"></img>
-                        <img　v-if=" image" :src="preview" 
-                            style="width: 150px;" 
-                            class="rounded-circle mt-5"></img>
-                        <input type="file" name=" " @input="onFileChange" />
+                        <div v-if="! image" class="mt-3">
+                             <div class="m-auto rounded-circle"
+                                style="width: 150px; height: 150px; overflow: hidden;" >
+                                
+                                <!--ユーザー画像があるとき-->
+                                <img v-if="user.image"
+                                    :src="user.url"
+                                    style="" 
+                                    class="image"
+                                    @click="imageForm"
+                                    @dragleave.prevent @dragover.prevent @drop.prevent="onDrop"></img>
+                                    
+                                <!--画像がないとき-->
+                                <img v-if="! user.image"
+                                    src="/noimage.jpg"
+                                    style="" 
+                                    class="image"
+                                    @click="imageForm"
+                                    @dragleave.prevent @dragover.prevent @drop.prevent="onDrop"></img>
+                            </div>
+                            <div class="mt-3">
+                                <small>推奨画像サイズ：横幅200px以上、縦幅200px以上</br>
+                                ※ローカルから写真ファイルを選択、またはドラッグ＆ドロップしてください</small></br>
+                                <small>また、画像の更新までしばらくかかることがありますご了承ください。</small>
+                            </div>
+                        </div>
+                       
+                       
+                        <!--プレビュー-->
+                        <transition name="fade">
+                        <div v-if="image"  class="mt-3">
+                            <div class="m-auto rounded-circle mt-5"
+                                style="width: 150px; height: 150px; overflow: hidden;" >
+                                <img 
+                                    :src="preview"
+                                    style="" 
+                                    class="image"
+                                    @click="imageForm"
+                                    @dragleave.prevent @dragover.prevent @drop.prevent="onDrop"></img>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" @click="onImageUploader">保存する</button>
+                            </div>
+                        </div>
+                        </transition>
+                        
+                            <!--画像送信フォーム-->
+                            <input type="file" id="input-file" style="display: none;"
+                            @input="onFileChange" />
+                            
                     </div>
                     
-                    <div class="mt-3">
-                        <small>推奨画像サイズ：横幅200px以上、縦幅200px以上</br>
-                        ※ローカルから写真ファイルを選択、またはドラッグ＆ドロップしてください</small>
-                    </div>
+                    
                 </div>
                 
                     <h4 class="text-center"><b>プロフィールの編集</b></h4>
@@ -50,7 +92,7 @@
                     <!--エラーメッセージ-->
                     <div v-if="errors" class="errors text-danger mt-2">
                         <ul v-if="errors.name">
-                            <li v-for="msg in errors.name" :key="msg">メールアドレス{{ msg }}</li>
+                            <li v-for="msg in errors.name" :key="msg">名前{{ msg }}</li>
                         </ul>
                         <ul v-if="errors.email">
                             <li v-for="msg in errors.email" :key="msg">メールアドレス{{ msg }}</li>
@@ -312,6 +354,10 @@
 </div>
 </template>
 
+<style type="text/css">
+
+
+</style>
 <script>
 // import Modal from '../components/modal/Modal.vue'
 
@@ -355,26 +401,58 @@ export default {
         
         // ユーザー情報の送信
         async onChangeUser(){
-                console.log("ユーザー情報を送信", this.user )
-                const response = await axios.put(`/api/users/${ this.id }/details`, this.user)
-                console.log("ユーザーを受信",response)
-                if (response.status === 200) {
-                     this.$store.commit('message/setContent', {   // メッセージ登録
-                            content: 'プロフィールを編集しました',
-                            type: 'user-edit',
-                            timeout: 3000
-                    })
-                }
-                if(response.status === 422){
-                    this.errors = response.data.errors
-                }
-                if (response.status !== 200){
-                    this.$store.commit('error/setCode', response.status)
-                }
+            
+            
+            console.log("ユーザー情報を送信", this.user )
+            const response = await axios.put(`/api/users/${ this.id }/details`, this.user)
+            console.log("ユーザーを受信",response)
+            if (response.status === 200) {
+                 this.$store.commit('message/setContent', {   // メッセージ登録
+                        content: 'プロフィールを編集しました',
+                        type: 'user-edit',
+                        timeout: 3000
+                })
+            }
+            if(response.status === 422){
+                this.errors = response.data.errors
+            }
+            if (response.status !== 200){
+                this.$store.commit('error/setCode', response.status)
+            }
+        },
+        
+        async onImageUploader(){
+            const formData = new FormData()
+            formData.append('image', this.image)
+            
+            
+            const response = await axios.post(`/api/users/${ this.id }/image`, formData)
+            console.log("ユーザーを受信",response)
+            if (response.status === 200) {
+                // this.user = response.data
+                
+                this.$store.commit('message/setContent', {   // メッセージ登録
+                        content: 'プロフィールを編集しました',
+                        type: 'user-edit',
+                        timeout: 3000
+                })
+                this.reset()
+            }
+            if(response.status === 422){
+                this.errors = response.data.errors
+            }
+            if (response.status !== 200){
+                this.$store.commit('error/setCode', response.status)
+            }
+            
         },
         
         
         // 画面アップロード
+        imageForm(){
+            // 画像フォームがクリックされればinput起動
+            document.getElementById('input-file').click();
+        },
         onFileChange (event) {
             console.log("画像の読み込み")
             if(event.target.files.length === 0 && ! event.target.files[0].type.match('image.*')) {
@@ -421,6 +499,7 @@ export default {
         onClickBack(){
             if(confirm("入力中ですもどりますか？")){
                 this.$router.push(`/users/${ this.user.id }`)
+                
             }
         }
     },

@@ -7,11 +7,22 @@
         <div v-if="user" class="bg-white text-center">
         
             
-            <!--画像-->
+            <!--プロフィール画像-->
             <div class=" mt-5">
-                <div class="m-auto rounded-circle image-form" style="width: 150px;">
-                    <img src="/noimage.jpg"  
-                        class="image  "  
+                <div class="m-auto rounded-circle image-form" 
+                    style="width: 150px; height: 150px; overflow: hidden;" >
+                    
+                    <!--画像あり-->
+                    <img v-if="user.image"
+                        :src="user.url"  
+                        class="image "  
+                        :class="{'image-hover' : imageHover }"
+                        @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
+                    
+                    <!--画像なし-->
+                    <img v-if="! user.image"
+                        src="/noimage.jpg"  
+                        class="image "  
                         :class="{'image-hover' : imageHover }"
                         @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
                 </div>
@@ -244,7 +255,7 @@ export default {
         return{
             Mode: false,
             user: null,
-            errors :null,
+            errors: null,
             imageHover: false,
             tab: 0,
             
@@ -290,7 +301,10 @@ export default {
                             timeout: 3000
                     })
                     
+                    //エラーメッセージのリセット
+                    this.errors = null
                     this.Mode = false
+                    return false
                 }
                 if(response.status === 422){
                     this.errors = response.data.errors

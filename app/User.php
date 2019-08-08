@@ -18,15 +18,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','sex','address','message',
+        'name', 'email', 'password','sex','address','message','image',
     ];
     
-    protected $appends = [ 'user_by_create', ];
+    protected $appends = [ 'user_by_create', 'url',];
     protected $visible = [
-        'id', 'name', 'email','message','address', 'sex','role', 'birthday',
-        'posts', 'comments', 'user_by_create','likes'
+        'id', 'name', 'email','message','address', 'sex', 'birthday','image',
+        'posts', 'comments', 'user_by_create','likes', 'url'
     ];
-
 
     protected $hidden = [ 'password', 'remember_token', ];
 
@@ -37,7 +36,14 @@ class User extends Authenticatable
             return false;
         }
         return $this->id == Auth::user()->id;
-
+    }
+    
+    
+    public function getUrlAttribute()
+    {
+        // return Storage::cloud()->url( $this->attributes['image']);
+            return "https://ka1301-laravel-test.s3.ap-northeast-1.amazonaws.com/users/".$this->id.'/'.$this->image;
+        // }
     }
     
     public function posts()

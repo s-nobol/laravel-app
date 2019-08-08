@@ -15,7 +15,7 @@ class CommentController extends Controller
     
     public function __construct()
     {
-        // $this->middleware('auth')->except(['view']);
+        $this->middleware('auth')->except(['view','show']);
         // $this->authorizeResource(Comment::class, 'comment');   
     }
 

@@ -9,28 +9,28 @@
         <!--画像-->
         <div class="mt-5">
             
-            <img src="/image.jpg"></img>
+                <img v-if="post.image" :src="post.url+'image.jpg'" class="post-image"></img>
+                <img v-else src="/image.jpg"  class="post-image"></img>
+            
             <div v-if="currentUser" >
                 <div v-if="post.user.id === currentUser.id">
                     <span class="text-success" @click="Mode = ! Mode ">編集</span>
                     <span class="text-danger2" @click="postDelete">削除</span>
                 </div>
             </div>
-            
-        
         </div>
         
         
         
         <!--記事のステータス-->
-        <div class="mt-3">
-            <!--<p v-if="Mode" class="text-success">編集モード</p>-->
-        </div>
+        <!--<div class="mt-3">-->
+        <!--    <p v-if="Mode" class="text-success">編集モード</p>-->
+        <!--</div>-->
         
         
         
         <!--カテゴリー-->
-        <div class="mb-3">
+        <div class="mt-5 mb-3">
             <span class="p-2 bg-success2">{{ post.category.name }}</span>
         </div>
         
@@ -49,7 +49,7 @@
             <button 
                 class="btn  p-0 text-success2"
                 @click="onClickComment"> 
-                <i class="far fa-comment-alt fa-lg m-1 "></i>54
+                <i class="far fa-comment-alt fa-lg m-1 "></i>54{{ post.comments_count}}
             </button>
             
             <!--View-->
@@ -109,14 +109,12 @@
         </transition>
         
         
-        
         <!--通報ボタン-->
         <div v-if="currentUser" class="mt-5 text-muted">
             <span @click="reportModal = ! reportModal">
                 <i class="fas fa-exclamation-circle m-1"></i>通報する
             </span>
         </div>
-        
         <transition name="fade" >
             <Report v-if="reportModal" :id="post.id" @close="onCloseReport"/>
         </transition>
@@ -126,33 +124,46 @@
         <!--投稿者-->
         <div class="mt-5 bg-whitesmoke p-5 ">
             
-            <button class="btn bg-success2  mt-2 mb-2">投稿者</button></br>
+            <button class="btn bg-success2  mt-2 mb-3">投稿者</button></br>
             
             
             <!--ユーザープロフィール-->
             <RouterLink :to="`/users/${post.user.id}`"  class="" >
-                <div class="image-form rounded-circle d-inline-block" style="width: 120px;" >
-                    <img src="/noimage.jpg"
-                        class=" image" :class="{'image-hover' : imageHover }"
-                         @mouseover="onHoverImage"  @mouseout="onDownImage"></img></br>
+                  <div class="m-auto rounded-circle image-form" style="width: 120px; height: 120px; overflow: hidden;" >
+                    
+                    <!--画像あり-->
+                    <img v-if="post.user.image"
+                        :src="post.user.url"  
+                        class="image "  
+                        :class="{'image-hover' : imageHover }"
+                        @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
+                    
+                    <!--画像なし-->
+                    <img v-if="! post.user.image"
+                        src="/noimage.jpg"  
+                        class="image "  
+                        :class="{'image-hover' : imageHover }"
+                        @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
                 </div>
                 
                 
                 <h3 class="mt-2 text-post-edit2"><b>{{ post.user.name }}</b></h3>
-                <span class="text-dark"><i class="fas fa-map-marker-alt fa-lg  m-1"></i>{{ post.user.address }}</span>
+                <span class="text-dark" v-if="post.user.address">
+                    <i class="fas fa-map-marker-alt fa-lg  m-1"></i>{{ post.user.address }}
+                </span>
             </RouterLink>
             
         </div>
         
         
         <!--コメント-->
-        <div class="row mt-5">
-            <div class="col-3"></div>
-            <div class="col-6">
+        <div class="row mt-5 p-3">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
                 <button class="btn bg-success2 mt-3">コメント</button></br>
                 <Comment :post="post" />
             </div>
-            <div class="col-3"></div>
+            <div class="col-md-3"></div>
         </div>
         
         
@@ -171,6 +182,11 @@
   opacity: 0;
 }
 
+.post-image{
+    max-width: 700px;
+    max-height:  700px;
+    /*width: 300px;*/
+}
 .post-edit-form{
     height: 300px;
     overflow: hidden;
@@ -243,6 +259,8 @@ export default {
                         type: 'success',
                         timeout: 3000
                 })
+                //エラーメッセージのリセット
+                this.errors = ''
                 this.Mode = false
                 return false
             }

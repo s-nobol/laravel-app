@@ -43,6 +43,7 @@ Route::resource('users', 'UserController');
 Route::get('/users/{user}/posts', 'UserController@user_posts');
 Route::get('/users/{user}/likes', 'UserController@user_like_posts');
 Route::put('/users/{user}/details', 'UserController@update2');
+Route::post('/users/{user}/image', 'UserController@image_upload');
 
 
 Route::get('/users/{id}/view', 'UserController@view');
@@ -83,11 +84,18 @@ Route::delete('/messages/{message}', 'DatabaseController@deletemessages');
 Route::resource('reports', 'ReportController');
 
 
-
-
 // laravel-test-app.mlドメインの作成
 
+// s3に画像アップロード()
 
-// ミドルウェアをルートへ登録
+// テスト
+//  composer require league/flysystem-aws-s3-v3
+Route::post('/test/image', 'DatabaseController@send_image_s3');
 
-// AWS　ERB
+// Git push してS3が起動するかためしてみる
+// $git push -u origin 作成したブランチ名
+// git clone -b ブランチ名 https://リポジトリのアドレス
+
+// サムネイルの作成
+// 全体のView修正
+// 画像サイズ修正(intervention Image ?)米最後

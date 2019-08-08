@@ -1,5 +1,5 @@
 <template>
-<div class="mt-2 mb-5  w-75 m-auto">
+<div class="mt-2 mb-5  ">
     
     
     <!--コメント送信フォーム(ゲストユーザー用)-->
@@ -41,21 +41,47 @@
         
         <div v-for="comment in comments"  class="mt-2">
         
-            <div class="media">
-            
                 <!--非作成ユーザー-->
-                <img v-if="comment.id !== post.user.id" src="/noimage.jpg" class="ml-3" alt="" style="width: 50px;">
-                <div class="media-body text-left bg-whitesmoke p-3 pl-4 rounded-pill">
-                    <div>
-                        <!--<small>ユーザー名:{{ comment.user.name }}</small>-->
-                        <!--<small>作成時間:{{ comment.created_at }}</small>-->
-                    </div>
-                    
-                    <span>{{ comment.id }} {{ comment.content }}</span>
+            <div class="media" v-if="comment.user.id !== post.user.id" >
+            
+                <!--ユーザー画像-->
+                <div class=" rounded-circle"  style="width: 50px; height: 50px; overflow: hidden;" >
+                    <img v-if="comment.user.image" :src="comment.user.url" class="image" >
+                    <img v-else src="/noimage.jpg" class="image">
                 </div>
                 
-                <!--記事作成ユーザー-->
-                <img v-if="comment.id === post.user.id" src="/noimage.jpg" class="mr-3" alt="" style="width: 50px;">
+                <!--コメント内容-->
+                <div class="media-body text-left bg-whitesmoke p-3 pl-4 rounded-pill">
+                    <span>{{ comment.id }} {{ comment.content }}</span>
+                    <span>ユーザー：{{ comment.user.name }}</span>
+                </div>
+                
+                <!--削除ボタン-->
+                <div v-if="currentUser">
+                <button
+                    v-if="comment.user.id === currentUser.id"
+                    class="btn btn-danger p-1" 
+                    @click="deleteComment(comment)" 
+                    >削除</button>
+                </div>
+            </div>
+            
+            <!--記事作成ユーザー-->
+            <div class="media"  v-if="comment.user.id === post.user.id" >
+            
+                <!--コメント内容-->
+                <div class="media-body text-left bg-whitesmoke p-3 pl-4 rounded-pill">
+                    <span>{{ comment.id }} {{ comment.content }}</span>
+                    <span>ユーザー：{{ comment.user.name }}</span>
+                </div>
+                
+                <!--ユーザー画像-->
+                <div class=" rounded-circle"  style="width: 50px; height: 50px; overflow: hidden;" >
+                    <img v-if="comment.user.image" :src="comment.user.url" class="image" >
+                    <img v-else src="/noimage.jpg" class="image">
+                </div>
+                
+                <!--削除ボタン-->
                 <div v-if="currentUser">
                 <button
                     v-if="comment.user.id === currentUser.id"
@@ -69,9 +95,9 @@
         </div>
         
         <!--ページネーション-->
-        <div v-if="lastPage > 1" >
+        <div v-if="lastPage > 1"  class="mt-5">
             <button @click="onPrev" class="btn btn-primary">前へ</button>
-            <button @click="onNext" class="btn btn-primary">次へ</button>
+            <button v-if="currentPage !== lastPage" @click="onNext" class="btn btn-primary">次へ</button>
         </div>
     </div>
   
@@ -106,8 +132,6 @@ export default {
     },
     methods: {
         async getComment(){
-            console.log("コメント受信", this.post.id)
-            console.log("コメントページ", this.currentPage)
             
             const response = await axios.get(`/api/posts/${this.post.id}/comments?page=${this.currentPage}`)
             console.log("コメント受信",response)

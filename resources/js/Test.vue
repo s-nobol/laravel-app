@@ -1,9 +1,20 @@
 <template>
 <div>
 
-        <span @click="onClickButtonForm">吹き出しボタン</span>
+    <div class="container">
+        <form  @submit.prevent="SendImage" >
         
-        <button @click="onClickButtonErrors">エラーチェックボタン</button>
+            <input type="file" name="" @change="onFileChange"/>
+            <div v-if="preview">
+                <img :src="preview" style="max-height: 500px;"></img>
+            </div>
+            
+            <div class="mt-3">
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+            </div>
+        </form>
+        <!--<button @click="onClickButtonErrors" >エラーチェックボタン</button>-->
+    </div>
        
     
 </div>
@@ -15,37 +26,57 @@ export default {
 
     data() {
         return {
+            preview: null,
+            image2: null,
             mause: false,
             form: false,
-            user: {
-                name: '123',
-                email: '123@example.com',
-                sex: 0,
-                address: '住所',
-                message: 'これはテストメッセージです',
-            },
-            id: 51//ログインユーザーのID
         }
     },
     methods:{
-        onClickButtonErrors(){
-           
-            this.userEdit()
+        // SendImage(){
+        // },
+        
+        // 画面アップロード
+        onFileChange (event) {
+            if(event.target.files.length === 0 && ! event.target.files[0].type.match('image.*')) {
+                // this.reset()
+                return false
+            }
+            
+            const reader = new FileReader()
+            reader.onload = e => {
+                this.preview = e.target.result
+            }
+            reader.readAsDataURL(event.target.files[0])
+            this.image2 = event.target.files[0]
         },
         
-        async userEdit(){
-            // Route::put('/users/{user}/details', 'UserController@update2');
-            // user-update-1
-            console.log("送信", this.user )
-            // const response = await axios.put(`/api/users/${this.id}` , this.user )
-            
-            //user-update-2
-            const response = await axios.get(`/api/messages`, this.user )
-            console.log(response)
         
-            if(response.status !== 200){
-                this.$store.commit('error/setCode', response.status)
+         async SendImage(){
+            
+            const formData = new FormData()
+            formData.append('image', this.image2)
+            // formData.append('name', "これはテストメッセージです")
+            
+            
+            const response = await axios.post(`/api/users/51/image`, formData)
+            console.log("ユーザーを受信",response)
+            if (response.status === 201) {
+                // メッセージ登録
+                this.$store.commit('message/setContent', {
+                        content: '写真が投稿されました！',
+                        type: 'success',
+                        timeout: 3000
+                })
+                // this.$emit('close')
+                this.reset()
+                return false
             }
+            // バリテーションエラー
+            if (response.status === 422) {
+                this.errors = response.data.errors
+            }
+            
         },
         onClickButtonForm(){
             this.form = ! this.form

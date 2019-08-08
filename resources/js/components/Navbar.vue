@@ -6,13 +6,31 @@
                 <!--m-auto w-75-->
                 <RouterLink class="navbar-brand text-dark" to="/"><b>ホーム</b></RouterLink>
                 
-                <div v-if="currentUser" class=" nav-item float-right">
-                    <div class=" float-right">
-                        <button  class="btn btn-primary"
+                <div v-if="currentUser" class=" float-right">
+                    <div class=" float-right ">
+                        <button  class=" btn btn-primary"
                             @click="showForm = ! showForm" >記事の作成</button>
                         
+                     
+                        
                         <RouterLink class="" :to="`/users/${currentUser.id}`">
-                            <img src="/noimage.jpg" class="rounded-circle" style="width: 30px;"></img>
+                            <!--<img src="/noimage.jpg" class="rounded-circle" style="width: 30px;"></img>-->
+                     
+                            
+                            <!--画像あり-->
+                            <img v-if="currentUser.image"
+                                :src="currentUser.url"
+                                style="width: 30px; height: 30px; overflow: hidden;" 
+                                class="image rounded-circle "></img>
+                            
+                            <!--画像なし-->
+                            <img v-if="! currentUser.image"
+                                src="/noimage.jpg"  
+                                style="width: 30px; height: 30px; overflow: hidden;" 
+                                class="image rounded-circle " ></img>
+                                
+                        
+                        
                             <span v-if="currentUser" class="navbar__item" >{{ currentUser.name }}</span>
                         </RouterLink>
                         <button v-if="currentUser"  @click="logout" class="btn" >ログアウト</button>

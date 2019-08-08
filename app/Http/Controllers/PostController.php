@@ -48,34 +48,42 @@ class PostController extends Controller
     }
 
 
+    // $extension = $request->image->extension();
     public function store(PostRequest $request)
     {
         // 投稿写真の拡張子を取得する
-        // $extension = $request->post->extension();
-        // ここにnew Post();
-        // $post->filename = $post->id . '.' . $extension;
-        // Storage::cloud()->putFileAs('', $request->post, $post->filename, 'public');
+        $image = $request->image;
+        $post = new Post();
+        
+        
 
         // トランザクションを利用する
-        // DB::beginTransaction();
-        // try {
-        //     Auth::user()->posts()->save($post);
-        //     DB::commit();} catch (\Exception $exception) {
-        //     DB::rollBack();
-        //     // DBとの不整合を避けるためアップロードしたファイルを削除
-        //     Storage::cloud()->delete($post->filename);
-        //     throw $exception;
-        // }
+        DB::beginTransaction();
+        try {
+            //記事の作成
+            $post->image = 'image.jpg';
+            $post->category_id = $request->category_id;
+            $post->title = $request->title;
+            $post->description = $request->description;
+            $post = Auth::user()->posts()->save($post);
         
-        //記事の作成
-        $post = new Post();
-        $post->category_id = $request->category_id;
-        $post->title = $request->title;
-        $post->description = $request->description;
-        return Auth::user()->posts()->save($post);
+            // 画像ファイルの保存
+            Storage::cloud()->putFileAs('/posts/'.$post->id, $image, $post->image , 'public');
 
+            // サムネイルの保存
+            // Storage::cloud()->putFileAs('', $request->post, $post->filename, 'public');
+            
+            DB::commit();
+            
+            } catch (\Exception $exception) {
+            DB::rollBack();
+            // s3のディレクトリごと削除
+            Storage::cloud()->deleteDirectory('/posts/'.$post->id);
+            throw $exception;
+        }
+        
 
-        // return response($post, 201);
+        return response($post, 201);
     }
 
     
@@ -88,7 +96,6 @@ class PostController extends Controller
 
     public function update(PostEditRequest $request, Post $post)
     {
-    
         $post->fill($request->all())->save();
         $post = Post::where('token', $post->token)->with(['user','category'])->first();
         return $post;

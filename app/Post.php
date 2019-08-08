@@ -14,11 +14,11 @@ class Post extends Model
         'title', 'description', 
     ];
     
-    protected $appends = [ 'user_by_create','user_by_liked','likes_count' ];
+    protected $appends = [ 'user_by_create','user_by_liked','likes_count', 'comments_count' ,'url'];
     protected $visible = [
-        'id', 'token','title', 'description', 'created_at',
-        'user','category', 'user_by_create', 'comments',
-        'user_by_liked','likes_count'
+        'id', 'token','title', 'description', 'image', 'created_at',
+        'user','category', 'user_by_create',
+        'user_by_liked','likes_count', 'comments_count','url',
     ];
 
     /** プライマリキーの型 */
@@ -80,6 +80,19 @@ class Post extends Model
     }
     public function getLikesCountAttribute() {
         return $this->likes->count();
+    }
+    public function getCommentsCountAttribute() {
+        return $this->comments->count();
+    }
+    
+    public function getUrlAttribute()
+    {
+        // return "https://ka1301-laravel-test.s3.ap-northeast-1.amazonaws.com/posts/".$this->id.'/'.$this->image;
+        return "https://ka1301-laravel-test.s3.ap-northeast-1.amazonaws.com/posts/".$this->id.'/';
+    } 
+    public function getThumAttribute()
+    {
+        return "https://ka1301-laravel-test.s3.ap-northeast-1.amazonaws.com/posts/".$this->id.'/'.$this->image;
     }
     /**
     * リレーションシップ - usersテーブル

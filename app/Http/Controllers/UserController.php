@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Post;
 use App\Like;
 use App\Http\Requests\UserEditRequest;
 use App\Http\Requests\UserEdit2Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UserImageRequest;
 
 class UserController extends Controller
 {
@@ -64,7 +65,7 @@ class UserController extends Controller
         return $user;
     }
     
-    
+    // ユーザープロフィールの編集（user-show）
     public function update(UserEditRequest $request, User $user)
     {
         $user->fill($request->all())->save();
@@ -72,24 +73,33 @@ class UserController extends Controller
     }
     
     
+    // ユーザープロフィールの編集（user-edit）
     public function update2(UserEdit2Request $request, User $user)
     {
-        // 自作ポリシー
+        
         if(Auth::user()->id != $user->id){
             // return $user;
             return abort(403);
         }
-        
         $user->fill($request->all())->save();
         $user = User::find($user->id);
         return $user;
     }
     
-    
-    public function testup(UserEdit2Request $request){
-    // public function testup( User $user){
-        return "成功";
+    // ユーザープロフィール画像の編集（user-edit）
+    public function image_upload(UserImageRequest $request, User $user){
+        // 自作ポリシー
+        if(Auth::user()->id != $user->id){
+            return abort(403);
+        }
+        $user->image = "image.jpg";
+        $user->save();
+        
+        Storage::cloud()->putFileAs('/users/'.$user->id, $request->image , $user->image , 'public');
+        return $request;
     }
+    
+    
 
     public function destroy($id)
     {
