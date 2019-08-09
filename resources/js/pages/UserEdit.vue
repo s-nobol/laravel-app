@@ -24,7 +24,8 @@
                         <!--エラーメッセージ-->
                         <div v-if="errors" class="errors text-danger mt-2">
                             <ul v-if="errors.image">
-                                <li v-for="msg in errors.image" :key="msg">メールアドレス{{ msg }}</li>
+                                <span>画像アップロードできませんでした</span></br>
+                                <span>画像サイズは5MBまでです、画像のサイズを確認してください</span>
                             </ul>
                         </div>
                     
@@ -71,7 +72,12 @@
                             </div>
                             
                             <div class="mt-3">
-                                <button class="btn btn-primary" @click="onImageUploader">保存する</button>
+                                <button class="btn btn-primary" @click="onImageUploader">
+                                    <span v-if="loading" class="spinner-grow spinner-grow-sm"></span>
+                                    <span v-if="loading">アップロード中です</span>
+                                    <span v-if="! loading">保存する</span>
+                                
+                                </button>
                             </div>
                         </div>
                         </transition>
@@ -376,6 +382,7 @@ export default {
             
             image: null,
             preview: null,
+            loading: false,
         }
     },
     computed: {
@@ -422,6 +429,13 @@ export default {
         },
         
         async onImageUploader(){
+            
+            if(this.loading){
+                console.log("loagin中です")
+                return false
+            }
+            this.loading = true
+            
             const formData = new FormData()
             formData.append('image', this.image)
             
@@ -445,6 +459,7 @@ export default {
                 this.$store.commit('error/setCode', response.status)
             }
             
+            this.loading = false
         },
         
         

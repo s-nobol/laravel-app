@@ -6,21 +6,25 @@
         <div v-if="posts.length > 0">
         
             <transition-group name="list" tag="div">
-            <div v-for="post in posts" :key="post.id" class="d-inline-block p-1" style="width: 20%;" >
+            <div v-for="post in posts" :key="post.id" 
+                class="d-inline-block p-1" style="width: 20%; overflow: hidden;" >
+                
                 <RouterLink :to="`/posts/${post.token}`" >
                     <div >
                         {{ post.id }}
-                        <img src="/image.jpg" style="width: 100%;" class="list-image"></img>
+                        <img v-if="post.image" :src="post.url+'thum.jpg'" 
+                            style="width: 100%;" class="list-image" alt="画像がありません"></img>
+                        <img v-else src="/image.jpg" style="width: 100%;" class="image"></img>
                     </div>
                 </RouterLink>
+                
             </div>
             </transition-group>
             
         </div>
         
         <!--要素の最底辺-->
-        <div id="imageButtom"class="mt-3 border-top" style="height: 500px;">
-            <span>画像の最低ライン</span>
+        <div  id="imageButtom"class="mt-3 border-top text-center" style="height: 500px;"  >
             <span v-if="loading" class="text-info">読み込み中</span>
         </div>
     
@@ -36,6 +40,9 @@
 .list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {
   opacity: 0;
   transform: translateY(30px);
+}
+.buttom-h{
+    height: 150px;
 }
 </style>
 

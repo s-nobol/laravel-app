@@ -2908,6 +2908,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -2924,6 +2931,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       title: '',
       description: '',
       errors: null,
+      loading: false,
       acd: false
     };
   },
@@ -2977,20 +2985,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                if (!this.loading) {
+                  _context2.next = 3;
+                  break;
+                }
+
+                console.log("loagin中です");
+                return _context2.abrupt("return", false);
+
+              case 3:
+                this.loading = true;
                 formData = new FormData();
                 formData.append('image', this.image);
                 formData.append('category_id', Number(this.category));
                 formData.append('title', this.title);
                 formData.append('description', this.description);
-                _context2.next = 7;
+                _context2.next = 11;
                 return axios.post('/api/posts', formData);
 
-              case 7:
+              case 11:
                 response = _context2.sent;
                 console.log("記事の作成受信", response);
 
                 if (!(response.status === 201)) {
-                  _context2.next = 14;
+                  _context2.next = 18;
                   break;
                 }
 
@@ -3004,7 +3022,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.reset();
                 return _context2.abrupt("return", false);
 
-              case 14:
+              case 18:
                 // バリテーションエラー
                 if (response.status === 422) {
                   this.errors = response.data.errors;
@@ -3014,7 +3032,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 }
 
-              case 15:
+                this.loading = false;
+
+              case 20:
               case "end":
                 return _context2.stop();
             }
@@ -3028,6 +3048,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return createPost;
     }(),
+    onPostUpload: function onPostUpload() {// console.log("起動")
+    },
     // 画面アップロード
     imageForm: function imageForm() {
       // 画像フォームがクリックされればinput起動
@@ -4373,6 +4395,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 // import Modal from '../components/modal/Modal.vue'
 /* harmony default export */ __webpack_exports__["default"] = ({
   // components:{Modal},
@@ -5661,6 +5690,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 // import Modal from '../components/modal/Modal.vue'
 /* harmony default export */ __webpack_exports__["default"] = ({
   // components:{Modal},
@@ -5675,7 +5710,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       user: null,
       errors: null,
       image: null,
-      preview: null
+      preview: null,
+      loading: false
     };
   },
   computed: {
@@ -5782,12 +5818,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
+                if (!this.loading) {
+                  _context3.next = 3;
+                  break;
+                }
+
+                console.log("loagin中です");
+                return _context3.abrupt("return", false);
+
+              case 3:
+                this.loading = true;
                 formData = new FormData();
                 formData.append('image', this.image);
-                _context3.next = 4;
+                _context3.next = 8;
                 return axios.post("/api/users/".concat(this.id, "/image"), formData);
 
-              case 4:
+              case 8:
                 response = _context3.sent;
                 console.log("ユーザーを受信", response);
 
@@ -5810,7 +5856,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.$store.commit('error/setCode', response.status);
                 }
 
-              case 9:
+                this.loading = false;
+
+              case 14:
               case "end":
                 return _context3.stop();
             }
@@ -5933,6 +5981,18 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6583,7 +6643,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.list-enter-active, .list-leave-active {\n  -webkit-transition: all 1.3s;\n  transition: all 1.3s;\n}\n.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {\n  opacity: 0;\n  -webkit-transform: translateY(30px);\n          transform: translateY(30px);\n}\n", ""]);
+exports.push([module.i, "\n.list-enter-active, .list-leave-active {\n  -webkit-transition: all 1.3s;\n  transition: all 1.3s;\n}\n.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {\n  opacity: 0;\n  -webkit-transform: translateY(30px);\n          transform: translateY(30px);\n}\n.buttom-h{\n    height: 150px;\n}\n", ""]);
 
 // exports
 
@@ -9350,7 +9410,9 @@ var render = function() {
                       _vm.errors.image
                         ? _c("div", [
                             _c("p", { staticClass: "text-danger " }, [
-                              _vm._v("アップロードできませんでした。")
+                              _vm._v(
+                                "アップロードできませんでした。画像が大きすぎる可能性があります"
+                              )
                             ])
                           ])
                         : _vm._e()
@@ -9685,10 +9747,28 @@ var render = function() {
                           : _vm._e(),
                         _vm._v(" "),
                         _c("div", { staticClass: "mt-2 text-right" }, [
-                          _c("input", {
-                            staticClass: "btn btn-primary",
-                            attrs: { type: "submit", value: "送信" }
-                          })
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              on: { click: _vm.onPostUpload }
+                            },
+                            [
+                              _vm.loading
+                                ? _c("span", {
+                                    staticClass: "spinner-grow spinner-grow-sm"
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.loading
+                                ? _c("span", [_vm._v("アップロード中です")])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.loading
+                                ? _c("span", [_vm._v("作成する")])
+                                : _vm._e()
+                            ]
+                          )
                         ])
                       ])
                     : _vm._e()
@@ -11154,7 +11234,7 @@ var render = function() {
                   {
                     key: post.id,
                     staticClass: "d-inline-block p-1",
-                    staticStyle: { width: "20%" }
+                    staticStyle: { width: "20%", overflow: "hidden" }
                   },
                   [
                     _c(
@@ -11167,11 +11247,20 @@ var render = function() {
                               _vm._s(post.id) +
                               "\n                    "
                           ),
-                          _c("img", {
-                            staticClass: "list-image",
-                            staticStyle: { width: "100%" },
-                            attrs: { src: "/image.jpg" }
-                          })
+                          post.image
+                            ? _c("img", {
+                                staticClass: "list-image",
+                                staticStyle: { width: "100%" },
+                                attrs: {
+                                  src: post.url + "thum.jpg",
+                                  alt: "画像がありません"
+                                }
+                              })
+                            : _c("img", {
+                                staticClass: "image",
+                                staticStyle: { width: "100%" },
+                                attrs: { src: "/image.jpg" }
+                              })
                         ])
                       ]
                     )
@@ -11189,13 +11278,11 @@ var render = function() {
     _c(
       "div",
       {
-        staticClass: "mt-3 border-top",
+        staticClass: "mt-3 border-top text-center",
         staticStyle: { height: "500px" },
         attrs: { id: "imageButtom" }
       },
       [
-        _c("span", [_vm._v("画像の最低ライン")]),
-        _vm._v(" "),
         _vm.loading
           ? _c("span", { staticClass: "text-info" }, [_vm._v("読み込み中")])
           : _vm._e()
@@ -11808,15 +11895,18 @@ var render = function() {
                     _vm.errors
                       ? _c("div", { staticClass: "errors text-danger mt-2" }, [
                           _vm.errors.image
-                            ? _c(
-                                "ul",
-                                _vm._l(_vm.errors.image, function(msg) {
-                                  return _c("li", { key: msg }, [
-                                    _vm._v("メールアドレス" + _vm._s(msg))
-                                  ])
-                                }),
-                                0
-                              )
+                            ? _c("ul", [
+                                _c("span", [
+                                  _vm._v("画像アップロードできませんでした")
+                                ]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _vm._v(
+                                    "画像サイズは5MBまでです、画像のサイズを確認してください"
+                                  )
+                                ])
+                              ])
                             : _vm._e()
                         ])
                       : _vm._e(),
@@ -11921,7 +12011,22 @@ var render = function() {
                                   staticClass: "btn btn-primary",
                                   on: { click: _vm.onImageUploader }
                                 },
-                                [_vm._v("保存する")]
+                                [
+                                  _vm.loading
+                                    ? _c("span", {
+                                        staticClass:
+                                          "spinner-grow spinner-grow-sm"
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.loading
+                                    ? _c("span", [_vm._v("アップロード中です")])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  !_vm.loading
+                                    ? _c("span", [_vm._v("保存する")])
+                                    : _vm._e()
+                                ]
                               )
                             ])
                           ])
@@ -13002,8 +13107,9 @@ var render = function() {
                             "div",
                             {
                               key: post.id,
-                              staticClass: "d-inline-block",
-                              staticStyle: { width: "20%" }
+                              staticClass: "d-inline-block p-1",
+                              staticStyle: { width: "20%", overflow: "hidden" },
+                              attrs: { id: "posts" }
                             },
                             [
                               _c(
@@ -13011,11 +13117,20 @@ var render = function() {
                                 { attrs: { to: "/posts/" + post.token } },
                                 [
                                   _c("div", [
-                                    _c("img", {
-                                      staticClass: "p-1",
-                                      staticStyle: { width: "100%" },
-                                      attrs: { src: "/image.jpg" }
-                                    })
+                                    post.image
+                                      ? _c("img", {
+                                          staticClass: "list-image",
+                                          staticStyle: { width: "100%" },
+                                          attrs: {
+                                            src: post.url + "thum.jpg",
+                                            alt: "画像がありません"
+                                          }
+                                        })
+                                      : _c("img", {
+                                          staticClass: "image",
+                                          staticStyle: { width: "100%" },
+                                          attrs: { src: "/image.jpg" }
+                                        })
                                   ])
                                 ]
                               )
@@ -13030,16 +13145,18 @@ var render = function() {
                   )
                 : _vm._e(),
               _vm._v(" "),
+              _vm.posts.length === 0
+                ? _c("div", { staticClass: "mt-5" }, [_vm._m(0)])
+                : _vm._e(),
+              _vm._v(" "),
               _c(
                 "div",
                 {
-                  staticClass: "mt-3 border-top",
+                  staticClass: "mt-3 border-top text-center",
                   staticStyle: { height: "500px" },
                   attrs: { id: "imageButtom" }
                 },
                 [
-                  _c("span", [_vm._v("画像の最低ライン")]),
-                  _vm._v(" "),
                   _vm.loading
                     ? _c("span", { staticClass: "text-info" }, [
                         _vm._v("読み込み中")
@@ -13054,7 +13171,20 @@ var render = function() {
       : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "m-auto card w-25" }, [
+      _c("div", { staticClass: "p-3 text-center" }, [
+        _c("h5", { staticClass: "pt-2" }, [
+          _c("span", [_vm._v("まだ記事がありません")])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

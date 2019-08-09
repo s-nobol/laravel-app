@@ -22,7 +22,8 @@ use Illuminate\Http\Request;
 // npm run watch 
 // php artisan migrate:rollback
 
-// $git push -u origin 作成したブランチ名
+// git push -u origin 作成したブランチ名
+// git clone -b ブランチ名 https://リポジトリのアドレス
 
 Route::get('/user', function () {
     return Auth::user();
@@ -92,10 +93,18 @@ Route::resource('reports', 'ReportController');
 //  composer require league/flysystem-aws-s3-v3
 Route::post('/test/image', 'DatabaseController@send_image_s3');
 
-// Git push してS3が起動するかためしてみる
-// $git push -u origin 作成したブランチ名
-// git clone -b ブランチ名 https://リポジトリのアドレス
+
 
 // サムネイルの作成
-// 全体のView修正
-// 画像サイズ修正(intervention Image ?)米最後
+
+// php のメモリ開放
+// php.init/ memory_limit= 128M -> 1024M 
+// ec2 再起動
+
+
+// 8/9 サムネイルの作成に成功した画像をEC2で起動するか確かめてみる。
+// php.initのメモリを拡張しなくてはならないかもしれない
+
+// AWS　ESE　申請
+// 成功したら全体のView修正
+// getScrollButtom　の位置を <div id="posts" の最下部に設定する

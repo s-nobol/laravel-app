@@ -192,10 +192,13 @@
             <div v-if="posts.length > 0 " class="text-left">
             
                 <transition-group name="list" tag="div">
-                <div v-for="post in posts" :key="post.id" class="d-inline-block" style="width: 20%;">
+                <div  v-for="post in posts" :key="post.id" id="posts"
+                    class="d-inline-block p-1" style="width: 20%; overflow: hidden;">
                     <RouterLink :to="`/posts/${post.token}`"  >
                         <div>
-                            <img src="/image.jpg" class="p-1" style="width: 100%"></img>
+                            <img v-if="post.image" :src="post.url+'thum.jpg'" 
+                                style="width: 100%;" class="list-image" alt="画像がありません"></img>
+                            <img v-else src="/image.jpg" style="width: 100%;" class="image"></img>
                         </div>
                     </RouterLink>
                 </div>
@@ -203,10 +206,19 @@
             
             </div>
             
+            <div v-if="posts.length === 0 " class="mt-5">
+                 <div class="m-auto card w-25">
+                    <div class="p-3 text-center">
+                        <!--<span class="display-2"><b>403</b></span>-->
+                        <!--<h4 class="border-bottom pb-3"><span><b>You Dont Have Post</b></span></h4>-->
+                        <h5 class="pt-2"><span>まだ記事がありません</span></h5>
+                    </div>
+                </div>
+            </div>
+            
             
             <!--要素の最底辺-->
-            <div id="imageButtom"class="mt-3 border-top" style="height: 500px;">
-                <span>画像の最低ライン</span>
+            <div id="imageButtom"class="mt-3 border-top text-center" style="height: 500px;">
                 <span v-if="loading" class="text-info">読み込み中</span>
             </div>
             

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+
+use Illuminate\Http\File;
 use App\User;
 use App\Post;
 use App\Like;
@@ -92,10 +95,27 @@ class UserController extends Controller
         if(Auth::user()->id != $user->id){
             return abort(403);
         }
+        
+        
         $user->image = "image.jpg";
         $user->save();
         
-        Storage::cloud()->putFileAs('/users/'.$user->id, $request->image , $user->image , 'public');
+        
+        // 画像のサイズ取得
+        $image = Image::make($request->image);
+        $image->resize(200, null, function($constraint){
+            $constraint->aspectRatio();
+        });//リサイズ
+        $image->crop(200, 200);
+        // $image->save('thum.jpg',75);
+        
+        $image =  $image->encode('jpg');
+        // $image->save($file_path); //特定のファイルに保存
+        
+        
+        Storage::disk('s3')->put('/users/'.$user->id.'/image.jpg', (string)$image, 'public');
+        // Storage::cloud()->put('/users/'.$user->id.'/image.jpg', $image->response());
+        
         return $request;
     }
     
@@ -105,4 +125,13 @@ class UserController extends Controller
     {
         //
     }
+    
+    
+// 画像を横幅300px・縦幅アスペクト比維持の自動サイズへリサイズ
+// $image = \Image::make($request->image)
+//     ->resize(100, null, function ($constraint) {
+//         $constraint->aspectRatio();
+// })->save();"Call to a member function getRealPath() on string"
+
+// $data = (string) Image::make($request->image)->encode('jpg', 30);
 }

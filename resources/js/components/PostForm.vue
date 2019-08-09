@@ -10,7 +10,7 @@
             <div v-if="errors" class="w-100">
                 <div v-if="errors.image">
                     <!--<span v-for="msg in errors.image" class="text-danger">{{ msg }}</span>-->
-                    <p class="text-danger ">アップロードできませんでした。</p>
+                    <p class="text-danger ">アップロードできませんでした。画像が大きすぎる可能性があります</p>
                 </div>
             </div>
             
@@ -107,7 +107,14 @@
                 
                 <!--送信ボタン-->
                 <div class="mt-2 text-right">
-                    <input type="submit" value="送信" class="btn btn-primary"/>
+                    <!--<input  value="送信" class="btn btn-primary"/>-->
+        
+                    <button　class="btn btn-primary" @click="onPostUpload">
+                        <span v-if="loading" class="spinner-grow spinner-grow-sm"></span>
+                        <span v-if="loading">アップロード中です</span>
+                        <span v-if="! loading">作成する</span>
+                    
+                    </button>
                 </div>
             
             </div>
@@ -154,6 +161,7 @@ export default {
             description: '',
             errors: null,
             
+            loading: false,
             acd: false
         }
     },
@@ -173,6 +181,12 @@ export default {
         },
         
         async createPost(){
+            
+            if(this.loading){
+                console.log("loagin中です")
+                return false
+            }
+            this.loading = true
             
             const formData = new FormData()
             formData.append('image', this.image)
@@ -203,9 +217,13 @@ export default {
                 }
             }
             
+            this.loading = false
+            
         },
         
-        
+        onPostUpload(){
+            // console.log("起動")
+        },
         // 画面アップロード
         imageForm(){
             // 画像フォームがクリックされればinput起動

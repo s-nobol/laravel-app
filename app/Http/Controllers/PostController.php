@@ -10,6 +10,7 @@ use App\Http\Requests\PostEditRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -71,7 +72,19 @@ class PostController extends Controller
             Storage::cloud()->putFileAs('/posts/'.$post->id, $image, $post->image , 'public');
 
             // サムネイルの保存
-            // Storage::cloud()->putFileAs('', $request->post, $post->filename, 'public');
+            $thum = Image::make($image);
+            $thum->resize(300, null, function($constraint){
+                $constraint->aspectRatio();
+            });//リサイズ
+            $thum->crop(200, 200);
+            // $image->save('thum.jpg',75);
+            
+            $thum =$thum->encode('jpg');
+            
+            
+            // Storage::cloud()->put('/posts/'.$post->id.'/thum.jpg', (string)$thum);
+            Storage::disk('s3')->put('/posts/'.$post->id.'/thum.jpg', (string)$thum, 'public');
+            
             
             DB::commit();
             
