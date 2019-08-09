@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 
 // git push -u origin 作成したブランチ名
 // git clone -b ブランチ名 https://リポジトリのアドレス
+// git clone -b  Send-Image-S3 https://github.com/s-nobol/laravel-app.git
 
 Route::get('/user', function () {
     return Auth::user();
