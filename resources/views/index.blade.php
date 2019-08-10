@@ -20,11 +20,11 @@
 <body>
 
     <!--認証クラス-->
-    <div>
-    @auth<small>{{Auth::user()->name}} はログイン済みです</small>
-    @else<small>ログインしていません</small> 
-    @endauth
-    </div>
+    <!--<div>-->
+    <!--@auth<small>{{Auth::user()->name}} はログイン済みです</small>-->
+    <!--@else<small>ログインしていません</small> -->
+    <!--@endauth-->
+    <!--</div>-->
     <div class="">
         <div id="app"></div>
     </div>

@@ -1920,6 +1920,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2033,14 +2046,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+//
+//
+//
 //
 //
 //
@@ -2067,91 +2075,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      isActive: false,
       preview: null,
       image2: null,
       mause: false,
       form: false
     };
   },
-  methods: {
-    // SendImage(){
+  methods: {// SendImage(){
     // },
-    // 画面アップロード
-    onFileChange: function onFileChange(event) {
-      var _this = this;
-
-      if (event.target.files.length === 0 && !event.target.files[0].type.match('image.*')) {
-        // this.reset()
-        return false;
-      }
-
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        _this.preview = e.target.result;
-      };
-
-      reader.readAsDataURL(event.target.files[0]);
-      this.image2 = event.target.files[0];
-    },
-    SendImage: function () {
-      var _SendImage = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var formData, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                formData = new FormData();
-                formData.append('image', this.image2); // formData.append('name', "これはテストメッセージです")
-
-                _context.next = 4;
-                return axios.post("/api/users/51/image", formData);
-
-              case 4:
-                response = _context.sent;
-                console.log("ユーザーを受信", response);
-
-                if (!(response.status === 201)) {
-                  _context.next = 10;
-                  break;
-                }
-
-                // メッセージ登録
-                this.$store.commit('message/setContent', {
-                  content: '写真が投稿されました！',
-                  type: 'success',
-                  timeout: 3000
-                }); // this.$emit('close')
-
-                this.reset();
-                return _context.abrupt("return", false);
-
-              case 10:
-                // バリテーションエラー
-                if (response.status === 422) {
-                  this.errors = response.data.errors;
-                }
-
-              case 11:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function SendImage() {
-        return _SendImage.apply(this, arguments);
-      }
-
-      return SendImage;
-    }(),
-    onClickButtonForm: function onClickButtonForm() {
-      this.form = !this.form;
-      console.log("form", this.form);
-    }
   } // 
 
 });
@@ -2689,6 +2621,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2698,8 +2676,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      isActive: false,
+      //
       modal: false,
-      showForm: false
+      showForm: false,
+      menuBar: false
     };
   },
   computed: {
@@ -2727,7 +2708,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   console.log("logout"); // window.location.reload();
                 }
 
-              case 3:
+                this.menuBar = false;
+
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -3758,6 +3741,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     modal: {
@@ -3768,14 +3757,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       loginForm: {
-        email: '123@example.com',
-        password: '123123123'
+        email: '',
+        password: ''
       },
       registerForm: {
-        name: '123',
-        email: '123@example.com',
-        password: '123123123',
-        password_confirmation: '123123123'
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
       }
     };
   },
@@ -4402,6 +4391,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import Modal from '../components/modal/Modal.vue'
 /* harmony default export */ __webpack_exports__["default"] = ({
   // components:{Modal},
@@ -4409,6 +4426,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       posts: [],
       loading: false,
+      loadingEnd: false,
       // ページネーション
       currentPage: 0,
       lastPage: 0,
@@ -4448,7 +4466,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 posts_count = response.data.data.length;
 
                 for (i = 0; i < posts_count; i++) {
-                  time = time + 100;
+                  time = time + 300;
                   setTimeout(function () {
                     // 記事をリストに追加
                     _this.posts.push(response.data.data[num]);
@@ -4477,10 +4495,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return getPost;
     }(),
+    // マウスオーバー
+    mouseover: function mouseover() {
+      console.log("マウスオーバー");
+    },
     handleScroll: function handleScroll() {
       this.scrollTop = window.scrollY;
+      var windowsHeight = window.parent.screen.height; // console.log("底辺", this.scrollBottom )
 
-      if (this.scrollTop + 500 > this.scrollBottom) {
+      if (this.scrollTop + windowsHeight > this.scrollBottom) {
         if (this.loading) {
           console.log("ローディング中", this.scrollBottom);
           return false;
@@ -4490,7 +4513,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     },
     //画像の最底辺取得
-    //名前変更した方がいいかも？
     getScrollButtom: function getScrollButtom() {
       var imageButtom = document.getElementById("imageButtom");
       this.scrollBottom = imageButtom.offsetTop;
@@ -4633,13 +4655,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       sendEmailForm: {
-        email: '123@example.com'
+        email: ''
       },
       passwordResetForm: {
         token: '',
         email: '',
-        password: '789789789',
-        password_confirmation: '789789789'
+        password: '',
+        password_confirmation: ''
       },
       emailErrors: '',
       Errors: null
@@ -4785,8 +4807,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
 //
 //
 //
@@ -6235,6 +6255,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 // import Modal from '../components/modal/Modal.vue'
 /* harmony default export */ __webpack_exports__["default"] = ({
   // components:{Modal},
@@ -6289,7 +6310,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.user = response.data; // this.posts =response.data.posts 
                 }
 
-              case 6:
+                if (response.status !== 200) {
+                  this.$store.commit('error/setCode', response.status);
+                }
+
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -6360,6 +6385,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return editUser;
     }(),
+    mouseover: function mouseover() {},
     // タブの選択
     onChangeTab: function onChangeTab(select) {
       if (this.tab !== select) {
@@ -6455,7 +6481,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var posts_count = reponse_data.data.length;
 
       for (var i = 0; i < posts_count; i++) {
-        time = time + 100;
+        time = time + 300;
         setTimeout(function () {
           // 記事をリストに追加
           _this.posts.push(reponse_data.data[num]);
@@ -6548,7 +6574,26 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.flash-form{\n    height: 50px;\n    overflow-y: auto;\n    overflow: hidden;\n}\n.slide_down-enter-active, .slide_down-leave-active {\n    -webkit-transition: all .5s;\n    transition: all .5s;\n}\n.slide_down-enter, .slide_down-leave-to {\n    height: 0;\n}\n", ""]);
+exports.push([module.i, "\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.flash-form{\n    height: 50px;\n    overflow-y: auto;\n    overflow: hidden;\n}\n.slide_down-enter-active, .slide_down-leave-active {\n    -webkit-transition: all .5s;\n    transition: all .5s;\n}\n.slide_down-enter, .slide_down-leave-to {\n    height: 0;\n}\n\n\n/*スライドアップ*/\n.slide_up-enter-active, .slide_up-leave-active {\n  -webkit-transition: all 0.8s;\n  transition: all 0.8s;\n}\n.slide_up-enter, .slide_up-leave-to /* .list-leave-active for below version 2.1.8 */ {\n  opacity: 0;\n  -webkit-transform: translateY(30px);\n          transform: translateY(30px);\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Test.vue?vue&type=style&index=0&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Test.vue?vue&type=style&index=0&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*#postview{*/\n/*    background-color: gray;*/\n/*}*/\n\n", ""]);
 
 // exports
 
@@ -6567,7 +6612,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.nav-form { height: 50px; width: 100%;\n}\n.post-form{\n    /*位置情報?サイズ*/\n    position: relative; \n    top: 60px;\n    right: 0;\n    /*left: 230px;*/\n    z-index: 10;\n    width: 400px; /* 幅 */\n    padding: 10px;\n    \n    /*吹き出しボーダー*/\n    border: solid #fff 2px;\n    border-radius: 15px;\n    \n    background-color: white;\n    \n    /*影*/\n    box-shadow: 0 3px 6px rgba(0,0,0,0.1);\n    border-radius: 10px;\n    -webkit-transition: 3s;\n    transition: 3s;\n}\n.slide_down-enter-active, .slide_down-leave-active {\n    -webkit-transition: all .5s;\n    transition: all .5s;\n}\n.slide_down-enter, .slide_down-leave-to {\n    height: 0;\n}\n", ""]);
+exports.push([module.i, "\n.nav-form { height: 50px; width: 100%;\n}\n/*.post-form{*/\n    /*位置情報?サイズ*/\n    /*position: relative; */\n/*    position: absolute; */\n/*    top: 60px;*/\n/*    right: 15%;*/\n    /*left: 0;*/\n/*    z-index: 10;*/\n    width: 400px; /* 幅 */\n/*    padding: 10px;*/\n    \n    /*吹き出しボーダー*/\n/*    border: solid #fff 2px;*/\n/*    border-radius: 15px;*/\n    \n/*    background-color: white;*/\n    \n    /*影*/\n/*    box-shadow: 0 3px 6px rgba(0,0,0,0.1);*/\n/*    border-radius: 10px;*/\n/*    transition: 3s;*/\n/*}*/\n.menu{\n    background-color: white;\n    width: 100%; \n    height: 50px;\n}\n.slide_down-enter-active, .slide_down-leave-active {\n    -webkit-transition: all .5s;\n    transition: all .5s;\n}\n.slide_down-enter, .slide_down-leave-to {\n    height: 0;\n}\n", ""]);
 
 // exports
 
@@ -6605,7 +6650,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.modal {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n            justify-content: center;\n    position: fixed;\n    z-index: 30;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background: rgba(0, 0, 0, 0.5);\n}\n", ""]);
+exports.push([module.i, "\n.modal {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n            justify-content: center;\n    position: fixed;\n    z-index: 30;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background: rgba(0, 0, 0, 0.5);\n}\n  /*ウィンドウ幅が767px以上の場合に適用(pc用)*/\n@media screen and (min-width: 800px) {\n#modal-window  {\n        width: 30%;\n}\n}\n\n/*ウィンドウ幅が最大767pxまでの場合に適用(ipad用)*/\n@media screen and (max-width: 800px) {\n#modal-window {\n        width: 50%;\n}\n}\n\n/*ウィンドウ幅が最大479pxまでの場合に適用(iphonx用)*/\n@media screen and (max-width: 479px) {\n#modal-window {\n        width: 80%;\n}\n}\n", ""]);
 
 // exports
 
@@ -6643,7 +6688,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.list-enter-active, .list-leave-active {\n  -webkit-transition: all 1.3s;\n  transition: all 1.3s;\n}\n.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {\n  opacity: 0;\n  -webkit-transform: translateY(30px);\n          transform: translateY(30px);\n}\n.buttom-h{\n    height: 150px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*.list-enter-active, .list-leave-active {*/\n/*  transition: all 1.3s;*/\n/*}*/\n/*.list-enter, .list-leave-to {*/\n/*  opacity: 0;*/\n/*  transform: translateY(30px);*/\n/*}*/\n/*.list-item {*/\n/*    transition-duration: 0.7s;*/\n/*    overflow: hidden;*/\n/*}*/\n\n/*.list-item :hover  {*/\n/*    transform: scale(1.2);*/\n/*    transition-duration: 0.7s;*/\n/*    overflow: hidden;*/\n/*}*/\n@media screen and (min-width: 800px) { /*ウィンドウ幅が767px以上の場合に適用*/\n#postview {\n        width: 20%;\n}\n}\n@media screen and (max-width: 800px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/\n#postview {\n        width: 33%;\n}\n}\n@media screen and (max-width: 479px) { /*ウィンドウ幅が最大479pxまでの場合に適用*/\n#postview {\n        width: 50%;\n}\n}\n", ""]);
 
 // exports
 
@@ -6662,7 +6707,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.bg-whitesmoke{\n        background-color: whitesmoke;\n}\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.post-image{\n    max-width: 700px;\n    max-height:  700px;\n    /*width: 300px;*/\n}\n.post-edit-form{\n    height: 300px;\n    overflow: hidden;\n}\n\n", ""]);
+exports.push([module.i, "\n.bg-whitesmoke{\n        background-color: whitesmoke;\n}\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.post-image{\n    max-width: 700px;\n    max-height:  700px;\n    /*width: 300px;*/\n}\n.post-edit-form{\n    height: 300px;\n    overflow: hidden;\n}\n\n\n", ""]);
 
 // exports
 
@@ -6681,7 +6726,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.user-form{\n    height: 330px;\n    /*overflow-y: auto;*/\n    overflow: hidden;\n}\n\n/*タブの色*/\n.w-30{\n    width: 33%;\n}\n.list-enter-active, .list-leave-active {\n  -webkit-transition: all 1.3s;\n  transition: all 1.3s;\n}\n.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {\n  opacity: 0;\n  -webkit-transform: translateY(30px);\n          transform: translateY(30px);\n}\n", ""]);
+exports.push([module.i, "\n.user-form{\n    height: 330px;\n    /*overflow-y: auto;*/\n    overflow: hidden;\n}\n\n/*タブの色*/\n.w-30{\n    width: 33%;\n}\n.list-enter-active, .list-leave-active {\n  -webkit-transition: all 1.5s;\n  transition: all 1.5s;\n}\n.list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {\n  opacity: 0;\n  -webkit-transform: translateY(60px);\n          transform: translateY(60px);\n}\n\n", ""]);
 
 // exports
 
@@ -7957,6 +8002,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Test.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/Test.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader??ref--6-1!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--6-2!../../node_modules/vue-loader/lib??vue-loader-options!./Test.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Test.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Navbar.vue?vue&type=style&index=0&lang=css&":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Navbar.vue?vue&type=style&index=0&lang=css& ***!
@@ -8768,7 +8843,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "bg-white" },
+    {},
     [
       _c("header", [_c("Navbar")], 1),
       _vm._v(" "),
@@ -8784,7 +8859,21 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("main", [_c("div", {}, [_c("RouterView")], 1)]),
+      _c("main", [
+        _c(
+          "div",
+          { staticClass: "bg-light" },
+          [
+            _c(
+              "transition",
+              { attrs: { name: "slide_up" } },
+              [_c("RouterView")],
+              1
+            )
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
       _c(
         "transition",
@@ -8823,51 +8912,52 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "all-wrapper" }, [
       _c(
-        "form",
+        "div",
         {
+          staticClass: "dropdown-wrapper",
           on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.SendImage($event)
+            click: function($event) {
+              _vm.isActive = !_vm.isActive
             }
           }
         },
         [
-          _c("input", {
-            attrs: { type: "file", name: "" },
-            on: { change: _vm.onFileChange }
-          }),
+          _c("div", { staticClass: "dropdown-text" }, [_vm._v("メニュ")]),
           _vm._v(" "),
-          _vm.preview
-            ? _c("div", [
-                _c("img", {
-                  staticStyle: { "max-height": "500px" },
-                  attrs: { src: _vm.preview }
-                })
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm._m(0)
+          _c("i", { staticClass: "el-icon-caret-bottom" })
         ]
-      )
-    ])
+      ),
+      _vm._v(" "),
+      _vm.isActive
+        ? _c("div", { staticClass: "list-items" }, [
+            _c("div", { staticClass: "list-item" }, [
+              _vm._v(
+                "\n                        選択肢がありません\n                    "
+              )
+            ])
+          ])
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _vm.isActive
+      ? _c(
+          "div",
+          {
+            staticClass: "dropdown-bg",
+            on: {
+              click: function($event) {
+                _vm.isActive = false
+              }
+            }
+          },
+          [_vm._v("15")]
+        )
+      : _vm._e()
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-3" }, [
-      _c("input", {
-        staticClass: "btn btn-primary",
-        attrs: { type: "submit", value: "Submit" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -9203,15 +9293,15 @@ var render = function() {
     "div",
     {},
     [
-      _c("nav", { staticClass: "navbar bg-white  nav-form" }, [
+      _c("nav", { staticClass: "navbar bg-white nav-form border-bottom " }, [
         _c(
           "div",
-          { staticClass: "m-auto w-75" },
+          { staticClass: "m-auto container  " },
           [
             _c(
               "RouterLink",
-              { staticClass: "navbar-brand text-dark", attrs: { to: "/" } },
-              [_c("b", [_vm._v("ホーム")])]
+              { staticClass: "navbar-brand text-dark ", attrs: { to: "/" } },
+              [_c("b", [_vm._v("Laravel-app")])]
             ),
             _vm._v(" "),
             _vm.currentUser
@@ -9219,69 +9309,116 @@ var render = function() {
                   "div",
                   { staticClass: " float-right" },
                   [
-                    _c(
-                      "div",
-                      { staticClass: " float-right " },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: " btn btn-primary",
+                    _c("ul", { staticClass: "nav justify-content-end" }, [
+                      _c(
+                        "li",
+                        {
+                          staticClass: "nav-item mr-2",
+                          staticStyle: { position: "relative" }
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: " btn btn-primary",
+                              on: {
+                                click: function($event) {
+                                  _vm.showForm = !_vm.showForm
+                                }
+                              }
+                            },
+                            [_vm._v("記事の作成")]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          staticClass: "nav-item ",
+                          attrs: { id: "navbar-user" }
+                        },
+                        [
+                          _c(
+                            "RouterLink",
+                            {
+                              staticClass: "navbar-brand",
+                              attrs: { to: "/users/" + _vm.currentUser.id }
+                            },
+                            [
+                              _vm.currentUser.image
+                                ? _c("img", {
+                                    staticClass:
+                                      "image rounded-circle d-inline-block align-top",
+                                    staticStyle: {
+                                      width: "30px",
+                                      height: "30px"
+                                    },
+                                    attrs: { src: _vm.currentUser.url }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.currentUser.image
+                                ? _c("img", {
+                                    staticClass: "image rounded-circle ",
+                                    staticStyle: {
+                                      width: "30px",
+                                      height: "30px"
+                                    },
+                                    attrs: { src: "/noimage.jpg" }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.currentUser
+                                ? _c("small", { staticClass: "text-dark" }, [
+                                    _vm._v(_vm._s(_vm.currentUser.name))
+                                  ])
+                                : _vm._e()
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          staticClass: "navbar-brand ",
+                          staticStyle: { cursor: "pointer" },
+                          attrs: { id: "navbar-user" }
+                        },
+                        [
+                          _vm.currentUser
+                            ? _c(
+                                "small",
+                                {
+                                  staticClass: "text-dark",
+                                  on: { click: _vm.logout }
+                                },
+                                [_vm._v("ログアウト")]
+                              )
+                            : _vm._e()
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        {
+                          staticClass: "nav-item ",
+                          attrs: { id: "navbar-menu" }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-bars navbar-brand pl-2",
                             on: {
                               click: function($event) {
-                                _vm.showForm = !_vm.showForm
+                                _vm.menuBar = !_vm.menuBar
                               }
                             }
-                          },
-                          [_vm._v("記事の作成")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "RouterLink",
-                          { attrs: { to: "/users/" + _vm.currentUser.id } },
-                          [
-                            _vm.currentUser.image
-                              ? _c("img", {
-                                  staticClass: "image rounded-circle ",
-                                  staticStyle: {
-                                    width: "30px",
-                                    height: "30px",
-                                    overflow: "hidden"
-                                  },
-                                  attrs: { src: _vm.currentUser.url }
-                                })
-                              : _vm._e(),
-                            _vm._v(" "),
-                            !_vm.currentUser.image
-                              ? _c("img", {
-                                  staticClass: "image rounded-circle ",
-                                  staticStyle: {
-                                    width: "30px",
-                                    height: "30px",
-                                    overflow: "hidden"
-                                  },
-                                  attrs: { src: "/noimage.jpg" }
-                                })
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm.currentUser
-                              ? _c("span", { staticClass: "navbar__item" }, [
-                                  _vm._v(_vm._s(_vm.currentUser.name))
-                                ])
-                              : _vm._e()
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _vm.currentUser
-                          ? _c(
-                              "button",
-                              { staticClass: "btn", on: { click: _vm.logout } },
-                              [_vm._v("ログアウト")]
-                            )
-                          : _vm._e()
-                      ],
-                      1
-                    ),
+                          })
+                        ]
+                      )
+                    ]),
                     _vm._v(" "),
                     _c("transition", { attrs: { name: "fade" } }, [
                       _vm.showForm
@@ -9337,6 +9474,82 @@ var render = function() {
           ],
           1
         )
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide_down" } }, [
+        _vm.menuBar
+          ? _c(
+              "div",
+              {
+                staticClass: "navbar-menu-item bg-white",
+                attrs: { id: "navbar-menu" }
+              },
+              [
+                _vm.currentUser
+                  ? _c("div", { staticClass: " container p-1" }, [
+                      _c(
+                        "div",
+                        { staticClass: "p-2 border-bottom" },
+                        [
+                          _c(
+                            "RouterLink",
+                            {
+                              staticClass: "navbar-brand",
+                              attrs: { to: "/users/" + _vm.currentUser.id }
+                            },
+                            [
+                              _vm.currentUser.image
+                                ? _c("img", {
+                                    staticClass:
+                                      "image rounded-circle d-inline-block align-top",
+                                    staticStyle: {
+                                      width: "30px",
+                                      height: "30px"
+                                    },
+                                    attrs: { src: _vm.currentUser.url }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.currentUser.image
+                                ? _c("img", {
+                                    staticClass: "image rounded-circle ",
+                                    staticStyle: {
+                                      width: "30px",
+                                      height: "30px"
+                                    },
+                                    attrs: { src: "/noimage.jpg" }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.currentUser
+                                ? _c("small", { staticClass: "text-dark" }, [
+                                    _vm._v(_vm._s(_vm.currentUser.name))
+                                  ])
+                                : _vm._e()
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "p-2" }, [
+                        _vm.currentUser
+                          ? _c(
+                              "small",
+                              {
+                                staticClass: "navbar-brand text-dark",
+                                staticStyle: { cursor: "pointer" },
+                                on: { click: _vm.logout }
+                              },
+                              [_vm._v("ログアウト")]
+                            )
+                          : _vm._e()
+                      ])
+                    ])
+                  : _vm._e()
+              ]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c(
@@ -10102,512 +10315,116 @@ var render = function() {
         }
       },
       [
-        _c("div", { staticClass: "modal-window w-25" }, [
-          _c("div", { staticClass: "modal-content p-3" }, [
-            _vm.modal === 1
-              ? _c("div", [
-                  _c(
-                    "form",
-                    {
-                      staticClass: "form",
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.login($event)
+        _c(
+          "div",
+          { staticClass: "modal-window ", attrs: { id: "modal-window" } },
+          [
+            _c("div", { staticClass: "modal-content p-3" }, [
+              _vm.modal === 1
+                ? _c("div", [
+                    _c(
+                      "form",
+                      {
+                        staticClass: "form",
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.login($event)
+                          }
                         }
-                      }
-                    },
-                    [
-                      _c("h3", [_vm._v("ログイン")]),
-                      _vm._v(" "),
-                      !_vm.loginErrors
-                        ? _c("div", [
-                            _c("div", { staticClass: "mt-2" }, [
-                              _c("label", { attrs: { for: "login-email" } }, [
-                                _vm._v("メールアドレス")
+                      },
+                      [
+                        _c("h3", [_vm._v("ログイン")]),
+                        _vm._v(" "),
+                        !_vm.loginErrors
+                          ? _c("div", [
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c("label", { attrs: { for: "login-email" } }, [
+                                  _vm._v("メールアドレス")
+                                ]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.loginForm.email,
+                                      expression: "loginForm.email"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  attrs: { type: "email", name: "email" },
+                                  domProps: { value: _vm.loginForm.email },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.loginForm,
+                                        "email",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
                               ]),
-                              _c("br"),
                               _vm._v(" "),
-                              _c("input", {
-                                directives: [
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c(
+                                  "label",
+                                  { attrs: { for: "login-password" } },
+                                  [_vm._v("パスワード")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "small",
                                   {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.loginForm.email,
-                                    expression: "loginForm.email"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.loginForm.email },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                    staticClass: "text-primary",
+                                    on: { click: _vm.onResetPassword }
+                                  },
+                                  [_vm._v("パスワードを忘れた")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.loginForm.password,
+                                      expression: "loginForm.password"
                                     }
-                                    _vm.$set(
-                                      _vm.loginForm,
-                                      "email",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-2" }, [
-                              _c(
-                                "label",
-                                { attrs: { for: "login-password" } },
-                                [_vm._v("パスワード")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "small",
-                                {
-                                  staticClass: "text-primary",
-                                  on: { click: _vm.onResetPassword }
-                                },
-                                [_vm._v("パスワードを忘れた")]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.loginForm.password,
-                                    expression: "loginForm.password"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                attrs: { type: "password" },
-                                domProps: { value: _vm.loginForm.password },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  attrs: { type: "password" },
+                                  domProps: { value: _vm.loginForm.password },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.loginForm,
+                                        "password",
+                                        $event.target.value
+                                      )
                                     }
-                                    _vm.$set(
-                                      _vm.loginForm,
-                                      "password",
-                                      $event.target.value
-                                    )
                                   }
-                                }
-                              })
+                                })
+                              ])
                             ])
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.loginErrors
-                        ? _c("div", { staticClass: " mt-2" }, [
-                            _c("div", { staticClass: "mt-3" }, [
-                              _vm.loginErrors.email
-                                ? _c(
-                                    "div",
-                                    _vm._l(_vm.loginErrors.email, function(
-                                      msg
-                                    ) {
-                                      return _c(
-                                        "span",
-                                        {
-                                          key: msg,
-                                          staticClass: "text-danger"
-                                        },
-                                        [_vm._v(_vm._s(msg))]
-                                      )
-                                    }),
-                                    0
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              !_vm.loginErrors.email
-                                ? _c("label", [_vm._v("メールアドレス")])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.loginForm.email,
-                                    expression: "loginForm.email"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                class: {
-                                  "border border-danger": _vm.loginErrors.email
-                                },
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.loginForm.email },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.loginForm,
-                                      "email",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-3" }, [
-                              _vm.loginErrors.password
-                                ? _c(
-                                    "div",
-                                    _vm._l(_vm.loginErrors.password, function(
-                                      msg
-                                    ) {
-                                      return _c(
-                                        "span",
-                                        {
-                                          key: msg,
-                                          staticClass: "text-danger"
-                                        },
-                                        [_vm._v(_vm._s(msg))]
-                                      )
-                                    }),
-                                    0
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              !_vm.loginErrors.password
-                                ? _c("label", [
-                                    _vm._v(
-                                      "パスワード\n                                    "
-                                    ),
-                                    _c(
-                                      "small",
-                                      {
-                                        staticClass: "text-primary",
-                                        on: { click: _vm.onResetPassword }
-                                      },
-                                      [_vm._v("パスワードを忘れた")]
-                                    )
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.loginForm.password,
-                                    expression: "loginForm.password"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                class: {
-                                  "border border-danger":
-                                    _vm.loginErrors.password
-                                },
-                                attrs: { type: "password" },
-                                domProps: { value: _vm.loginForm.password },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.loginForm,
-                                      "password",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ])
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm._m(0)
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.modal === 2
-              ? _c("div", [
-                  _c("h3", [_vm._v("新規登録")]),
-                  _vm._v(" "),
-                  _c(
-                    "form",
-                    {
-                      staticClass: "form",
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.register($event)
-                        }
-                      }
-                    },
-                    [
-                      !_vm.registerErrors
-                        ? _c("div", [
-                            _c("div", { staticClass: "mt-2" }, [
-                              _c("label", { attrs: { for: "username" } }, [
-                                _vm._v("名前")
-                              ]),
-                              _c("br"),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.registerForm.name,
-                                    expression: "registerForm.name"
-                                  }
-                                ],
-                                staticClass: "w-100 p-2",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.registerForm.name },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "name",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-2" }, [
-                              _c("label", { attrs: { for: "email" } }, [
-                                _vm._v("メールアドレス")
-                              ]),
-                              _c("br"),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.registerForm.email,
-                                    expression: "registerForm.email"
-                                  }
-                                ],
-                                staticClass: "w-100 p-2",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.registerForm.email },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "email",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-2" }, [
-                              _c("label", { attrs: { for: "password" } }, [
-                                _vm._v("パスワード")
-                              ]),
-                              _c("br"),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.registerForm.password,
-                                    expression: "registerForm.password"
-                                  }
-                                ],
-                                staticClass: "w-100 p-2",
-                                attrs: { type: "password" },
-                                domProps: { value: _vm.registerForm.password },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "password",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-2" }, [
-                              _c(
-                                "label",
-                                { attrs: { for: "password-confirmation" } },
-                                [_vm._v("パスワード(再確認)")]
-                              ),
-                              _c("br"),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value:
-                                      _vm.registerForm.password_confirmation,
-                                    expression:
-                                      "registerForm.password_confirmation"
-                                  }
-                                ],
-                                staticClass: "w-100 p-2",
-                                attrs: { type: "password" },
-                                domProps: {
-                                  value: _vm.registerForm.password_confirmation
-                                },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "password_confirmation",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ])
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.registerErrors
-                        ? _c("div", [
-                            _c("div", { staticClass: "mt-3" }, [
-                              _vm.registerErrors.name
-                                ? _c(
-                                    "div",
-                                    _vm._l(_vm.registerErrors.name, function(
-                                      msg
-                                    ) {
-                                      return _c(
-                                        "span",
-                                        {
-                                          key: msg,
-                                          staticClass: "text-danger"
-                                        },
-                                        [_vm._v(_vm._s(msg))]
-                                      )
-                                    }),
-                                    0
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              !_vm.registerErrors.name
-                                ? _c("label", [_vm._v("名前")])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.registerForm.name,
-                                    expression: "registerForm.name"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                class: {
-                                  "border border-danger":
-                                    _vm.registerErrors.name
-                                },
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.registerForm.name },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "name",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-3" }, [
-                              _vm.registerErrors.email
-                                ? _c(
-                                    "div",
-                                    _vm._l(_vm.registerErrors.email, function(
-                                      msg
-                                    ) {
-                                      return _c(
-                                        "span",
-                                        {
-                                          key: msg,
-                                          staticClass: "text-danger"
-                                        },
-                                        [_vm._v(_vm._s(msg))]
-                                      )
-                                    }),
-                                    0
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              !_vm.registerErrors.email
-                                ? _c("label", [_vm._v("メールアドレス")])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.registerForm.email,
-                                    expression: "registerForm.email"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                class: {
-                                  "border border-danger":
-                                    _vm.registerErrors.email
-                                },
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.registerForm.email },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "email",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-3" }, [
-                              _vm.registerErrors.password
-                                ? _c(
-                                    "div",
-                                    _vm._l(
-                                      _vm.registerErrors.password,
-                                      function(msg) {
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.loginErrors
+                          ? _c("div", { staticClass: " mt-2" }, [
+                              _c("div", { staticClass: "mt-3" }, [
+                                _vm.loginErrors.email
+                                  ? _c(
+                                      "div",
+                                      _vm._l(_vm.loginErrors.email, function(
+                                        msg
+                                      ) {
                                         return _c(
                                           "span",
                                           {
@@ -10616,96 +10433,503 @@ var render = function() {
                                           },
                                           [_vm._v(_vm._s(msg))]
                                         )
+                                      }),
+                                      0
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                !_vm.loginErrors.email
+                                  ? _c("label", [_vm._v("メールアドレス")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.loginForm.email,
+                                      expression: "loginForm.email"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  class: {
+                                    "border border-danger":
+                                      _vm.loginErrors.email
+                                  },
+                                  attrs: { type: "email", name: "email" },
+                                  domProps: { value: _vm.loginForm.email },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
                                       }
-                                    ),
-                                    0
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              !_vm.registerErrors.password
-                                ? _c("label", [_vm._v("パスワード")])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.registerForm.password,
-                                    expression: "registerForm.password"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                class: {
-                                  "border border-danger":
-                                    _vm.registerErrors.password
-                                },
-                                attrs: { type: "password" },
-                                domProps: { value: _vm.registerForm.password },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                      _vm.$set(
+                                        _vm.loginForm,
+                                        "email",
+                                        $event.target.value
+                                      )
                                     }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "password",
-                                      $event.target.value
-                                    )
                                   }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "mt-3" }, [
-                              !_vm.registerErrors.password
-                                ? _c("label", [_vm._v("パスワード(再確認)")])
-                                : _vm._e(),
+                                })
+                              ]),
                               _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value:
-                                      _vm.registerForm.password_confirmation,
-                                    expression:
-                                      "registerForm.password_confirmation"
-                                  }
-                                ],
-                                staticClass: "w-100 border p-2",
-                                class: {
-                                  "border border-danger":
-                                    _vm.registerErrors.password
-                                },
-                                attrs: { type: "password" },
-                                domProps: {
-                                  value: _vm.registerForm.password_confirmation
-                                },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.registerForm,
-                                      "password_confirmation",
-                                      $event.target.value
+                              _c("div", { staticClass: "mt-3" }, [
+                                _vm.loginErrors.password
+                                  ? _c(
+                                      "div",
+                                      _vm._l(_vm.loginErrors.password, function(
+                                        msg
+                                      ) {
+                                        return _c(
+                                          "span",
+                                          {
+                                            key: msg,
+                                            staticClass: "text-danger"
+                                          },
+                                          [_vm._v(_vm._s(msg))]
+                                        )
+                                      }),
+                                      0
                                     )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                !_vm.loginErrors.password
+                                  ? _c("label", [
+                                      _vm._v(
+                                        "パスワード\n                                    "
+                                      ),
+                                      _c(
+                                        "small",
+                                        {
+                                          staticClass: "text-primary",
+                                          on: { click: _vm.onResetPassword }
+                                        },
+                                        [_vm._v("パスワードを忘れた")]
+                                      )
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.loginForm.password,
+                                      expression: "loginForm.password"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  class: {
+                                    "border border-danger":
+                                      _vm.loginErrors.password
+                                  },
+                                  attrs: { type: "password" },
+                                  domProps: { value: _vm.loginForm.password },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.loginForm,
+                                        "password",
+                                        $event.target.value
+                                      )
+                                    }
                                   }
-                                }
-                              })
+                                })
+                              ])
                             ])
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm._m(1)
-                    ]
-                  )
-                ])
-              : _vm._e()
-          ])
-        ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._m(0)
+                      ]
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.modal === 2
+                ? _c("div", [
+                    _c("h3", [_vm._v("新規登録")]),
+                    _vm._v(" "),
+                    _c(
+                      "form",
+                      {
+                        staticClass: "form",
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                            return _vm.register($event)
+                          }
+                        }
+                      },
+                      [
+                        !_vm.registerErrors
+                          ? _c("div", [
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c("label", { attrs: { for: "username" } }, [
+                                  _vm._v("名前")
+                                ]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.registerForm.name,
+                                      expression: "registerForm.name"
+                                    }
+                                  ],
+                                  staticClass: "w-100 p-2",
+                                  attrs: { type: "text" },
+                                  domProps: { value: _vm.registerForm.name },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "name",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c("label", { attrs: { for: "email" } }, [
+                                  _vm._v("メールアドレス")
+                                ]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.registerForm.email,
+                                      expression: "registerForm.email"
+                                    }
+                                  ],
+                                  staticClass: "w-100 p-2",
+                                  attrs: { type: "email", name: "email" },
+                                  domProps: { value: _vm.registerForm.email },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "email",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c("label", { attrs: { for: "password" } }, [
+                                  _vm._v("パスワード")
+                                ]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.registerForm.password,
+                                      expression: "registerForm.password"
+                                    }
+                                  ],
+                                  staticClass: "w-100 p-2",
+                                  attrs: { type: "password" },
+                                  domProps: {
+                                    value: _vm.registerForm.password
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "password",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c(
+                                  "label",
+                                  { attrs: { for: "password-confirmation" } },
+                                  [_vm._v("パスワード(再確認)")]
+                                ),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value:
+                                        _vm.registerForm.password_confirmation,
+                                      expression:
+                                        "registerForm.password_confirmation"
+                                    }
+                                  ],
+                                  staticClass: "w-100 p-2",
+                                  attrs: { type: "password" },
+                                  domProps: {
+                                    value:
+                                      _vm.registerForm.password_confirmation
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "password_confirmation",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.registerErrors
+                          ? _c("div", [
+                              _c("div", { staticClass: "mt-3" }, [
+                                _vm.registerErrors.name
+                                  ? _c(
+                                      "div",
+                                      _vm._l(_vm.registerErrors.name, function(
+                                        msg
+                                      ) {
+                                        return _c(
+                                          "span",
+                                          {
+                                            key: msg,
+                                            staticClass: "text-danger"
+                                          },
+                                          [_vm._v(_vm._s(msg))]
+                                        )
+                                      }),
+                                      0
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                !_vm.registerErrors.name
+                                  ? _c("label", [_vm._v("名前")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.registerForm.name,
+                                      expression: "registerForm.name"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  class: {
+                                    "border border-danger":
+                                      _vm.registerErrors.name
+                                  },
+                                  attrs: { type: "text" },
+                                  domProps: { value: _vm.registerForm.name },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "name",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-3" }, [
+                                _vm.registerErrors.email
+                                  ? _c(
+                                      "div",
+                                      _vm._l(_vm.registerErrors.email, function(
+                                        msg
+                                      ) {
+                                        return _c(
+                                          "span",
+                                          {
+                                            key: msg,
+                                            staticClass: "text-danger"
+                                          },
+                                          [_vm._v(_vm._s(msg))]
+                                        )
+                                      }),
+                                      0
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                !_vm.registerErrors.email
+                                  ? _c("label", [_vm._v("メールアドレス")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.registerForm.email,
+                                      expression: "registerForm.email"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  class: {
+                                    "border border-danger":
+                                      _vm.registerErrors.email
+                                  },
+                                  attrs: { type: "email", name: "email" },
+                                  domProps: { value: _vm.registerForm.email },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "email",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-3" }, [
+                                _vm.registerErrors.password
+                                  ? _c(
+                                      "div",
+                                      _vm._l(
+                                        _vm.registerErrors.password,
+                                        function(msg) {
+                                          return _c(
+                                            "span",
+                                            {
+                                              key: msg,
+                                              staticClass: "text-danger"
+                                            },
+                                            [_vm._v(_vm._s(msg))]
+                                          )
+                                        }
+                                      ),
+                                      0
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                !_vm.registerErrors.password
+                                  ? _c("label", [_vm._v("パスワード")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.registerForm.password,
+                                      expression: "registerForm.password"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  class: {
+                                    "border border-danger":
+                                      _vm.registerErrors.password
+                                  },
+                                  attrs: { type: "password" },
+                                  domProps: {
+                                    value: _vm.registerForm.password
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "password",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-3" }, [
+                                !_vm.registerErrors.password
+                                  ? _c("label", [_vm._v("パスワード(再確認)")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value:
+                                        _vm.registerForm.password_confirmation,
+                                      expression:
+                                        "registerForm.password_confirmation"
+                                    }
+                                  ],
+                                  staticClass: "w-100 border p-2",
+                                  class: {
+                                    "border border-danger":
+                                      _vm.registerErrors.password
+                                  },
+                                  attrs: { type: "password" },
+                                  domProps: {
+                                    value:
+                                      _vm.registerForm.password_confirmation
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.registerForm,
+                                        "password_confirmation",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._m(1)
+                      ]
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ]
+        )
       ]
     )
   ])
@@ -11220,75 +11444,89 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.posts.length > 0
-      ? _c(
-          "div",
-          [
-            _c(
-              "transition-group",
-              { attrs: { name: "list", tag: "div" } },
-              _vm._l(_vm.posts, function(post) {
-                return _c(
-                  "div",
-                  {
-                    key: post.id,
-                    staticClass: "d-inline-block p-1",
-                    staticStyle: { width: "20%", overflow: "hidden" }
-                  },
-                  [
-                    _c(
-                      "RouterLink",
-                      { attrs: { to: "/posts/" + post.token } },
-                      [
-                        _c("div", [
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(post.id) +
-                              "\n                    "
-                          ),
-                          post.image
-                            ? _c("img", {
-                                staticClass: "list-image",
-                                staticStyle: { width: "100%" },
-                                attrs: {
-                                  src: post.url + "thum.jpg",
-                                  alt: "画像がありません"
-                                }
-                              })
-                            : _c("img", {
-                                staticClass: "image",
-                                staticStyle: { width: "100%" },
-                                attrs: { src: "/image.jpg" }
-                              })
-                        ])
-                      ]
-                    )
-                  ],
-                  1
-                )
-              }),
-              0
+  return _c(
+    "div",
+    [
+      _vm.posts.length > 0
+        ? _c(
+            "div",
+            { attrs: { id: "posts" } },
+            [
+              _c(
+                "transition-group",
+                { attrs: { name: "list", tag: "div" } },
+                _vm._l(_vm.posts, function(post) {
+                  return _c(
+                    "div",
+                    {
+                      key: post.id,
+                      staticClass: "d-inline-block p-1 ",
+                      staticStyle: { overflow: "hidden" },
+                      attrs: { id: "postview" }
+                    },
+                    [
+                      _c(
+                        "RouterLink",
+                        {
+                          attrs: { to: "/posts/" + post.token },
+                          nativeOn: {
+                            mouseover: function($event) {
+                              return _vm.mouseover($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "post-image-form" }, [
+                            post.image
+                              ? _c("img", {
+                                  staticClass: "image",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    src: post.url + "thum.jpg",
+                                    alt: "画像がありません"
+                                  }
+                                })
+                              : _c("img", {
+                                  staticClass: "image",
+                                  staticStyle: { width: "100%" },
+                                  attrs: { src: "/image.jpg" }
+                                })
+                          ])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                0
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        this.currentPage < this.lastPage
+          ? _c(
+              "div",
+              {
+                staticClass: "mt-3 border-top text-center ",
+                staticStyle: { height: "500px" },
+                attrs: { id: "imageButtom" }
+              },
+              [
+                _vm.loading
+                  ? _c("span", { staticClass: "text-info" }, [
+                      _vm._v("読み込み中")
+                    ])
+                  : _vm._e()
+              ]
             )
-          ],
-          1
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "mt-3 border-top text-center",
-        staticStyle: { height: "500px" },
-        attrs: { id: "imageButtom" }
-      },
-      [
-        _vm.loading
-          ? _c("span", { staticClass: "text-info" }, [_vm._v("読み込み中")])
           : _vm._e()
-      ]
-    )
-  ])
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -11312,12 +11550,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "w-50 m-auto" }, [
+  return _c("div", { staticClass: " m-auto ", attrs: { id: "edit-form" } }, [
     !_vm.token
       ? _c(
           "form",
           {
-            staticClass: "form ",
+            staticClass: "form mt-5 card p-3 ",
             on: {
               submit: function($event) {
                 $event.preventDefault()
@@ -11326,7 +11564,7 @@ var render = function() {
             }
           },
           [
-            _c("h3", [_vm._v("パスワード再設定")]),
+            _c("h4", [_vm._v("パスワード再設定")]),
             _vm._v(" "),
             _c("div", { staticClass: "mt-2" }, [
               !_vm.emailErrors
@@ -11353,7 +11591,7 @@ var render = function() {
                     expression: "sendEmailForm.email"
                   }
                 ],
-                staticClass: "w-100",
+                staticClass: "w-100 border p-2",
                 class: { "border border-danger": _vm.emailErrors },
                 attrs: { type: "email" },
                 domProps: { value: _vm.sendEmailForm.email },
@@ -11516,10 +11754,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-center" }, [
+  return _c("div", { staticClass: "mt-5" }, [
     _vm.post
       ? _c(
           "div",
+          { staticClass: "text-center" },
           [
             _c("div", { staticClass: "mt-5" }, [
               _vm.post.image
@@ -11586,9 +11825,7 @@ var render = function() {
                 },
                 [
                   _c("i", { staticClass: "far fa-comment-alt fa-lg m-1 " }),
-                  _vm._v(
-                    "54" + _vm._s(_vm.post.comments_count) + "\n            "
-                  )
+                  _vm._v(_vm._s(_vm.post.comments_count) + "\n            ")
                 ]
               ),
               _vm._v(" "),
@@ -11603,7 +11840,7 @@ var render = function() {
                 },
                 [
                   _c("i", { staticClass: "far fa-thumbs-up fa-lg m-1 " }),
-                  _vm._v("26" + _vm._s(_vm.post.likes_count) + "\n            ")
+                  _vm._v(_vm._s(_vm.post.likes_count) + "\n            ")
                 ]
               )
             ]),
@@ -11620,7 +11857,8 @@ var render = function() {
                     _c(
                       "form",
                       {
-                        staticClass: "m-auto w-25  border-top",
+                        staticClass: "m-auto border-top",
+                        attrs: { id: "edit-form" },
                         on: {
                           submit: function($event) {
                             $event.preventDefault()
@@ -11842,7 +12080,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "text-success2" }, [
       _c("i", { staticClass: "far fa-eye fa-lg  m-1 " }),
-      _vm._v("1781\n            ")
+      _vm._v("0\n            ")
     ])
   }
 ]
@@ -12590,7 +12828,7 @@ var render = function() {
           "div",
           { staticClass: "bg-white text-center" },
           [
-            _c("div", { staticClass: " mt-5" }, [
+            _c("div", { staticClass: " pt-5" }, [
               _c(
                 "div",
                 {
@@ -12691,7 +12929,8 @@ var render = function() {
                     _c(
                       "form",
                       {
-                        staticClass: "m-auto w-25 border-top",
+                        staticClass: "m-auto border-top",
+                        attrs: { id: "edit-form" },
                         on: {
                           submit: function($event) {
                             $event.preventDefault()
@@ -12722,7 +12961,8 @@ var render = function() {
                               }
                             ],
                             staticClass: "border bg-light ",
-                            attrs: { type: "text", autofocus: "" },
+                            class: { "border-danger": _vm.errors },
+                            attrs: { type: "text" },
                             domProps: { value: _vm.user.name },
                             on: {
                               input: function($event) {
@@ -12735,46 +12975,55 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "mt-3" }, [
-                          _c("b", [_vm._v("性別")]),
-                          _c("br"),
-                          _vm._v("\n                        男"),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.user.sex,
-                                expression: "user.sex"
+                        _c(
+                          "div",
+                          {
+                            staticClass: "mt-3",
+                            class: { "text-danger": _vm.errors }
+                          },
+                          [
+                            _c("b", { staticClass: "text-dark" }, [
+                              _vm._v("性別")
+                            ]),
+                            _c("br"),
+                            _vm._v("\n                        男"),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.user.sex,
+                                  expression: "user.sex"
+                                }
+                              ],
+                              attrs: { type: "radio", name: "sex", value: "0" },
+                              domProps: { checked: _vm._q(_vm.user.sex, "0") },
+                              on: {
+                                change: function($event) {
+                                  return _vm.$set(_vm.user, "sex", "0")
+                                }
                               }
-                            ],
-                            attrs: { type: "radio", name: "sex", value: "0" },
-                            domProps: { checked: _vm._q(_vm.user.sex, "0") },
-                            on: {
-                              change: function($event) {
-                                return _vm.$set(_vm.user, "sex", "0")
+                            }),
+                            _vm._v("\n                        女"),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.user.sex,
+                                  expression: "user.sex"
+                                }
+                              ],
+                              attrs: { type: "radio", name: "sex", value: "1" },
+                              domProps: { checked: _vm._q(_vm.user.sex, "1") },
+                              on: {
+                                change: function($event) {
+                                  return _vm.$set(_vm.user, "sex", "1")
+                                }
                               }
-                            }
-                          }),
-                          _vm._v("\n                        女"),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.user.sex,
-                                expression: "user.sex"
-                              }
-                            ],
-                            attrs: { type: "radio", name: "sex", value: "1" },
-                            domProps: { checked: _vm._q(_vm.user.sex, "1") },
-                            on: {
-                              change: function($event) {
-                                return _vm.$set(_vm.user, "sex", "1")
-                              }
-                            }
-                          })
-                        ]),
+                            })
+                          ]
+                        ),
                         _vm._v(" "),
                         _c("div", { staticClass: "mt-3" }, [
                           _c("b", [_vm._v("住所")]),
@@ -12792,6 +13041,7 @@ var render = function() {
                                 }
                               ],
                               staticClass: "border bg-light p-1",
+                              class: { "border-danger": _vm.errors },
                               attrs: { name: "pref" },
                               on: {
                                 change: function($event) {
@@ -13037,134 +13287,154 @@ var render = function() {
                 : _vm._e()
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "mt-5" }, [
-              _c("div", { staticClass: "m-auto w-75 row" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "w-30 tab-color",
-                    class: { "tab-color-select": _vm.tab === 0 },
-                    on: {
-                      click: function($event) {
-                        return _vm.onChangeTab(0)
-                      }
-                    }
-                  },
-                  [
-                    _c("h5", { staticClass: "text-center p-2" }, [
-                      _vm._v("自分の写真")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "w-30 tab-color",
-                    class: { "tab-color-select": _vm.tab === 1 },
-                    on: {
-                      click: function($event) {
-                        return _vm.onChangeTab(1)
-                      }
-                    }
-                  },
-                  [
-                    _c("h5", { staticClass: "text-center p-2" }, [
-                      _vm._v("いいねした写真")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "w-30  tab-color",
-                    class: { "tab-color-select ": _vm.tab === 2 },
-                    on: {
-                      click: function($event) {
-                        return _vm.onChangeTab(2)
-                      }
-                    }
-                  },
-                  [
-                    _c("h5", { staticClass: "text-center p-2" }, [
-                      _vm._v("みんなの写真")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _vm.posts.length > 0
-                ? _c(
+            _c(
+              "div",
+              { staticClass: "mt-5 " },
+              [
+                _c("div", { staticClass: "m-auto w-75 row" }, [
+                  _c(
                     "div",
-                    { staticClass: "text-left" },
+                    {
+                      staticClass: "w-30 tab-color",
+                      class: { "tab-color-select": _vm.tab === 0 },
+                      on: {
+                        click: function($event) {
+                          return _vm.onChangeTab(0)
+                        }
+                      }
+                    },
                     [
-                      _c(
-                        "transition-group",
-                        { attrs: { name: "list", tag: "div" } },
-                        _vm._l(_vm.posts, function(post) {
-                          return _c(
-                            "div",
-                            {
-                              key: post.id,
-                              staticClass: "d-inline-block p-1",
-                              staticStyle: { width: "20%", overflow: "hidden" },
-                              attrs: { id: "posts" }
-                            },
-                            [
-                              _c(
-                                "RouterLink",
-                                { attrs: { to: "/posts/" + post.token } },
-                                [
-                                  _c("div", [
-                                    post.image
-                                      ? _c("img", {
-                                          staticClass: "list-image",
-                                          staticStyle: { width: "100%" },
-                                          attrs: {
-                                            src: post.url + "thum.jpg",
-                                            alt: "画像がありません"
-                                          }
-                                        })
-                                      : _c("img", {
-                                          staticClass: "image",
-                                          staticStyle: { width: "100%" },
-                                          attrs: { src: "/image.jpg" }
-                                        })
-                                  ])
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        }),
-                        0
-                      )
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.posts.length === 0
-                ? _c("div", { staticClass: "mt-5" }, [_vm._m(0)])
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "mt-3 border-top text-center",
-                  staticStyle: { height: "500px" },
-                  attrs: { id: "imageButtom" }
-                },
-                [
-                  _vm.loading
-                    ? _c("span", { staticClass: "text-info" }, [
-                        _vm._v("読み込み中")
+                      _c("h5", { staticClass: "text-center p-2" }, [
+                        _vm._v("自分の写真")
                       ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "w-30 tab-color",
+                      class: { "tab-color-select": _vm.tab === 1 },
+                      on: {
+                        click: function($event) {
+                          return _vm.onChangeTab(1)
+                        }
+                      }
+                    },
+                    [
+                      _c("h5", { staticClass: "text-center p-2" }, [
+                        _vm._v("いいねした写真")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "w-30  tab-color",
+                      class: { "tab-color-select ": _vm.tab === 2 },
+                      on: {
+                        click: function($event) {
+                          return _vm.onChangeTab(2)
+                        }
+                      }
+                    },
+                    [
+                      _c("h5", { staticClass: "text-center p-2" }, [
+                        _vm._v("みんなの写真")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm.posts.length > 0
+                  ? _c(
+                      "div",
+                      { staticClass: "text-left bg-light" },
+                      [
+                        _c(
+                          "transition-group",
+                          { attrs: { name: "list", tag: "div" } },
+                          _vm._l(_vm.posts, function(post) {
+                            return _c(
+                              "div",
+                              {
+                                key: post.id,
+                                staticClass: "d-inline-block p-1",
+                                staticStyle: { overflow: "hidden" },
+                                attrs: { id: "postview" }
+                              },
+                              [
+                                _c(
+                                  "RouterLink",
+                                  {
+                                    attrs: { to: "/posts/" + post.token },
+                                    nativeOn: {
+                                      mouseover: function($event) {
+                                        return _vm.mouseover($event)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "post-image-form" },
+                                      [
+                                        post.image
+                                          ? _c("img", {
+                                              staticClass: "image",
+                                              staticStyle: { width: "100%" },
+                                              attrs: {
+                                                src: post.url + "thum.jpg",
+                                                alt: "画像がありません"
+                                              }
+                                            })
+                                          : _c("img", {
+                                              staticClass: "image",
+                                              staticStyle: { width: "100%" },
+                                              attrs: { src: "/image.jpg" }
+                                            })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          }),
+                          0
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.posts.length === 0
+                  ? _c("div", { staticClass: "mt-5" }, [_vm._m(0)])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  this.currentPage < this.lastPage
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "mt-3 border-top text-center ",
+                          staticStyle: { height: "500px" },
+                          attrs: { id: "imageButtom" }
+                        },
+                        [
+                          _vm.loading
+                            ? _c("span", { staticClass: "text-info" }, [
+                                _vm._v("読み込み中")
+                              ])
+                            : _vm._e()
+                        ]
+                      )
                     : _vm._e()
-                ]
-              )
-            ])
+                ])
+              ],
+              1
+            )
           ],
           1
         )
@@ -29290,9 +29560,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Test_vue_vue_type_template_id_8468a5a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Test.vue?vue&type=template&id=8468a5a0& */ "./resources/js/Test.vue?vue&type=template&id=8468a5a0&");
 /* harmony import */ var _Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Test.vue?vue&type=script&lang=js& */ "./resources/js/Test.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-/* harmony import */ var _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Test.vue?vue&type=custom&index=0&blockType=script1 */ "./resources/js/Test.vue?vue&type=custom&index=0&blockType=script1");
-/* harmony import */ var _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_3__);
+/* empty/unused harmony star reexport *//* harmony import */ var _Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Test.vue?vue&type=style&index=0&lang=css& */ "./resources/js/Test.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Test.vue?vue&type=custom&index=0&blockType=script1 */ "./resources/js/Test.vue?vue&type=custom&index=0&blockType=script1");
+/* harmony import */ var _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -29300,7 +29572,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _Test_vue_vue_type_template_id_8468a5a0___WEBPACK_IMPORTED_MODULE_0__["render"],
   _Test_vue_vue_type_template_id_8468a5a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -29313,7 +29585,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* custom blocks */
 
-if (typeof _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_3___default.a === 'function') _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_3___default()(component)
+if (typeof _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_4___default.a === 'function') _Test_vue_vue_type_custom_index_0_blockType_script1__WEBPACK_IMPORTED_MODULE_4___default()(component)
 
 /* hot reload */
 if (false) { var api; }
@@ -29344,6 +29616,22 @@ component.options.__file = "resources/js/Test.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--4-0!../../node_modules/vue-loader/lib??vue-loader-options!./Test.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Test.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/Test.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************!*\
+  !*** ./resources/js/Test.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader!../../node_modules/css-loader??ref--6-1!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--6-2!../../node_modules/vue-loader/lib??vue-loader-options!./Test.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/Test.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Test_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 

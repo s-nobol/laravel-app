@@ -1,9 +1,9 @@
 <template>
-<div class="w-50 m-auto">
+<div class=" m-auto " id="edit-form">
 
     
-        <form  v-if="! token" class="form " @submit.prevent="sendaEmail">        
-            <h3>パスワード再設定</h3>
+        <form  v-if="! token" class="form mt-5 card p-3 " @submit.prevent="sendaEmail">        
+            <h4>パスワード再設定</h4>
             
             
           
@@ -18,7 +18,7 @@
                 </div>
             
                 <input type="email"  v-model="sendEmailForm.email" 
-                class="w-100" :class="{ 'border border-danger': emailErrors }">
+                class="w-100 border p-2" :class="{ 'border border-danger': emailErrors }">
             </div>
             
             
@@ -88,13 +88,13 @@ export default {
     data(){
         return{
             sendEmailForm:{
-                email: '123@example.com',
+                email: '',
             },
             passwordResetForm:{
                 token: '',
                 email: '',
-                password: '789789789',
-                password_confirmation: '789789789',
+                password: '',
+                password_confirmation: '',
             },
             emailErrors: '',
             Errors: null,

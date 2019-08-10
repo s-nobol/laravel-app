@@ -21,8 +21,8 @@ class UserController extends Controller
     
     public function __construct()
     {
-        // $this->middleware('auth')->except(['index','show']);// show store edit update delete(ログインユーザーのみ) 
-        // $this->authorizeResource(User::class, 'user');   // edit update delete(作成ユーザーのみ) 
+        $this->middleware('auth')->except(['index','show']);// show store edit update delete(ログインユーザーのみ) 
+        $this->authorizeResource(User::class, 'user');   // edit update delete(作成ユーザーのみ) 
     }
     
     public function index() {

@@ -93,19 +93,7 @@ Route::resource('reports', 'ReportController');
 // テスト
 //  composer require league/flysystem-aws-s3-v3
 Route::post('/test/image', 'DatabaseController@send_image_s3');
+Route::post('/test/send_email', 'DatabaseController@send_email');
 
 
-
-// サムネイルの作成
-
-// php のメモリ開放
-// php.init/ memory_limit= 128M -> 1024M 
-// ec2 再起動
-
-
-// 8/9 サムネイルの作成に成功した画像をEC2で起動するか確かめてみる。
-// php.initのメモリを拡張しなくてはならないかもしれない
-
-// AWS　ESE　申請
-// 成功したら全体のView修正
-// getScrollButtom　の位置を <div id="posts" の最下部に設定する
+// ほぼ完成デプロイしてみる

@@ -34,13 +34,17 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post = Post::where('token', $post)->with(['user','category'])->first();
+       
         return $post;
     }
     
     // post-showの代わり
     public function view(string $token){
         
-        $post = Post::where('token', $token)->with(['user','category'])->first();
+        $post = Post::where('token', $token)->with(['user','category'])->first(); 
+        if (! $post) {
+            return abort(404);
+        }
         return $post;
     }
 

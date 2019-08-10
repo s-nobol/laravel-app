@@ -5,7 +5,7 @@
     <div class="modal modal-overlay" @click.self="$emit('close')">
  
         <!--モーダルの中身-->
-        <div class="modal-window w-25">
+        <div class="modal-window " id="modal-window">
             <div class="modal-content p-3">
                 
                     <!--ログイン-->
@@ -14,21 +14,12 @@
                         
                             <h3>ログイン</h3>
                             
-                            <!--エラーメッセージ-->
-                            <!--<div v-if="loginErrors" class="errors text-danger mt-2">{{ loginErrors }}-->
-                            <!--    <ul v-if="loginErrors.email">-->
-                            <!--        <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>-->
-                            <!--    </ul>-->
-                            <!--    <ul v-if="loginErrors.password">-->
-                            <!--        <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>-->
-                            <!--    </ul>-->
-                            <!--</div>-->
                             
                             <!--エラーなし-->
                             <div v-if="! loginErrors" > 
                                 <div  class="mt-2">
                                     <label for="login-email">メールアドレス</label></br>
-                                    <input type="text"  v-model="loginForm.email" 
+                                    <input type="email" name="email"  v-model="loginForm.email" 
                                     class="w-100 border p-2">
                                 </div>
                     
@@ -48,7 +39,7 @@
                                         <span v-for="msg in loginErrors.email" :key="msg" class="text-danger">{{ msg }}</span>
                                     </div>
                                     <label v-if="! loginErrors.email">メールアドレス</label>
-                                    <input type="text"  v-model="loginForm.email"  class="w-100 border p-2"
+                                    <input type="email" name="email"  v-model="loginForm.email"  class="w-100 border p-2"
                                     :class="{ 'border border-danger' : loginErrors.email }">
                                 </div>
                                 
@@ -86,18 +77,6 @@
                         <h3>新規登録</h3>
                         <form class="form" @submit.prevent="register">
                     
-                            <!--エラーメッセージ-->
-                            <!--<div v-if="registerErrors" class="errors mt-2 text-danger">{{ registerErrors }}-->
-                                <!--<ul v-if="registerErrors.name">-->
-                                <!--    <li v-for="msg in registerErrors.name" :key="msg">{{ msg }}</li>-->
-                                <!--</ul>-->
-                                <!--<ul v-if="registerErrors.email">-->
-                                <!--    <li v-for="msg in registerErrors.email" :key="msg">{{ msg }}</li>-->
-                                <!--</ul>-->
-                                <!--<ul v-if="registerErrors.password">-->
-                                <!--    <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>-->
-                                <!--</ul>-->
-                            <!--</div>-->
                         
                             <!--エラーなし-->
                             <div  v-if="! registerErrors" >
@@ -108,7 +87,7 @@
                                 
                                 <div class="mt-2">
                                     <label for="email">メールアドレス</label></br>
-                                    <input type="text" v-model="registerForm.email" class="w-100 p-2">
+                                    <input type="email"  name="email" v-model="registerForm.email" class="w-100 p-2">
                                 </div>
                                 
                                 <div class="mt-2">
@@ -143,7 +122,7 @@
                                         <span v-for="msg in registerErrors.email" :key="msg" class="text-danger">{{ msg }}</span>
                                     </div>
                                     <label v-if="! registerErrors.email">メールアドレス</label>
-                                    <input type="text"  v-model="registerForm.email"  class="w-100 border p-2"
+                                    <input type="email" name="email"   v-model="registerForm.email"  class="w-100 border p-2"
                                     :class="{ 'border border-danger' : registerErrors.email }">
                                 </div>
                                 
@@ -195,6 +174,33 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
   }
+  /*ウィンドウ幅が767px以上の場合に適用(pc用)*/
+@media screen and (min-width: 800px) { 
+    
+    
+    #modal-window  {
+        width: 30%;
+    }
+    
+}
+
+/*ウィンドウ幅が最大767pxまでの場合に適用(ipad用)*/
+@media screen and (max-width: 800px) { 
+    
+    #modal-window {
+        width: 50%;
+    }
+    
+}
+
+/*ウィンドウ幅が最大479pxまでの場合に適用(iphonx用)*/
+@media screen and (max-width: 479px) { 
+    
+    #modal-window {
+        width: 80%;
+    }
+    
+}
 </style>
 
 <script>
@@ -208,14 +214,14 @@ export default{
     data () {
         return {
             loginForm: {
-                email: '123@example.com',
-                password: '123123123',
+                email: '',
+                password: '',
             },      
             registerForm: {
-                name: '123',
-                email: '123@example.com',
-                password: '123123123',
-                password_confirmation: '123123123'
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: ''
             }
         }
     },

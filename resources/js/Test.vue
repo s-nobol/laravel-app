@@ -1,24 +1,27 @@
 <template>
 <div>
 
-    <div class="container">
-        <form  @submit.prevent="SendImage" >
-        
-            <input type="file" name="" @change="onFileChange"/>
-            <div v-if="preview">
-                <img :src="preview" style="max-height: 500px;"></img>
+        <div class="all-wrapper">
+            <div class="dropdown-wrapper" @click="isActive = !isActive">
+                <div class="dropdown-text">メニュ</div>
+                <i class="el-icon-caret-bottom"></i>
             </div>
-            
-            <div class="mt-3">
-                <input type="submit" value="Submit" class="btn btn-primary"/>
+            <div class="list-items" v-if="isActive">
+               
+                    <div class="list-item">
+                        選択肢がありません
+                    </div>
             </div>
-        </form>
-        <!--<button @click="onClickButtonErrors" >エラーチェックボタン</button>-->
-    </div>
-       
-    
+        </div>
+        <div class="dropdown-bg" @click="isActive = false" v-if="isActive">15</div>
 </div>
 </template>
+<style type="text/css">
+/*#postview{*/
+/*    background-color: gray;*/
+/*}*/
+
+</style>
 
 
 <script>
@@ -26,6 +29,7 @@ export default {
 
     data() {
         return {
+            isActive: false, 
             preview: null,
             image2: null,
             mause: false,
@@ -35,54 +39,6 @@ export default {
     methods:{
         // SendImage(){
         // },
-        
-        // 画面アップロード
-        onFileChange (event) {
-            if(event.target.files.length === 0 && ! event.target.files[0].type.match('image.*')) {
-                // this.reset()
-                return false
-            }
-            
-            const reader = new FileReader()
-            reader.onload = e => {
-                this.preview = e.target.result
-            }
-            reader.readAsDataURL(event.target.files[0])
-            this.image2 = event.target.files[0]
-        },
-        
-        
-         async SendImage(){
-            
-            const formData = new FormData()
-            formData.append('image', this.image2)
-            // formData.append('name', "これはテストメッセージです")
-            
-            
-            const response = await axios.post(`/api/users/51/image`, formData)
-            console.log("ユーザーを受信",response)
-            if (response.status === 201) {
-                // メッセージ登録
-                this.$store.commit('message/setContent', {
-                        content: '写真が投稿されました！',
-                        type: 'success',
-                        timeout: 3000
-                })
-                // this.$emit('close')
-                this.reset()
-                return false
-            }
-            // バリテーションエラー
-            if (response.status === 422) {
-                this.errors = response.data.errors
-            }
-            
-        },
-        onClickButtonForm(){
-            this.form = ! this.form
-            console.log("form",this.form)
-        },
-    //   hoverImage(){}
     }, 
     
 }

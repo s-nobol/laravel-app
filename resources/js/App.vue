@@ -1,5 +1,5 @@
 <template>
- <div class="bg-white">
+ <div class="">
         
         <!--ヘッダー-->
         <header>
@@ -17,8 +17,10 @@
         
         <!--メイン-->
         <main>
-            <div class="">
-                <RouterView />
+            <div class="bg-light">
+                <transition name="slide_up" >
+                    <RouterView />
+                </transition>
             </div>
         </main>
         
@@ -54,6 +56,17 @@
 .slide_down-enter, .slide_down-leave-to {
     height: 0;
 }
+
+
+/*スライドアップ*/
+.slide_up-enter-active, .slide_up-leave-active {
+  transition: all 0.8s;
+}
+.slide_up-enter, .slide_up-leave-to /* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 </style>
 
 <script>

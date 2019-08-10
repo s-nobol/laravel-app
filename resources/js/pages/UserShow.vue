@@ -1,14 +1,11 @@
 <template>
 <div class="text-center">
 
-        <!--<h1>ユーザー詳細ページ</h1>-->
-        <!--<h3>{{ user.id }}:::{{ currentUser.id}}</h3>-->
-        
         <div v-if="user" class="bg-white text-center">
         
             
             <!--プロフィール画像-->
-            <div class=" mt-5">
+            <div class=" pt-5">
                 <div class="m-auto rounded-circle image-form" 
                     style="width: 150px; height: 150px; overflow: hidden;" >
                     
@@ -66,7 +63,7 @@
             <!--編集フォーム-->
             <transition name="slide_down">
             <div v-if="Mode" class=" user-form " >
-                <form  @submit.prevent="editUser" class="m-auto w-25 border-top">
+                <form  @submit.prevent="editUser" class="m-auto border-top"  id="edit-form">
                 
                     <!--エラーメッセージ-->
                     <div v-if="errors">
@@ -76,20 +73,20 @@
                     <!--名前-->
                     <div class="mt-3" >
                         <b>名前</b></br>
-                        <input type="text" class="border bg-light " v-model="user.name" autofocus/>
+                        <input type="text" class="border bg-light " v-model="user.name"  :class="{ 'border-danger' : errors }" />
                     </div>
                     
                     <!--性別-->
-                    <div class="mt-3">
-                        <b>性別</b></br>
-                        男<input type="radio" name="sex" value="0" v-model="user.sex">
-                        女<input type="radio" name="sex" value="1" v-model="user.sex">
+                    <div class="mt-3"  :class="{ 'text-danger' : errors }">
+                        <b class="text-dark">性別</b></br>
+                        男<input type="radio" name="sex" value="0" v-model="user.sex"  >
+                        女<input type="radio" name="sex" value="1" v-model="user.sex"  >
                     </div>
                     
                     <!--住所-->
                     <div class="mt-3">
                         <b>住所</b></br>
-                        <select name="pref" class="border bg-light p-1"  v-model="user.address">
+                        <select name="pref" class="border bg-light p-1"  v-model="user.address"  :class="{ 'border-danger' : errors }">
                         <option value="">選択してください</option>
                         <option value="北海道">北海道</option>
                         <option value="青森県">青森県</option>
@@ -157,7 +154,7 @@
         
         
         <!--記事の一覧-->
-        <div class="mt-5">
+        <div class="mt-5 ">
             <div class="m-auto w-75 row">
                 
                 
@@ -189,15 +186,15 @@
             </div>
             
         
-            <div v-if="posts.length > 0 " class="text-left">
+            <div v-if="posts.length > 0 " class="text-left bg-light" >
             
                 <transition-group name="list" tag="div">
-                <div  v-for="post in posts" :key="post.id" id="posts"
-                    class="d-inline-block p-1" style="width: 20%; overflow: hidden;">
-                    <RouterLink :to="`/posts/${post.token}`"  >
-                        <div>
+                <div  v-for="post in posts" :key="post.id"  id="postview"
+                    class="d-inline-block p-1" style=" overflow: hidden;">
+                    <RouterLink :to="`/posts/${post.token}`"  @mouseover.native="mouseover" >
+                        <div class="post-image-form" >
                             <img v-if="post.image" :src="post.url+'thum.jpg'" 
-                                style="width: 100%;" class="list-image" alt="画像がありません"></img>
+                                style="width: 100%;" class="image" alt="画像がありません"></img>
                             <img v-else src="/image.jpg" style="width: 100%;" class="image"></img>
                         </div>
                     </RouterLink>
@@ -218,9 +215,13 @@
             
             
             <!--要素の最底辺-->
-            <div id="imageButtom"class="mt-3 border-top text-center" style="height: 500px;">
+            <transition name="fade">
+            <div v-if="this.currentPage < this.lastPage "  id="imageButtom"
+                class="mt-3 border-top text-center " style="height: 500px;" >
+                
                 <span v-if="loading" class="text-info">読み込み中</span>
             </div>
+            </transition>
             
            
         </div>
@@ -242,14 +243,14 @@
     width: 33%;
 }
 
-
 .list-enter-active, .list-leave-active {
-  transition: all 1.3s;
+  transition: all 1.5s;
 }
 .list-enter, .list-leave-to /* .list-leave-active for below version 2.1.8 */ {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(60px);
 }
+
 </style>
 
 <script>
@@ -299,6 +300,10 @@ export default {
                     this.user = response.data
                     // this.posts =response.data.posts 
                 }
+                
+                if(response.status !== 200){
+                    this.$store.commit('error/setCode', response.status)
+                }
         },
         async editUser(){
                 console.log("ユーザー情報を送信", this.user )
@@ -325,6 +330,8 @@ export default {
                     this.$store.commit('error/setCode', response.status)
                 }
         },
+        
+        mouseover(){},
         
         
         // タブの選択
@@ -375,7 +382,7 @@ export default {
             var posts_count = reponse_data.data.length
             
             for (var i = 0; i < posts_count; i++) {
-                time = time + 100
+                time = time + 300
                 setTimeout(()=>{
                     
                     // 記事をリストに追加

@@ -8,6 +8,8 @@ use App\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 // use Illuminate\Support\Facades\Storage;
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 class DatabaseController extends Controller
 {
@@ -65,5 +67,11 @@ class DatabaseController extends Controller
 
         return "画像の516165送信";
 
+    }
+    
+    // メール送信テスト
+    public function send_email(){
+        Mail::to('ka1301@outlook.jp')->send(new TestMail());
+        return "メールの送信完了";
     }
 }

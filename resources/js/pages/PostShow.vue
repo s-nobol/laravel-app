@@ -1,10 +1,7 @@
 <template>
-<div class="text-center">
+<div  class="mt-5">
 
-
-    <!--<h1>記事の詳細</h1>-->
-    
-    <div v-if="post">
+    <div v-if="post" class="text-center">
 
         <!--画像-->
         <div class="mt-5">
@@ -49,12 +46,12 @@
             <button 
                 class="btn  p-0 text-success2"
                 @click="onClickComment"> 
-                <i class="far fa-comment-alt fa-lg m-1 "></i>54{{ post.comments_count}}
+                <i class="far fa-comment-alt fa-lg m-1 "></i>{{ post.comments_count}}
             </button>
             
             <!--View-->
             <span class="text-success2">
-                <i class="far fa-eye fa-lg  m-1 "></i>1781
+                <i class="far fa-eye fa-lg  m-1 "></i>0
             </span>
             
             <!--like-->
@@ -62,7 +59,7 @@
                 class="btn p-0 text-success2"
                 :class="{ ' text-danger' : post.user_by_liked }"
                 @click="onClickLike">
-                 <i class="far fa-thumbs-up fa-lg m-1 "></i>26{{ post.likes_count}}
+                 <i class="far fa-thumbs-up fa-lg m-1 "></i>{{ post.likes_count}}
             </button>
         </div>
         
@@ -78,7 +75,7 @@
         <!--編集モード時-->
         <transition name="slide_down">
         <div v-if="Mode" class="mt-3 post-edit-form" >
-            <form  @submit.prevent="editPost" class="m-auto w-25  border-top">
+            <form  @submit.prevent="editPost" class="m-auto border-top" id="edit-form">
                 
                 
                 <!--エラーメッセージ-->
@@ -191,6 +188,7 @@
     height: 300px;
     overflow: hidden;
 }
+
 
 </style>
 

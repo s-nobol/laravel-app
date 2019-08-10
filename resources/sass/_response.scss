@@ -1,0 +1,109 @@
+/*ウィンドウ幅が767px以上の場合に適用(pc用)*/
+@media screen and (min-width: 800px) { 
+    
+    #postview {
+        width: 20%;
+    }
+    
+}
+
+/*ウィンドウ幅が最大767pxまでの場合に適用(ipad用)*/
+@media screen and (max-width: 800px) { 
+    
+    #postview {
+        width: 33%;
+    }
+    
+}
+/*ウィンドウ幅が最大479pxまでの場合に適用(iphonx用)*/
+@media screen and (max-width: 479px) { 
+    
+    #postview {
+        width: 50%;
+    }
+    
+}
+
+
+@media screen and (min-width: 800px) { 
+    #edit-form {
+        width: 25%;
+    }
+}
+@media screen and (max-width: 800px) { 
+    #edit-form{
+        width: 50%;
+    }
+}
+@media screen and (max-width: 479px) { 
+    #edit-form {
+        width: 80%;
+    }
+}
+
+// ナビバーのメニュー
+.navbar-menu-item{height: 120px;} 
+@media screen and (min-width: 800px) { 
+    
+    #navbar-user{
+        display: block;
+    }
+    #navbar-menu {
+        display: none;
+    }
+}
+@media screen and (max-width: 800px) { 
+    
+    #navbar-user{
+        display: none;
+    }
+    #navbar-menu {
+        display: block;
+    }
+}
+@media screen and (max-width: 479px) { 
+    
+    #navbar-user{
+        display: none;
+    }
+    #navbar-menu  {
+        display: block;
+    }
+}
+
+// PostFrom
+
+.post-form{
+    /*位置情報?サイズ*/
+    /*position: relative; */
+    position: absolute; 
+    top: 60px;
+    right: 15%;
+    /*left: 0;*/
+    z-index: 10;
+    width: 400px; /* 幅 */
+    padding: 10px;
+    
+    /*吹き出しボーダー*/
+    border: solid #fff 2px;
+    border-radius: 15px;
+    
+    background-color: white;
+    
+    /*影*/
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    transition: 3s;
+}
+
+@media screen and (max-width: 479px) { 
+    
+    .post-form {
+        position: absolute; 
+        top: 60px;
+        right: 0;
+        /*left: 0;*/
+        z-index: 10;
+        width: 100%; /* 幅 */
+    }
+}
