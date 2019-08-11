@@ -105,3 +105,5 @@ Route::post('/test/send_email', 'DatabaseController@send_email');
 // フェイルオーバー夜やる
 
 // comitする
+
+// git clone -b edit-password-reset https://github.com/s-nobol/laravel-app.git

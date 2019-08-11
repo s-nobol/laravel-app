@@ -44,8 +44,8 @@
                 
                 <!--性別-->
                 <h6 v-if="user.sex">
-                    <span v-if="user.sex == 0 "><b>男性</b></span>
-                    <span v-if="user.sex == 1 "><b>女性</b></span>
+                    <span v-if="user.sex == 1 "><b>男性</b></span>
+                    <span v-if="user.sex == 2 "><b>女性</b></span>
                 </h6>
                 
                 <!--住所-->
@@ -79,8 +79,8 @@
                     <!--性別-->
                     <div class="mt-3"  :class="{ 'text-danger' : errors }">
                         <b class="text-dark">性別</b></br>
-                        男<input type="radio" name="sex" value="0" v-model="user.sex"  >
-                        女<input type="radio" name="sex" value="1" v-model="user.sex"  >
+                        男<input type="radio" name="sex" value="1" v-model="user.sex"  >
+                        女<input type="radio" name="sex" value="2" v-model="user.sex"  >
                     </div>
                     
                     <!--住所-->

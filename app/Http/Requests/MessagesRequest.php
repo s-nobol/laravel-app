@@ -24,7 +24,7 @@ class MessagesRequest extends FormRequest
     public function rules()
     {
         return [
-            'content' => 'required|max:25',
+            'content' => 'required|max:250',
         ];
     }
     public function messages() {
@@ -32,7 +32,7 @@ class MessagesRequest extends FormRequest
         "required" => "必須項目です。",
         "email" => "メールアドレスの形式で入力してください。",
         "numeric" => "数値で入力してください。",
-        "max" => "25文字以内で入力してください。"
+        "max" => "250文字以内で入力してください。"
         ];
     }
 }

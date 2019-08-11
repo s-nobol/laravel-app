@@ -27,8 +27,8 @@ class PostRequest extends FormRequest
             //
             'image' => 'file|image|max:5000', //5Mバイト以下
             'category_id' => 'required',
-            'title' => 'required|max:25',
-            'description' => 'required|max:25'
+            'title' => 'required|max:50',
+            'description' => 'required|max:250'
         ];
     }
     public function messages() {
@@ -36,7 +36,8 @@ class PostRequest extends FormRequest
         "required" => "必須項目です。",
         "email" => "メールアドレスの形式で入力してください。",
         "numeric" => "数値で入力してください。",
-        "max" => "25文字以内で入力してください。",
+        "title.max" => "50文字以内で入力してください。",
+        "description.max" => "250文字以内で入力してください。",
         "file" => "ファイルがありません" ,
         "image" => "画像ファイルではありません",
         "image.max" => "画像ファイルが大きすぎます" 

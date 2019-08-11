@@ -12647,11 +12647,11 @@ var render = function() {
                           expression: "user.sex"
                         }
                       ],
-                      attrs: { type: "radio", name: "sex", value: "0" },
-                      domProps: { checked: _vm._q(_vm.user.sex, "0") },
+                      attrs: { type: "radio", name: "sex", value: "1" },
+                      domProps: { checked: _vm._q(_vm.user.sex, "1") },
                       on: {
                         change: function($event) {
-                          return _vm.$set(_vm.user, "sex", "0")
+                          return _vm.$set(_vm.user, "sex", "1")
                         }
                       }
                     }),
@@ -12665,11 +12665,11 @@ var render = function() {
                           expression: "user.sex"
                         }
                       ],
-                      attrs: { type: "radio", name: "sex", value: "1" },
-                      domProps: { checked: _vm._q(_vm.user.sex, "1") },
+                      attrs: { type: "radio", name: "sex", value: "2" },
+                      domProps: { checked: _vm._q(_vm.user.sex, "2") },
                       on: {
                         change: function($event) {
-                          return _vm.$set(_vm.user, "sex", "1")
+                          return _vm.$set(_vm.user, "sex", "2")
                         }
                       }
                     })
@@ -13103,11 +13103,11 @@ var render = function() {
                   _vm._v(" "),
                   _vm.user.sex
                     ? _c("h6", [
-                        _vm.user.sex == 0
+                        _vm.user.sex == 1
                           ? _c("span", [_c("b", [_vm._v("男性")])])
                           : _vm._e(),
                         _vm._v(" "),
-                        _vm.user.sex == 1
+                        _vm.user.sex == 2
                           ? _c("span", [_c("b", [_vm._v("女性")])])
                           : _vm._e()
                       ])
@@ -13205,11 +13205,11 @@ var render = function() {
                                   expression: "user.sex"
                                 }
                               ],
-                              attrs: { type: "radio", name: "sex", value: "0" },
-                              domProps: { checked: _vm._q(_vm.user.sex, "0") },
+                              attrs: { type: "radio", name: "sex", value: "1" },
+                              domProps: { checked: _vm._q(_vm.user.sex, "1") },
                               on: {
                                 change: function($event) {
-                                  return _vm.$set(_vm.user, "sex", "0")
+                                  return _vm.$set(_vm.user, "sex", "1")
                                 }
                               }
                             }),
@@ -13223,11 +13223,11 @@ var render = function() {
                                   expression: "user.sex"
                                 }
                               ],
-                              attrs: { type: "radio", name: "sex", value: "1" },
-                              domProps: { checked: _vm._q(_vm.user.sex, "1") },
+                              attrs: { type: "radio", name: "sex", value: "2" },
+                              domProps: { checked: _vm._q(_vm.user.sex, "2") },
                               on: {
                                 change: function($event) {
-                                  return _vm.$set(_vm.user, "sex", "1")
+                                  return _vm.$set(_vm.user, "sex", "2")
                                 }
                               }
                             })

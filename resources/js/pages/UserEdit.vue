@@ -134,8 +134,8 @@
                     <!--性別-->
                     <div class="mt-3">
                         <b>性別</b></br>
-                        男<input type="radio" name="sex" value="0" v-model="user.sex">
-                        女<input type="radio" name="sex" value="1" v-model="user.sex">
+                        男<input type="radio" name="sex" value="1" v-model="user.sex">
+                        女<input type="radio" name="sex" value="2" v-model="user.sex">
                     </div>
                     
                     
