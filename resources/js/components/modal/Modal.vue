@@ -49,7 +49,7 @@
                                         <span v-for="msg in loginErrors.password" :key="msg" class="text-danger">{{ msg }}</span>
                                     </div>
                                     <label v-if="! loginErrors.password">パスワード
-                                    <small class="text-primary" @click="onResetPassword">パスワードを忘れた</small>
+                                    <small class="text-primary" @click="onResetPassword" style="cursor: hand; cursor:pointer;">パスワードを忘れた</small>
                                     </label>
                                     <input type="password"  v-model="loginForm.password" class="w-100 border p-2"
                                     :class="{ 'border border-danger' : loginErrors.password }">

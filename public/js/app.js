@@ -4643,6 +4643,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import Modal from '../components/modal/Modal.vue'
 /* harmony default export */ __webpack_exports__["default"] = ({
   // components:{Modal},
@@ -4709,8 +4736,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (response.status !== 200) {
                   //フラッシュを作成（info）
                   this.$store.commit('message/setContent', {
-                    content: 'メールが送信されませんでした',
-                    type: 'info',
+                    content: 'メールの送信ができません',
+                    type: 'danger',
                     timeout: 3000
                   });
                 }
@@ -4739,12 +4766,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 // トークンを取得
-                this.passwordResetForm.token = this.token;
-                this.passwordResetForm.email = this.$route.query.email;
-                _context2.next = 4;
+                this.passwordResetForm.token = this.token; // this.passwordResetForm.email = this.$route.query.email
+
+                _context2.next = 3;
                 return axios.post('/api/password/reset', this.passwordResetForm);
 
-              case 4:
+              case 3:
                 response = _context2.sent;
                 console.log("パスワード送信", response);
 
@@ -4763,6 +4790,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 if (response.status === 422) {
                   this.Errors = response.data.errors;
+                }
+
+                if (response.status === 403) {
+                  //フラッシュを作成（success）
+                  this.$store.commit('message/setContent', {
+                    content: 'パスワードを更新できませんでした',
+                    type: 'danger',
+                    timeout: 3000
+                  }); // この後ログインする
+
+                  this.$router.push('/');
                 }
 
               case 8:
@@ -5142,11 +5180,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                console.log("記事の削除");
-                _context3.next = 3;
-                return axios["delete"]("/api/posts/".concat(this.post.id));
+                if (!confirm("本当に削除しますか？")) {
+                  _context3.next = 3;
+                  break;
+                }
+
+                _context3.next = 4;
+                break;
 
               case 3:
+                return _context3.abrupt("return", false);
+
+              case 4:
+                console.log("記事の削除");
+                _context3.next = 7;
+                return axios["delete"]("/api/posts/".concat(this.post.id));
+
+              case 7:
                 response = _context3.sent;
                 console.log("記事を一覧受信", response);
 
@@ -5165,7 +5215,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.$store.commit('error/setCode', response.status);
                 }
 
-              case 7:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -10502,6 +10552,7 @@ var render = function() {
                                         "small",
                                         {
                                           staticClass: "text-primary",
+                                          staticStyle: { cursor: "pointer" },
                                           on: { click: _vm.onResetPassword }
                                         },
                                         [_vm._v("パスワードを忘れた")]
@@ -11615,7 +11666,7 @@ var render = function() {
       ? _c(
           "form",
           {
-            staticClass: "form ",
+            staticClass: "form mt-5 card p-3 ",
             on: {
               submit: function($event) {
                 $event.preventDefault()
@@ -11626,80 +11677,236 @@ var render = function() {
           [
             _c("h3", [_vm._v("パスワード")]),
             _vm._v(" "),
-            _c("div", { staticClass: "mt-2" }, [
-              _c("label", [_vm._v("パスワード")]),
-              _c("br"),
-              _vm._v(" "),
-              _vm.Errors
-                ? _c("div", { staticClass: "errors text-danger mt-2" }, [
-                    _vm.Errors.password
-                      ? _c("span", { staticClass: "text-gander" }, [
-                          _vm._v(_vm._s(_vm.Errors.password))
-                        ])
-                      : _vm._e()
+            !_vm.Errors
+              ? _c("div", [
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("label", [_vm._v("メールアドレス")]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.passwordResetForm.email,
+                          expression: "passwordResetForm.email"
+                        }
+                      ],
+                      staticClass: "form-control w-100",
+                      attrs: { type: "email" },
+                      domProps: { value: _vm.passwordResetForm.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.passwordResetForm,
+                            "email",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("label", [_vm._v("パスワード")]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.passwordResetForm.password,
+                          expression: "passwordResetForm.password"
+                        }
+                      ],
+                      staticClass: "form-control w-100",
+                      attrs: { type: "text", name: "password" },
+                      domProps: { value: _vm.passwordResetForm.password },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.passwordResetForm,
+                            "password",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("label", [_vm._v("パスワード（再確認）")]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.passwordResetForm.password_confirmation,
+                          expression: "passwordResetForm.password_confirmation"
+                        }
+                      ],
+                      staticClass: "form-control w-100",
+                      attrs: { type: "password" },
+                      domProps: {
+                        value: _vm.passwordResetForm.password_confirmation
+                      },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.passwordResetForm,
+                            "password_confirmation",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
                   ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.passwordResetForm.password,
-                    expression: "passwordResetForm.password"
-                  }
-                ],
-                staticClass: "form-control w-100",
-                class: { "border border-danger": _vm.Errors },
-                attrs: { type: "text" },
-                domProps: { value: _vm.passwordResetForm.password },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(
-                      _vm.passwordResetForm,
-                      "password",
-                      $event.target.value
-                    )
-                  }
-                }
-              })
-            ]),
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _c("div", { staticClass: "mt-2" }, [
-              _c("label", [_vm._v("パスワード（再設定）")]),
-              _c("br"),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.passwordResetForm.password_confirmation,
-                    expression: "passwordResetForm.password_confirmation"
-                  }
-                ],
-                staticClass: "form-control w-100",
-                attrs: { type: "password" },
-                domProps: {
-                  value: _vm.passwordResetForm.password_confirmation
-                },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(
-                      _vm.passwordResetForm,
-                      "password_confirmation",
-                      $event.target.value
-                    )
-                  }
-                }
-              })
-            ]),
+            _vm.Errors
+              ? _c("div", [
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("label", [_vm._v("メールアドレス")]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _vm.Errors.email
+                      ? _c(
+                          "div",
+                          { staticClass: "errors text-danger mt-2" },
+                          _vm._l(_vm.Error.email, function(msg) {
+                            return _c(
+                              "span",
+                              { key: msg, staticClass: "text-danger" },
+                              [_vm._v(_vm._s(msg))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.passwordResetForm.email,
+                          expression: "passwordResetForm.email"
+                        }
+                      ],
+                      staticClass: "form-control w-100",
+                      class: { "border border-danger": _vm.Errors.email },
+                      attrs: { type: "email" },
+                      domProps: { value: _vm.passwordResetForm.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.passwordResetForm,
+                            "email",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("label", [_vm._v("パスワード")]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _vm.Errors.password
+                      ? _c(
+                          "div",
+                          { staticClass: "errors text-danger mt-2" },
+                          _vm._l(_vm.Errors.password, function(msg) {
+                            return _c(
+                              "span",
+                              { key: msg, staticClass: "text-danger" },
+                              [_vm._v(_vm._s(msg))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.passwordResetForm.password,
+                          expression: "passwordResetForm.password"
+                        }
+                      ],
+                      staticClass: "form-control w-100",
+                      class: { "border border-danger": _vm.Errors.password },
+                      attrs: { type: "text", name: "password" },
+                      domProps: { value: _vm.passwordResetForm.password },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.passwordResetForm,
+                            "password",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c("label", [_vm._v("パスワード（再確認）")]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.passwordResetForm.password_confirmation,
+                          expression: "passwordResetForm.password_confirmation"
+                        }
+                      ],
+                      staticClass: "form-control w-100",
+                      class: { "border border-danger": _vm.Errors.password },
+                      attrs: { type: "password" },
+                      domProps: {
+                        value: _vm.passwordResetForm.password_confirmation
+                      },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.passwordResetForm,
+                            "password_confirmation",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _vm._m(1)
           ]
@@ -11779,6 +11986,7 @@ var render = function() {
                             "span",
                             {
                               staticClass: "text-success",
+                              staticStyle: { cursor: "pointer" },
                               on: {
                                 click: function($event) {
                                   _vm.Mode = !_vm.Mode
@@ -11792,6 +12000,7 @@ var render = function() {
                             "span",
                             {
                               staticClass: "text-danger2",
+                              staticStyle: { cursor: "pointer" },
                               on: { click: _vm.postDelete }
                             },
                             [_vm._v("削除")]
@@ -29692,10 +29901,13 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            console.log = function () {}; //ログの非表示
+
+
+            _context.next = 3;
             return _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch('auth/currentUser');
 
-          case 2:
+          case 3:
             new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
               el: '#app',
               router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -29706,7 +29918,7 @@ function () {
               template: '<App />'
             });
 
-          case 3:
+          case 4:
           case "end":
             return _context.stop();
         }

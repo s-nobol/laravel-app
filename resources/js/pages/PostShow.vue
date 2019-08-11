@@ -11,8 +11,8 @@
             
             <div v-if="currentUser" >
                 <div v-if="post.user.id === currentUser.id">
-                    <span class="text-success" @click="Mode = ! Mode ">編集</span>
-                    <span class="text-danger2" @click="postDelete">削除</span>
+                    <span class="text-success" @click="Mode = ! Mode " style="cursor: hand; cursor:pointer;">編集</span>
+                    <span class="text-danger2" @click="postDelete" style="cursor: hand; cursor:pointer;">削除</span>
                 </div>
             </div>
         </div>
@@ -271,6 +271,11 @@ export default {
             
         },
         async postDelete(){
+            
+            if(confirm("本当に削除しますか？")){
+            }else{
+                return false
+            }
             console.log("記事の削除")
            
             const response = await axios.delete(`/api/posts/${ this.post.id }`)

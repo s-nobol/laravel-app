@@ -97,3 +97,11 @@ Route::post('/test/send_email', 'DatabaseController@send_email');
 
 
 // ほぼ完成デプロイしてみる
+// Venderの部分はデプロイ後インストールされる
+// パスワードメールの日本語化なんとかうまくいったっぽい
+// 明日ブランチcommitしてテストしてみる
+
+
+// フェイルオーバー夜やる
+
+// comitする

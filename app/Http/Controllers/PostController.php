@@ -122,7 +122,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
-        // $post->delete;
+        $post->delete();
         return "記事を削除しました";
     }
 }

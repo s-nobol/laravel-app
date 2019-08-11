@@ -31,36 +31,63 @@
         
         
         
-        <form v-if="token" class="form " @submit.prevent="passwordReset">
+        <form v-if="token" class="form mt-5 card p-3 "  @submit.prevent="passwordReset">
             <h3>パスワード</h3>
             
-            
-            
-            <!--メールアドレス-->
-            <!--<div class="mt-2">-->
-            <!--    <label>メールアドレス</label></br>-->
-            <!--     <div v-if="Errors" class="errors text-danger mt-2">-->
-            <!--        <span v-if="Errors.email" class="text-gander">{{ Errors.email }}</span>-->
-            <!--    </div>-->
-            <!--    <input type="email"  v-model="passwordResetForm.email" -->
-            <!--    class="form-control w-100"  :class="{ 'border border-danger': Errors }">-->
-            <!--</div>-->
-            
-            <!--パスワード-->
-            <div class="mt-2">
-                <label>パスワード</label></br>
-                 <div v-if="Errors" class="errors text-danger mt-2">
-                    <span v-if="Errors.password" class="text-gander">{{ Errors.password }}</span>
+            <!--エラーなし-->
+            <div v-if="! Errors">
+                <!--メールアドレス-->
+                <div class="mt-2">
+                    <label>メールアドレス</label></br>
+                    <input type="email"  v-model="passwordResetForm.email"class="form-control w-100"   >
                 </div>
-                <input type="text"  v-model="passwordResetForm.password" 
-                class="form-control w-100"  :class="{ 'border border-danger': Errors  }">
+                
+                <!--パスワード-->
+                <div class="mt-2">
+                    <label>パスワード</label></br>
+                    <input type="text" name="password"class="form-control w-100"  
+                    v-model="passwordResetForm.password" >
+                </div>
+                
+                
+                <!--パスワード確認-->
+                <div class="mt-2">
+                    <label>パスワード（再確認）</label></br>
+                    <input type="password"  v-model="passwordResetForm.password_confirmation" 
+                    class="form-control w-100"  >
+                </div>
             </div>
             
-            
-            <!--パスワード確認-->
-            <div class="mt-2">
-                <label>パスワード（再設定）</label></br>
-                <input type="password"  v-model="passwordResetForm.password_confirmation" class="form-control w-100">
+            <!--エラーあり-->
+            <div v-if="Errors">
+                <!--メールアドレス-->
+                <div class="mt-2">
+                    <label>メールアドレス</label></br>
+                     <div v-if="Errors.email" class="errors text-danger mt-2">
+                        <span v-for="msg in Error.email"  :key="msg" class="text-danger">{{ msg }}</span>
+                    </div>
+                    
+                    <input type="email"  v-model="passwordResetForm.email" 
+                    class="form-control w-100"  :class="{ 'border border-danger': Errors.email }">
+                </div>
+                
+                <!--パスワード-->
+                <div class="mt-2">
+                    <label>パスワード</label></br>
+                     <div v-if="Errors.password" class="errors text-danger mt-2">
+                        <span v-for="msg in Errors.password"  :key="msg" class="text-danger">{{ msg }}</span>
+                    </div>
+                    <input type="text" name="password" v-model="passwordResetForm.password" 
+                    class="form-control w-100"  :class="{ 'border border-danger': Errors.password  }">
+                </div>
+                
+                
+                <!--パスワード確認-->
+                <div class="mt-2">
+                    <label>パスワード（再確認）</label></br>
+                    <input type="password"  v-model="passwordResetForm.password_confirmation" 
+                    class="form-control w-100"   :class="{ 'border border-danger': Errors.password   }">
+                </div>
             </div>
             
             
@@ -128,8 +155,8 @@ export default {
             if(response.status !== 200 ){
                 //フラッシュを作成（info）
                 this.$store.commit('message/setContent', {
-                        content: 'メールが送信されませんでした',
-                        type: 'info',
+                        content: 'メールの送信ができません',
+                        type: 'danger',
                         timeout: 3000
                 })
             }
@@ -138,7 +165,7 @@ export default {
             
             // トークンを取得
             this.passwordResetForm.token = this.token
-            this.passwordResetForm.email = this.$route.query.email
+            // this.passwordResetForm.email = this.$route.query.email
             const response = await axios.post('/api/password/reset', this.passwordResetForm)
             console.log("パスワード送信",response)
             
@@ -158,6 +185,18 @@ export default {
             // バリテーションエラー
             if(response.status === 422 ){
                 this.Errors = response.data.errors
+            }
+            if(response.status === 403 ){
+                
+                //フラッシュを作成（success）
+                this.$store.commit('message/setContent', {
+                        content: 'パスワードを更新できませんでした',
+                        type: 'danger',
+                        timeout: 3000
+                })
+                
+                // この後ログインする
+                this.$router.push('/')
             }
         },
     }, 
