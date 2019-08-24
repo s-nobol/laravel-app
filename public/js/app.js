@@ -30350,10 +30350,13 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            console.log = function () {}; //ログの非表示
+
+
+            _context.next = 3;
             return _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch('auth/currentUser');
 
-          case 2:
+          case 3:
             new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
               el: '#app',
               router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -30364,7 +30367,7 @@ function () {
               template: '<App />'
             });
 
-          case 3:
+          case 4:
           case "end":
             return _context.stop();
         }
