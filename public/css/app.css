@@ -11289,7 +11289,7 @@ h1 {
 
 @media screen and (max-width: 800px) {
   h1 {
-    font-size: 35px;
+    font-size: 30px;
   }
 }
 
@@ -11312,6 +11312,22 @@ h1 {
 @media screen and (max-width: 479px) {
   .w-rsp-50 {
     width: 100%;
+  }
+}
+
+.tab-color h5 {
+  font-family: "Yu Gothic";
+}
+
+@media screen and (max-width: 800px) {
+  .tab-color h5 {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .tab-color h5 {
+    font-size: 13px;
   }
 }
 

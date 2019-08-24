@@ -144,9 +144,9 @@ h1{
     font-size: 35px;
 }
 @media screen and (max-width: 800px) { 
-        
+    // 少し文字を小さくする
     h1{
-        font-size: 35px;
+        font-size: 30px;
     }
 }
 @media screen and (max-width: 479px) { 
@@ -170,5 +170,24 @@ h1{
 @media screen and (max-width: 479px) { 
     .w-rsp-50{
         width: 100%;
+    }
+}
+
+// usershow
+// タブの文字サイズ
+.tab-color h5{
+    font-family: 'Yu Gothic';
+}
+
+@media screen and (max-width: 800px) { 
+    // 少し文字を小さくする5
+    .tab-color h5{
+        font-size: 16px;
+    }
+}
+@media screen and (max-width: 479px) { 
+    
+    .tab-color h5{
+        font-size: 13px;
     }
 }

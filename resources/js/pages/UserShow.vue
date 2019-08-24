@@ -157,7 +157,7 @@
         
         <!--記事の一覧-->
         <div class="mt-3">
-            <div class="m-auto w-75 row">
+            <div class="m-auto container pl-0 pr-0  row">
                 
                 <!--自分の写真-->
                 <div 
@@ -203,9 +203,9 @@
             
             </div>
             
-            <div v-if="posts.length === 0 " class="mt-5">
-                 <div class="m-auto card w-25">
-                    <div class="p-3 text-center">
+            <div v-if="posts.length === 0 " class="mt-5 pb-5">
+                 <div class="m-auto w-rsp-25 p-3">
+                    <div class="p-3 text-center card ">
                         <!--<span class="display-2"><b>403</b></span>-->
                         <!--<h4 class="border-bottom pb-3"><span><b>You Dont Have Post</b></span></h4>-->
                         <h5 class="pt-2"><span>まだ記事がありません</span></h5>

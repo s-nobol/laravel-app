@@ -108,8 +108,6 @@ Route::post('/test/send_email', 'DatabaseController@send_email');
 // git clone -b edit-password-reset https://github.com/s-nobol/laravel-app.git
 
 // php.ini　ファイルサイズを編集した
-// post_max_size = 8M
-// upload_max_filesize = 8M
 
 // 最終チェックしてGitにcommit
 // masuterブランちでマージ

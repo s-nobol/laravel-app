@@ -13951,7 +13951,7 @@ var render = function() {
             "div",
             { staticClass: "mt-3" },
             [
-              _c("div", { staticClass: "m-auto w-75 row" }, [
+              _c("div", { staticClass: "m-auto container pl-0 pr-0  row" }, [
                 _c(
                   "div",
                   {
@@ -14070,7 +14070,7 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.posts.length === 0
-                ? _c("div", { staticClass: "mt-5" }, [_vm._m(0)])
+                ? _c("div", { staticClass: "mt-5 pb-5" }, [_vm._m(0)])
                 : _vm._e(),
               _vm._v(" "),
               _c("transition", { attrs: { name: "fade" } }, [
@@ -14104,8 +14104,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "m-auto card w-25" }, [
-      _c("div", { staticClass: "p-3 text-center" }, [
+    return _c("div", { staticClass: "m-auto w-rsp-25 p-3" }, [
+      _c("div", { staticClass: "p-3 text-center card " }, [
         _c("h5", { staticClass: "pt-2" }, [
           _c("span", [_vm._v("まだ記事がありません")])
         ])
