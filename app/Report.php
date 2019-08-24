@@ -6,18 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
-    //
     
-    //
+    protected $perPage = 5; 
     protected $fillable = [
        'post_id', 'category','title', 'description', 
     ];
     
     
     // /** JSONに含める属性 */
-    // protected $visible = [
-    //     'user', 'content','id','created_at',
-    // ];
+    protected $visible = [
+        'post','id','created_at','title','description','post_id',
+    ];
 
     /**
      * リレーションシップ - usersテーブル
@@ -25,6 +24,6 @@ class Report extends Model
      */
     public function post()
     {
-        return $this->belongsTo('App\post', 'post_id', 'id', 'posts');
+        return $this->belongsTo('App\Post', 'post_id', 'id', 'posts');
     }
 }

@@ -4,7 +4,7 @@
     <div v-if="post" class="text-center">
 
         <!--画像-->
-        <div class="mt-5">
+        <div class="mt-5 ">
             
                 <img v-if="post.image" :src="post.url+'image.jpg'" class="post-image"></img>
                 <img v-else src="/image.jpg"  class="post-image"></img>
@@ -34,7 +34,7 @@
         
         
         <!--タイトル-->
-        <h1 class="p-0 mt-3">{{ post.title }}</h1>
+        <h1 class="p-0 mt-5">{{ post.title }}</h1>
         <small class="text-muted">{{  post.created_at }}</small>
         
       
@@ -51,7 +51,7 @@
             
             <!--View-->
             <span class="text-success2">
-                <i class="far fa-eye fa-lg  m-1 "></i>0
+                <i class="far fa-eye fa-lg  m-1 ml-2 "></i>
             </span>
             
             <!--like-->
@@ -65,9 +65,13 @@
         
         
         <!--説明-->
-        <div  class="mt-5"  >
-            <div class=" w-25 m-auto">
-            <span>{{ post.description }}</span>
+        <div  class="mt-3 "  >
+            <div class=" w-rsp-25 m-auto">
+                <p class="break-word ">
+                 <!--<pre>-->
+                    {{ post.description }}
+                <!--</pre>-->
+                </p>
             </div>
         </div>
         
@@ -108,7 +112,7 @@
         
         <!--通報ボタン-->
         <div v-if="currentUser" class="mt-5 text-muted">
-            <span @click="reportModal = ! reportModal">
+            <span  class="pointer"  @click="reportModal = ! reportModal">
                 <i class="fas fa-exclamation-circle m-1"></i>通報する
             </span>
         </div>
@@ -121,12 +125,12 @@
         <!--投稿者-->
         <div class="mt-5 bg-whitesmoke p-5 ">
             
-            <button class="btn bg-success2  mt-2 mb-3">投稿者</button></br>
+            <button class="btn bg-success2  tag mb-5">投稿者</button></br>
             
             
             <!--ユーザープロフィール-->
             <RouterLink :to="`/users/${post.user.id}`"  class="" >
-                  <div class="m-auto rounded-circle image-form" style="width: 120px; height: 120px; overflow: hidden;" >
+                  <div class="m-auto rounded-circle image-form " style="width: 120px; height: 120px; overflow: hidden;" >
                     
                     <!--画像あり-->
                     <img v-if="post.user.image"
@@ -154,13 +158,11 @@
         
         
         <!--コメント-->
-        <div class="row mt-5 p-3">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
+        <div class=" mt-5 p-3" id="comment-top">
+            <div class="w-rsp-50 m-auto" >
                 <button class="btn bg-success2 mt-3">コメント</button></br>
                 <Comment :post="post" />
             </div>
-            <div class="col-md-3"></div>
         </div>
         
         
@@ -179,10 +181,10 @@
   opacity: 0;
 }
 
-.post-image{
-    max-width: 700px;
-    max-height:  700px;
-    /*width: 300px;*/
+.tag{
+    /*position: relative;*/
+    /*top: -65px;*/
+    z-index: 2;
 }
 .post-edit-form{
     height: 300px;
@@ -296,7 +298,14 @@ export default {
         },
         
         //Comment
-        onClickComment(){},
+        onClickComment(){
+            // window.location.reload();
+            // コメントまでスクロール
+            // var position =  document.getElementById('comment-top').offsetTop;
+            // console.log(position)
+            // document.getElementsByTagName('body').animate({scrollTop:position}, 500 , "swing");
+            // return false;
+        },
         
         // like
         onClickLike(){

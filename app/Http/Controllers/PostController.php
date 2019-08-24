@@ -53,13 +53,12 @@ class PostController extends Controller
     }
 
 
-    // $extension = $request->image->extension();
+
     public function store(PostRequest $request)
     {
         // 投稿写真の拡張子を取得する
         $image = $request->image;
         $post = new Post();
-        
         
 
         // トランザクションを利用する
@@ -77,11 +76,22 @@ class PostController extends Controller
 
             // サムネイルの保存
             $thum = Image::make($image);
-            $thum->resize(300, null, function($constraint){
-                $constraint->aspectRatio();
-            });//リサイズ
-            $thum->crop(200, 200);
-            // $image->save('thum.jpg',75);
+            
+            // 長さを取得
+            $width = $thum->width();
+            $height =$thum->height();
+            
+            // 高さに合わせてリサイズ
+            if ($width >= $height) {
+                $thum->resize( null, 300, function($constraint){ $constraint->aspectRatio();});
+                
+            // 幅に合わせてリサイズ
+            }else if($width < $height){
+                $thum->resize(300, null, function($constraint){ $constraint->aspectRatio();});
+            }
+            
+            //リサイズ
+            $thum->crop(290, 290);
             
             $thum =$thum->encode('jpg');
             

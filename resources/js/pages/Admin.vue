@@ -1,43 +1,48 @@
 <template>
 <div>
-    <h1>管理者</h1>
+    <div  v-if="admin" class=" container">
     
-    <div class="row">
+        <h1 class="mt-3 mb-3">管理者ページ</h1>
         
-        <!--メニュ-->
-        <div class="col-3 bg-white">
-            <p :class="{ 'text-primary' : tab === 0}" @click="tab = 0">メニュー</p>
-            <p :class="{ 'text-primary' : tab === 1}" @click="tab = 1">データベース</p>
-            <p :class="{ 'text-primary' : tab === 2}" @click="tab = 2">メッセージの作成</p>
-            <p :class="{ 'text-primary' : tab === 3}" @click="tab = 3">通報</p>
+        <div class="row">
+            
+            <!--メニュ-->
+            <div class="col-3 bg-white p-3">
+                <p class="pointer" :class="{ 'text-primary' : tab === 0}" @click="tab = 0">メニュー</p>
+                <p class="pointer" :class="{ 'text-primary' : tab === 1}" @click="tab = 1">データベース</p>
+                <p class="pointer" :class="{ 'text-primary' : tab === 2}" @click="tab = 2">メッセージの作成</p>
+                <p class="pointer" :class="{ 'text-primary' : tab === 3}" @click="tab = 3">通報</p>
+            </div>
+            
+            <!--view-->
+            <div class="col-9 bg-white p-3">
+            
+                <!--タブ1-->
+                <div v-if=" tab === 0">
+                    <h3>メニュー</h3>
+                </div>
+                
+                <!--タブ2-->
+                <div v-if=" tab === 1">
+                    <DataBase />
+                </div>
+                
+                
+                <!--タブ3-->
+                <div v-if=" tab === 2">
+                    <Message />
+                </div>
+                
+                <!--タブ4-->
+                <div v-if=" tab === 3">
+                    <Report />
+                </div>
+                
+            </div>
         </div>
-        
-        <!--view-->
-        <div class="col-9 bg-white">
-        
-            <!--タブ1-->
-            <div v-if=" tab === 0">
-                <h3>メニュー</h3>
-            </div>
-            
-            <!--タブ2-->
-            <div v-if=" tab === 1">
-                <DataBase />
-            </div>
-            
-            
-            <!--タブ3-->
-            <div v-if=" tab === 2">
-                <Message />
-            </div>
-            
-            <!--タブ4-->
-            <div v-if=" tab === 3">
-                <Report />
-            </div>
-            
-        </div>
+    
     </div>
+    
     
 
 </div>
@@ -53,7 +58,8 @@ export default {
     components:{ DataBase, Message, Report },
     data(){
         return{
-            tab: 1,
+            admin: false,
+            tab: 3,
             posts: null,
             messageForm: {
                 content: ''
@@ -63,6 +69,22 @@ export default {
         }
     },
     methods:{
+        
+        // 管理者ユーザーか確認
+        async getAdminUser(){
+            
+            const response = await axios.get(`/api/messages`)
+            console.log("記事を一覧受信",response)
+            if( response.status === 200 ){
+                this.admin  = true
+                return false;
+            }
+            if (response.status !== 200){
+                this.$store.commit('error/setCode', response.status)
+                return false
+            }
+        },
+        
         
         //メッセージの作成
         async addMessage(){
@@ -84,10 +106,10 @@ export default {
                 this.messages = response.data
             }
         },
-        async getPost(){
-        },
-        
-    
     },
+    
+    created(){
+        this.getAdminUser()
+    }
 }
 </script>

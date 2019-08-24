@@ -69,6 +69,8 @@ Route::delete('/posts/{post}/like', 'LikeController@destroy');
 // カテゴリ機能
 Route::get('/categorys', 'CategoryController@index');
 
+// admin
+Route::get('/admin', 'DatabaseController@get_admin_user');
 
 // データベース検索機能
 Route::get('/db/{id}', 'DatabaseController@getDatabase');
@@ -78,13 +80,17 @@ Route::get('/messages', 'DatabaseController@getmessages');
 Route::post('/messages', 'DatabaseController@addmessages');
 Route::delete('/messages/{message}', 'DatabaseController@deletemessages');
 
-// postFormアコーディオンは現状態でいい
+
 
 // 通報機能（Report）
-// php artisan make:model Report --all
-// php artisan make:request ReportRequest
 Route::resource('reports', 'ReportController');
 
+
+// admin通報機能（Report）
+Route::get('/admin/get_report', 'DatabaseController@get_report');
+
+// admin　記事削除
+Route::delete('/admin/delete_post/{id}', 'DatabaseController@delete_post');
 
 // laravel-test-app.mlドメインの作成
 
@@ -96,14 +102,14 @@ Route::post('/test/image', 'DatabaseController@send_image_s3');
 Route::post('/test/send_email', 'DatabaseController@send_email');
 
 
-// ほぼ完成デプロイしてみる
-// Venderの部分はデプロイ後インストールされる
-// パスワードメールの日本語化なんとかうまくいったっぽい
-// 明日ブランチcommitしてテストしてみる
 
 
-// フェイルオーバー夜やる
-
-// comitする
 
 // git clone -b edit-password-reset https://github.com/s-nobol/laravel-app.git
+
+// php.ini　ファイルサイズを編集した
+// post_max_size = 8M
+// upload_max_filesize = 8M
+
+// 最終チェックしてGitにcommit
+// masuterブランちでマージ

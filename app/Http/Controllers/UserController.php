@@ -101,16 +101,25 @@ class UserController extends Controller
         $user->save();
         
         
-        // 画像のサイズ取得
+        // 画像の取得
         $image = Image::make($request->image);
-        $image->resize(200, null, function($constraint){
-            $constraint->aspectRatio();
-        });//リサイズ
-        $image->crop(200, 200);
-        // $image->save('thum.jpg',75);
+                    
+        // 長さを取得
+        $width = $image->width();
+        $height =$image->height();
         
+        // 高さに合わせてリサイズ
+        if ($width >= $height) {
+            $image->resize( null, 200, function($constraint){ $constraint->aspectRatio();});
+            
+        // 幅に合わせてリサイズ
+        }else if($width < $height){
+            $image->resize(200, null, function($constraint){ $constraint->aspectRatio();});
+        }
+        
+        //クロップ
+        $image->crop(200, 200);
         $image =  $image->encode('jpg');
-        // $image->save($file_path); //特定のファイルに保存
         
         
         Storage::disk('s3')->put('/users/'.$user->id.'/image.jpg', (string)$image, 'public');

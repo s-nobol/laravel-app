@@ -126,11 +126,8 @@ export default{
                 this.$emit('close')
                 return false
             }
-            console.log("通報する", result)
             
-            
-            
-            this.reportForm.post_id = 1
+            this.reportForm.post_id = this.id
             const  response = await axios.post(`/api/reports`, this.reportForm)
             
             console.log("通報する", response)
@@ -141,7 +138,7 @@ export default{
             if (response.status === 200 ) {
                  this.$store.commit('message/setContent', {
                         content: '通報しました！',
-                        type: 'info',
+                        type: 'danger',
                         timeout: 3000
                 })
                 this.$emit('close')

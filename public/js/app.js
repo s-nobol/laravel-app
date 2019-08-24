@@ -2898,6 +2898,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -2914,6 +2917,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       title: '',
       description: '',
       errors: null,
+      uploadErrors: null,
       loading: false,
       acd: false
     };
@@ -3011,6 +3015,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.errors = response.data.errors;
 
                   if (this.errors.image) {
+                    this.loading = false;
                     this.reset();
                   }
                 }
@@ -3031,17 +3036,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return createPost;
     }(),
-    onPostUpload: function onPostUpload() {// console.log("起動")
-    },
-    // 画面アップロード
     imageForm: function imageForm() {
       // 画像フォームがクリックされればinput起動
       document.getElementById('input-file').click();
     },
+    // 画面アップロード
     onFileChange: function onFileChange(event) {
       var _this = this;
 
-      if (event.target.files.length === 0 && !event.target.files[0].type.match('image.*')) {
+      // エラーをリセット
+      this.errors = null;
+      this.uploadErrors = null; // 画像ファイルか確認
+
+      if (event.target.files.length === 0) {
+        this.reset();
+        this.uploadErrors = "ファイルがありません";
+        return false;
+      }
+
+      if (!event.target.files[0].type.match('image.*')) {
+        console.log("画像ファイルではありません");
+        this.uploadErrors = "画像ファイルではありません";
         this.reset();
         return false;
       }
@@ -3060,13 +3075,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onDrop: function onDrop(event) {
       var _this2 = this;
 
+      // エラーをリセット
+      if (this.errors) {
+        this.errors = null;
+      }
+
       if (event.dataTransfer.files.length > 1) {
         console.log("ファイルは一つまでです");
+        this.uploadErrors = "ファイルは一つまでです";
         return false;
       }
 
       if (!event.dataTransfer.files[0].type.match('image.*')) {
         console.log("画像ファイルではありません");
+        this.uploadErrors = "画像ファイルではありません";
         this.reset();
         return false;
       }
@@ -3085,7 +3107,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.preview = '';
       this.image = null;
       this.$el.querySelector('input[type="file"]').value = null;
-    }
+    },
+    onPostUpload: function onPostUpload() {}
   },
   created: function created() {
     // this.getCategory()
@@ -3438,6 +3461,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3445,31 +3512,56 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         content: ''
       },
       reportErrors: null,
-      reports: []
+      reports: [],
+      // ページネーション
+      currentPage: 0,
+      lastPage: 0,
+      loading: false,
+      reportHover: false
     };
   },
   methods: {
-    getreport: function () {
-      var _getreport = _asyncToGenerator(
+    getReport: function () {
+      var _getReport = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response;
+        var response, report_count, i;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return axios.get("/api/reports");
+                if (!this.loading) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return", false);
 
               case 2:
+                //読み込み中ならcancel
+                this.loading = true;
+                _context.next = 5;
+                return axios.get("/api/admin/get_report?page=".concat(this.currentPage + 1));
+
+              case 5:
                 response = _context.sent;
                 console.log("通報を受信", response);
 
                 if (response.status === 200) {
-                  this.reports = response.data;
+                  report_count = response.data.data.length;
+
+                  for (i = 0; i < report_count; i++) {
+                    this.reports.push(response.data.data[i]);
+                  } // ページの更新
+
+
+                  this.currentPage = response.data.current_page;
+                  this.lastPage = response.data.last_page;
                 }
 
-              case 5:
+                this.loading = false;
+
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -3477,26 +3569,67 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, this);
       }));
 
-      function getreport() {
-        return _getreport.apply(this, arguments);
+      function getReport() {
+        return _getReport.apply(this, arguments);
       }
 
-      return getreport;
+      return getReport;
     }(),
-    deletereport: function () {
-      var _deletereport = _asyncToGenerator(
+    deleteReport: function () {
+      var _deleteReport = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(id) {
-        var response;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(item) {
+        var response, index;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios["delete"]("/api/reports/".concat(id));
+                return axios["delete"]("/api/reports/".concat(item.id));
 
               case 2:
                 response = _context2.sent;
+                console.log("通報を削除受信", response);
+
+                if (response.status === 200) {
+                  console.log(response.data);
+                  index = this.reports.indexOf(item);
+                  this.reports.splice(index, 1);
+                  this.$store.commit('message/setContent', {
+                    content: '通報を削除しました',
+                    type: 'danger',
+                    timeout: 3000
+                  });
+                }
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function deleteReport(_x) {
+        return _deleteReport.apply(this, arguments);
+      }
+
+      return deleteReport;
+    }(),
+    deleteAll: function () {
+      var _deleteAll = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios["delete"]("/api/reports/".concat(id));
+
+              case 2:
+                response = _context3.sent;
                 console.log("通報を削除受信", response);
 
                 if (response.status === 200) {
@@ -3505,21 +3638,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2);
+        }, _callee3);
       }));
 
-      function deletereport(_x) {
-        return _deletereport.apply(this, arguments);
+      function deleteAll() {
+        return _deleteAll.apply(this, arguments);
       }
 
-      return deletereport;
-    }()
+      return deleteAll;
+    }(),
+    // 記事の削除
+    deletePost: function () {
+      var _deletePost = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(id) {
+        var response, msg;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (!confirm("記事を削除しますか？ " + id)) {
+                  _context4.next = 6;
+                  break;
+                }
+
+                _context4.next = 3;
+                return axios["delete"]("/api/admin/delete_post/".concat(id));
+
+              case 3:
+                response = _context4.sent;
+                console.log("通報を削除受信", response);
+
+                if (response.status === 200) {
+                  console.log(response.data);
+                  msg = response.data;
+                  this.$store.commit('message/setContent', {
+                    content: msg,
+                    type: 'danger',
+                    timeout: 3000
+                  });
+                }
+
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function deletePost(_x2) {
+        return _deletePost.apply(this, arguments);
+      }
+
+      return deletePost;
+    }(),
+    mouseover: function mouseover() {
+      alert("dsdsd");
+    }
   },
   created: function created() {
-    this.getreport();
+    this.getReport();
   }
 });
 
@@ -4031,12 +4213,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 4:
-                console.log("通報する", result);
-                this.reportForm.post_id = 1;
-                _context.next = 8;
+                this.reportForm.post_id = this.id;
+                _context.next = 7;
                 return axios.post("/api/reports", this.reportForm);
 
-              case 8:
+              case 7:
                 response = _context.sent;
                 console.log("通報する", response); // バリテーションエラー
 
@@ -4047,13 +4228,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (response.status === 200) {
                   this.$store.commit('message/setContent', {
                     content: '通報しました！',
-                    type: 'info',
+                    type: 'danger',
                     timeout: 3000
                   });
                   this.$emit('close');
                 }
 
-              case 12:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -4205,6 +4386,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -4216,7 +4402,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      tab: 1,
+      admin: false,
+      tab: 3,
       posts: null,
       messageForm: {
         content: ''
@@ -4226,9 +4413,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    //メッセージの作成
-    addMessage: function () {
-      var _addMessage = _asyncToGenerator(
+    // 管理者ユーザーか確認
+    getAdminUser: function () {
+      var _getAdminUser = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var response;
@@ -4236,12 +4423,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _context.next = 2;
+                return axios.get("/api/messages");
+
+              case 2:
+                response = _context.sent;
+                console.log("記事を一覧受信", response);
+
+                if (!(response.status === 200)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                this.admin = true;
+                return _context.abrupt("return", false);
+
+              case 7:
+                if (!(response.status !== 200)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context.abrupt("return", false);
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function getAdminUser() {
+        return _getAdminUser.apply(this, arguments);
+      }
+
+      return getAdminUser;
+    }(),
+    //メッセージの作成
+    addMessage: function () {
+      var _addMessage = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
                 console.log("", this.messageForm);
-                _context.next = 3;
+                _context2.next = 3;
                 return axios.post("/api/messages", this.messageForm);
 
               case 3:
-                response = _context.sent;
+                response = _context2.sent;
                 console.log("記事を一覧受信", response); // this.tab.length
 
                 if (response.status === 201) {
@@ -4253,10 +4488,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
 
       function addMessage() {
@@ -4268,17 +4503,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getMessage: function () {
       var _getMessage = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.next = 2;
+                _context3.next = 2;
                 return axios.get("/api/messages");
 
               case 2:
-                response = _context2.sent;
+                response = _context3.sent;
                 console.log("記事を一覧受信", response);
 
                 if (response.status === 200) {
@@ -4287,10 +4522,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function getMessage() {
@@ -4298,28 +4533,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return getMessage;
-    }(),
-    getPost: function () {
-      var _getPost = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }));
-
-      function getPost() {
-        return _getPost.apply(this, arguments);
-      }
-
-      return getPost;
     }()
+  },
+  created: function created() {
+    this.getAdminUser();
   }
 });
 
@@ -4342,23 +4559,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -4785,6 +4985,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                   this.$store.dispatch('auth/currentUser');
                   this.$router.push('/');
+                  window.location.reload();
                 } // バリテーションエラー
 
 
@@ -4845,6 +5046,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -5230,7 +5433,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return postDelete;
     }(),
     //Comment
-    onClickComment: function onClickComment() {},
+    onClickComment: function onClickComment() {// window.location.reload();
+      // コメントまでスクロール
+      // var position =  document.getElementById('comment-top').offsetTop;
+      // console.log(position)
+      // document.getElementsByTagName('body').animate({scrollTop:position}, 500 , "swing");
+      // return false;
+    },
     // like
     onClickLike: function onClickLike() {
       if (!this.currentUser) {
@@ -6738,7 +6947,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*.list-enter-active, .list-leave-active {*/\n/*  transition: all 1.3s;*/\n/*}*/\n/*.list-enter, .list-leave-to {*/\n/*  opacity: 0;*/\n/*  transform: translateY(30px);*/\n/*}*/\n/*.list-item {*/\n/*    transition-duration: 0.7s;*/\n/*    overflow: hidden;*/\n/*}*/\n\n/*.list-item :hover  {*/\n/*    transform: scale(1.2);*/\n/*    transition-duration: 0.7s;*/\n/*    overflow: hidden;*/\n/*}*/\n@media screen and (min-width: 800px) { /*ウィンドウ幅が767px以上の場合に適用*/\n#postview {\n        width: 20%;\n}\n}\n@media screen and (max-width: 800px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/\n#postview {\n        width: 33%;\n}\n}\n@media screen and (max-width: 479px) { /*ウィンドウ幅が最大479pxまでの場合に適用*/\n#postview {\n        width: 50%;\n}\n}\n", ""]);
+exports.push([module.i, "\n@media screen and (min-width: 800px) { /*ウィンドウ幅が767px以上の場合に適用*/\n#postview {\n        width: 20%;\n}\n}\n@media screen and (max-width: 800px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/\n#postview {\n        width: 33%;\n}\n}\n@media screen and (max-width: 479px) { /*ウィンドウ幅が最大479pxまでの場合に適用*/\n#postview {\n        width: 50%;\n}\n}\n", ""]);
 
 // exports
 
@@ -6757,7 +6966,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.bg-whitesmoke{\n        background-color: whitesmoke;\n}\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.post-image{\n    max-width: 700px;\n    max-height:  700px;\n    /*width: 300px;*/\n}\n.post-edit-form{\n    height: 300px;\n    overflow: hidden;\n}\n\n\n", ""]);
+exports.push([module.i, "\n.bg-whitesmoke{\n        background-color: whitesmoke;\n}\n.fade-leave-active,.fade-enter-active{\n  -webkit-transition: opacity .5s;\n  transition: opacity .5s;\n}\n.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n.tag{\n    /*position: relative;*/\n    /*top: -65px;*/\n    z-index: 2;\n}\n.post-edit-form{\n    height: 300px;\n    overflow: hidden;\n}\n\n\n", ""]);
 
 // exports
 
@@ -9346,7 +9555,7 @@ var render = function() {
       _c("nav", { staticClass: "navbar bg-white nav-form border-bottom " }, [
         _c(
           "div",
-          { staticClass: "m-auto container  " },
+          { staticClass: " container  pl-0 pr-0" },
           [
             _c(
               "RouterLink",
@@ -9420,7 +9629,7 @@ var render = function() {
                                 : _vm._e(),
                               _vm._v(" "),
                               _vm.currentUser
-                                ? _c("small", { staticClass: "text-dark" }, [
+                                ? _c("small", { staticClass: "text-dark " }, [
                                     _vm._v(_vm._s(_vm.currentUser.name))
                                   ])
                                 : _vm._e()
@@ -9442,7 +9651,7 @@ var render = function() {
                             ? _c(
                                 "small",
                                 {
-                                  staticClass: "text-dark",
+                                  staticClass: "text-dark ",
                                   on: { click: _vm.logout }
                                 },
                                 [_vm._v("ログアウト")]
@@ -9587,7 +9796,7 @@ var render = function() {
                           ? _c(
                               "small",
                               {
-                                staticClass: "navbar-brand text-dark",
+                                staticClass: "navbar-brand text-dark ",
                                 staticStyle: { cursor: "pointer" },
                                 on: { click: _vm.logout }
                               },
@@ -9679,6 +9888,14 @@ var render = function() {
                             ])
                           ])
                         : _vm._e()
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.uploadErrors
+                  ? _c("div", [
+                      _c("p", { staticClass: "text-danger " }, [
+                        _vm._v(_vm._s(_vm.uploadErrors))
+                      ])
                     ])
                   : _vm._e(),
                 _vm._v(" "),
@@ -10087,8 +10304,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("Admin.vue")]),
-    _vm._v(" "),
     _c(
       "div",
       {},
@@ -10298,37 +10513,137 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", [_vm._v("通報一覧")]),
-    _vm._v(" "),
-    _c(
-      "div",
-      _vm._l(_vm.reports, function(report) {
-        return _c("div", { staticClass: "bg-white" }, [
-          _c("span", [_vm._v("ID:" + _vm._s(report.id))]),
+    _c("div", { staticClass: "mt-3" }, [
+      _c("h3", { staticClass: "d-inline-block" }, [_vm._v("通報一覧")]),
+      _vm._v(" "),
+      _c(
+        "table",
+        { staticClass: "table" },
+        [
+          _vm._m(0),
           _vm._v(" "),
-          _c("span", [_vm._v("件名:" + _vm._s(report.title))]),
-          _vm._v(" "),
-          _c("span", [_vm._v("内容:" + _vm._s(report.description))]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "p-0 btn btn-danger",
-              on: {
-                click: function($event) {
-                  return _vm.deletereport(report.id)
-                }
-              }
-            },
-            [_vm._v("削除")]
-          )
-        ])
-      }),
-      0
-    )
+          _vm._l(_vm.reports, function(report) {
+            return _c("tbody", { key: report.id }, [
+              _c("tr", [
+                _c("th", { attrs: { scope: "row" } }, [
+                  _vm._v(_vm._s(report.id))
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("p", { staticClass: "text-over" }, [
+                    _vm._v(_vm._s(report.title))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "p",
+                    {
+                      staticClass: "text-over p-0 m-0",
+                      nativeOn: {
+                        mouseover: function($event) {
+                          return _vm.mouseover($event)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(report.description))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  report.post
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "RouterLink",
+                            { attrs: { to: "/posts/" + report.post.token } },
+                            [
+                              _vm._v(
+                                _vm._s(report.post.token) + "...へ移動する"
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "pointer text-danger",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deletePost(report.post.id)
+                                }
+                              }
+                            },
+                            [_vm._v("delete")]
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !report.post
+                    ? _c("div", [
+                        _c("span", { staticClass: "pointer text-danger" }, [
+                          _vm._v("削除済み")
+                        ])
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteReport(report)
+                        }
+                      }
+                    },
+                    [_vm._v("削除")]
+                  )
+                ])
+              ])
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-center" }, [
+        _vm.currentPage !== _vm.lastPage
+          ? _c(
+              "button",
+              { staticClass: "btn btn-success", on: { click: _vm.getReport } },
+              [_vm._v("もっと読む")]
+            )
+          : _vm._e()
+      ])
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("件名")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("内容")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("記事のID")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("削除")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -11404,73 +11719,83 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", [_vm._v("管理者")]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-3 bg-white" }, [
-        _c(
-          "p",
-          {
-            class: { "text-primary": _vm.tab === 0 },
-            on: {
-              click: function($event) {
-                _vm.tab = 0
-              }
-            }
-          },
-          [_vm._v("メニュー")]
-        ),
-        _vm._v(" "),
-        _c(
-          "p",
-          {
-            class: { "text-primary": _vm.tab === 1 },
-            on: {
-              click: function($event) {
-                _vm.tab = 1
-              }
-            }
-          },
-          [_vm._v("データベース")]
-        ),
-        _vm._v(" "),
-        _c(
-          "p",
-          {
-            class: { "text-primary": _vm.tab === 2 },
-            on: {
-              click: function($event) {
-                _vm.tab = 2
-              }
-            }
-          },
-          [_vm._v("メッセージの作成")]
-        ),
-        _vm._v(" "),
-        _c(
-          "p",
-          {
-            class: { "text-primary": _vm.tab === 3 },
-            on: {
-              click: function($event) {
-                _vm.tab = 3
-              }
-            }
-          },
-          [_vm._v("通報")]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-9 bg-white" }, [
-        _vm.tab === 0 ? _c("div", [_c("h3", [_vm._v("メニュー")])]) : _vm._e(),
-        _vm._v(" "),
-        _vm.tab === 1 ? _c("div", [_c("DataBase")], 1) : _vm._e(),
-        _vm._v(" "),
-        _vm.tab === 2 ? _c("div", [_c("Message")], 1) : _vm._e(),
-        _vm._v(" "),
-        _vm.tab === 3 ? _c("div", [_c("Report")], 1) : _vm._e()
-      ])
-    ])
+    _vm.admin
+      ? _c("div", { staticClass: " container" }, [
+          _c("h1", { staticClass: "mt-3 mb-3" }, [_vm._v("管理者ページ")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-3 bg-white p-3" }, [
+              _c(
+                "p",
+                {
+                  staticClass: "pointer",
+                  class: { "text-primary": _vm.tab === 0 },
+                  on: {
+                    click: function($event) {
+                      _vm.tab = 0
+                    }
+                  }
+                },
+                [_vm._v("メニュー")]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass: "pointer",
+                  class: { "text-primary": _vm.tab === 1 },
+                  on: {
+                    click: function($event) {
+                      _vm.tab = 1
+                    }
+                  }
+                },
+                [_vm._v("データベース")]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass: "pointer",
+                  class: { "text-primary": _vm.tab === 2 },
+                  on: {
+                    click: function($event) {
+                      _vm.tab = 2
+                    }
+                  }
+                },
+                [_vm._v("メッセージの作成")]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass: "pointer",
+                  class: { "text-primary": _vm.tab === 3 },
+                  on: {
+                    click: function($event) {
+                      _vm.tab = 3
+                    }
+                  }
+                },
+                [_vm._v("通報")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-9 bg-white p-3" }, [
+              _vm.tab === 0
+                ? _c("div", [_c("h3", [_vm._v("メニュー")])])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.tab === 1 ? _c("div", [_c("DataBase")], 1) : _vm._e(),
+              _vm._v(" "),
+              _vm.tab === 2 ? _c("div", [_c("Message")], 1) : _vm._e(),
+              _vm._v(" "),
+              _vm.tab === 3 ? _c("div", [_c("Report")], 1) : _vm._e()
+            ])
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -11967,7 +12292,7 @@ var render = function() {
           "div",
           { staticClass: "text-center" },
           [
-            _c("div", { staticClass: "mt-5" }, [
+            _c("div", { staticClass: "mt-5 " }, [
               _vm.post.image
                 ? _c("img", {
                     staticClass: "post-image",
@@ -12017,7 +12342,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("h1", { staticClass: "p-0 mt-3" }, [
+            _c("h1", { staticClass: "p-0 mt-5" }, [
               _vm._v(_vm._s(_vm.post.title))
             ]),
             _vm._v(" "),
@@ -12054,9 +12379,15 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "mt-5" }, [
-              _c("div", { staticClass: " w-25 m-auto" }, [
-                _c("span", [_vm._v(_vm._s(_vm.post.description))])
+            _c("div", { staticClass: "mt-3 " }, [
+              _c("div", { staticClass: " w-rsp-25 m-auto" }, [
+                _c("p", { staticClass: "break-word " }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.post.description) +
+                      "\n                "
+                  )
+                ])
               ])
             ]),
             _vm._v(" "),
@@ -12159,6 +12490,7 @@ var render = function() {
                   _c(
                     "span",
                     {
+                      staticClass: "pointer",
                       on: {
                         click: function($event) {
                           _vm.reportModal = !_vm.reportModal
@@ -12191,7 +12523,7 @@ var render = function() {
               "div",
               { staticClass: "mt-5 bg-whitesmoke p-5 " },
               [
-                _c("button", { staticClass: "btn bg-success2  mt-2 mb-3" }, [
+                _c("button", { staticClass: "btn bg-success2  tag mb-5" }, [
                   _vm._v("投稿者")
                 ]),
                 _c("br"),
@@ -12203,7 +12535,7 @@ var render = function() {
                     _c(
                       "div",
                       {
-                        staticClass: "m-auto rounded-circle image-form",
+                        staticClass: "m-auto rounded-circle image-form ",
                         staticStyle: {
                           width: "120px",
                           height: "120px",
@@ -12257,25 +12589,25 @@ var render = function() {
               1
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "row mt-5 p-3" }, [
-              _c("div", { staticClass: "col-md-3" }),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-md-6" },
-                [
-                  _c("button", { staticClass: "btn bg-success2 mt-3" }, [
-                    _vm._v("コメント")
-                  ]),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("Comment", { attrs: { post: _vm.post } })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-3" })
-            ])
+            _c(
+              "div",
+              { staticClass: " mt-5 p-3", attrs: { id: "comment-top" } },
+              [
+                _c(
+                  "div",
+                  { staticClass: "w-rsp-50 m-auto" },
+                  [
+                    _c("button", { staticClass: "btn bg-success2 mt-3" }, [
+                      _vm._v("コメント")
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("Comment", { attrs: { post: _vm.post } })
+                  ],
+                  1
+                )
+              ]
+            )
           ],
           1
         )
@@ -12288,8 +12620,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "text-success2" }, [
-      _c("i", { staticClass: "far fa-eye fa-lg  m-1 " }),
-      _vm._v("0\n            ")
+      _c("i", { staticClass: "far fa-eye fa-lg  m-1 ml-2 " })
     ])
   }
 ]
@@ -13033,51 +13364,51 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "text-center" }, [
     _vm.user
-      ? _c(
-          "div",
-          { staticClass: "bg-white text-center" },
-          [
-            _c("div", { staticClass: " pt-5" }, [
-              _c(
+      ? _c("div", { staticClass: "bg-white text-center" }, [
+          _c("div", { staticClass: " pt-5" }, [
+            _c(
+              "div",
+              {
+                staticClass: "m-auto rounded-circle image-form",
+                staticStyle: {
+                  width: "150px",
+                  height: "150px",
+                  overflow: "hidden"
+                }
+              },
+              [
+                _vm.user.image
+                  ? _c("img", {
+                      staticClass: "image ",
+                      class: { "image-hover": _vm.imageHover },
+                      attrs: { src: _vm.user.url },
+                      on: {
+                        mouseover: _vm.onHoverImage,
+                        mouseout: _vm.onDownImage
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.user.image
+                  ? _c("img", {
+                      staticClass: "image ",
+                      class: { "image-hover": _vm.imageHover },
+                      attrs: { src: "/noimage.jpg" },
+                      on: {
+                        mouseover: _vm.onHoverImage,
+                        mouseout: _vm.onDownImage
+                      }
+                    })
+                  : _vm._e()
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          true
+            ? _c(
                 "div",
-                {
-                  staticClass: "m-auto rounded-circle image-form",
-                  staticStyle: {
-                    width: "150px",
-                    height: "150px",
-                    overflow: "hidden"
-                  }
-                },
+                { staticClass: "mt-3 pb-4 text-center" },
                 [
-                  _vm.user.image
-                    ? _c("img", {
-                        staticClass: "image ",
-                        class: { "image-hover": _vm.imageHover },
-                        attrs: { src: _vm.user.url },
-                        on: {
-                          mouseover: _vm.onHoverImage,
-                          mouseout: _vm.onDownImage
-                        }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !_vm.user.image
-                    ? _c("img", {
-                        staticClass: "image ",
-                        class: { "image-hover": _vm.imageHover },
-                        attrs: { src: "/noimage.jpg" },
-                        on: {
-                          mouseover: _vm.onHoverImage,
-                          mouseout: _vm.onDownImage
-                        }
-                      })
-                    : _vm._e()
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            true
-              ? _c("div", { staticClass: "mt-3 text-center" }, [
                   _vm.currentUser
                     ? _c("div", {}, [
                         _vm.user.id === _vm.currentUser.id
@@ -13126,527 +13457,645 @@ var render = function() {
                   _vm._v(" "),
                   _vm.user.message
                     ? _c("div", { staticClass: "m-auto w-25" }, [
-                        _c("span", [_vm._v(_vm._s(_vm.user.message))])
+                        _c("p", { staticClass: "break-word" }, [
+                          _vm._v(_vm._s(_vm.user.message))
+                        ])
                       ])
-                    : _vm._e()
-                ])
-              : undefined,
-            _vm._v(" "),
-            _c("transition", { attrs: { name: "slide_down" } }, [
-              _vm.Mode
-                ? _c("div", { staticClass: " user-form " }, [
-                    _c(
-                      "form",
-                      {
-                        staticClass: "m-auto border-top",
-                        attrs: { id: "edit-form" },
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.editUser($event)
-                          }
-                        }
-                      },
-                      [
-                        _vm.errors
-                          ? _c("div", [
-                              _c("p", { staticClass: "text-danger" }, [
-                                _vm._v("入力に誤りがあります")
-                              ])
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "mt-3" }, [
-                          _c("b", [_vm._v("名前")]),
-                          _c("br"),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.user.name,
-                                expression: "user.name"
-                              }
-                            ],
-                            staticClass: "border bg-light ",
-                            class: { "border-danger": _vm.errors },
-                            attrs: { type: "text" },
-                            domProps: { value: _vm.user.name },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(_vm.user, "name", $event.target.value)
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass: "mt-3",
-                            class: { "text-danger": _vm.errors }
-                          },
-                          [
-                            _c("b", { staticClass: "text-dark" }, [
-                              _vm._v("性別")
-                            ]),
-                            _c("br"),
-                            _vm._v("\n                        男"),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.sex,
-                                  expression: "user.sex"
-                                }
-                              ],
-                              attrs: { type: "radio", name: "sex", value: "1" },
-                              domProps: { checked: _vm._q(_vm.user.sex, "1") },
-                              on: {
-                                change: function($event) {
-                                  return _vm.$set(_vm.user, "sex", "1")
-                                }
-                              }
-                            }),
-                            _vm._v("\n                        女"),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.sex,
-                                  expression: "user.sex"
-                                }
-                              ],
-                              attrs: { type: "radio", name: "sex", value: "2" },
-                              domProps: { checked: _vm._q(_vm.user.sex, "2") },
-                              on: {
-                                change: function($event) {
-                                  return _vm.$set(_vm.user, "sex", "2")
-                                }
-                              }
-                            })
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "mt-3" }, [
-                          _c("b", [_vm._v("住所")]),
-                          _c("br"),
-                          _vm._v(" "),
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("transition", { attrs: { name: "slide_down" } }, [
+                    _vm.Mode
+                      ? _c("div", { staticClass: " user-form " }, [
                           _c(
-                            "select",
+                            "form",
                             {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.address,
-                                  expression: "user.address"
-                                }
-                              ],
-                              staticClass: "border bg-light p-1",
-                              class: { "border-danger": _vm.errors },
-                              attrs: { name: "pref" },
+                              staticClass: "m-auto border-top",
+                              attrs: { id: "edit-form" },
                               on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.user,
-                                    "address",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.editUser($event)
                                 }
                               }
                             },
                             [
-                              _c("option", { attrs: { value: "" } }, [
-                                _vm._v("選択してください")
-                              ]),
+                              _vm.errors
+                                ? _c("div", [
+                                    _c("p", { staticClass: "text-danger" }, [
+                                      _vm._v("入力に誤りがあります")
+                                    ])
+                                  ])
+                                : _vm._e(),
                               _vm._v(" "),
-                              _c("option", { attrs: { value: "北海道" } }, [
-                                _vm._v("北海道")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "青森県" } }, [
-                                _vm._v("青森県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "岩手県" } }, [
-                                _vm._v("岩手県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "宮城県" } }, [
-                                _vm._v("宮城県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "秋田県" } }, [
-                                _vm._v("秋田県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "山形県" } }, [
-                                _vm._v("山形県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "福島県" } }, [
-                                _vm._v("福島県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "茨城県" } }, [
-                                _vm._v("茨城県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "栃木県" } }, [
-                                _vm._v("栃木県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "群馬県" } }, [
-                                _vm._v("群馬県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "埼玉県" } }, [
-                                _vm._v("埼玉県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "千葉県" } }, [
-                                _vm._v("千葉県")
+                              _c("div", { staticClass: "mt-3" }, [
+                                _c("b", [_vm._v("名前")]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.user.name,
+                                      expression: "user.name"
+                                    }
+                                  ],
+                                  staticClass: "border bg-light ",
+                                  class: { "border-danger": _vm.errors },
+                                  attrs: { type: "text" },
+                                  domProps: { value: _vm.user.name },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.user,
+                                        "name",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
                               ]),
                               _vm._v(" "),
                               _c(
-                                "option",
-                                { attrs: { value: "東京都", selected: "" } },
-                                [_vm._v("東京都")]
+                                "div",
+                                {
+                                  staticClass: "mt-3",
+                                  class: { "text-danger": _vm.errors }
+                                },
+                                [
+                                  _c("b", { staticClass: "text-dark" }, [
+                                    _vm._v("性別")
+                                  ]),
+                                  _c("br"),
+                                  _vm._v("\n                        男"),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.user.sex,
+                                        expression: "user.sex"
+                                      }
+                                    ],
+                                    attrs: {
+                                      type: "radio",
+                                      name: "sex",
+                                      value: "1"
+                                    },
+                                    domProps: {
+                                      checked: _vm._q(_vm.user.sex, "1")
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.$set(_vm.user, "sex", "1")
+                                      }
+                                    }
+                                  }),
+                                  _vm._v("\n                        女"),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.user.sex,
+                                        expression: "user.sex"
+                                      }
+                                    ],
+                                    attrs: {
+                                      type: "radio",
+                                      name: "sex",
+                                      value: "2"
+                                    },
+                                    domProps: {
+                                      checked: _vm._q(_vm.user.sex, "2")
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.$set(_vm.user, "sex", "2")
+                                      }
+                                    }
+                                  })
+                                ]
                               ),
                               _vm._v(" "),
-                              _c("option", { attrs: { value: "神奈川県" } }, [
-                                _vm._v("神奈川県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "新潟県" } }, [
-                                _vm._v("新潟県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "富山県" } }, [
-                                _vm._v("富山県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "石川県" } }, [
-                                _vm._v("石川県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "福井県" } }, [
-                                _vm._v("福井県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "山梨県" } }, [
-                                _vm._v("山梨県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "長野県" } }, [
-                                _vm._v("長野県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "岐阜県" } }, [
-                                _vm._v("岐阜県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "静岡県" } }, [
-                                _vm._v("静岡県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "愛知県" } }, [
-                                _vm._v("愛知県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "三重県" } }, [
-                                _vm._v("三重県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "滋賀県" } }, [
-                                _vm._v("滋賀県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "京都府" } }, [
-                                _vm._v("京都府")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "大阪府" } }, [
-                                _vm._v("大阪府")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "兵庫県" } }, [
-                                _vm._v("兵庫県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "奈良県" } }, [
-                                _vm._v("奈良県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "和歌山県" } }, [
-                                _vm._v("和歌山県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "鳥取県" } }, [
-                                _vm._v("鳥取県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "島根県" } }, [
-                                _vm._v("島根県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "岡山県" } }, [
-                                _vm._v("岡山県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "広島県" } }, [
-                                _vm._v("広島県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "山口県" } }, [
-                                _vm._v("山口県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "徳島県" } }, [
-                                _vm._v("徳島県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "香川県" } }, [
-                                _vm._v("香川県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "愛媛県" } }, [
-                                _vm._v("愛媛県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "高知県" } }, [
-                                _vm._v("高知県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "福岡県" } }, [
-                                _vm._v("福岡県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "佐賀県" } }, [
-                                _vm._v("佐賀県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "長崎県" } }, [
-                                _vm._v("長崎県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "熊本県" } }, [
-                                _vm._v("熊本県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "大分県" } }, [
-                                _vm._v("大分県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "宮崎県" } }, [
-                                _vm._v("宮崎県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "鹿児島県" } }, [
-                                _vm._v("鹿児島県")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "沖縄県" } }, [
-                                _vm._v("沖縄県")
-                              ])
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "mt-3" },
-                          [
-                            _c(
-                              "RouterLink",
-                              { attrs: { to: "/users/" + _vm.id + "/edit" } },
-                              [_vm._v("詳細設定")]
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "mt-3" }, [
-                          _c("input", {
-                            staticClass: "btn btn-primary",
-                            attrs: { type: "submit", value: "Submit" }
-                          })
-                        ])
-                      ]
-                    )
-                  ])
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "mt-5 " },
-              [
-                _c("div", { staticClass: "m-auto w-75 row" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "w-30 tab-color",
-                      class: { "tab-color-select": _vm.tab === 0 },
-                      on: {
-                        click: function($event) {
-                          return _vm.onChangeTab(0)
-                        }
-                      }
-                    },
-                    [
-                      _c("h5", { staticClass: "text-center p-2" }, [
-                        _vm._v("自分の写真")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "w-30 tab-color",
-                      class: { "tab-color-select": _vm.tab === 1 },
-                      on: {
-                        click: function($event) {
-                          return _vm.onChangeTab(1)
-                        }
-                      }
-                    },
-                    [
-                      _c("h5", { staticClass: "text-center p-2" }, [
-                        _vm._v("いいねした写真")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "w-30  tab-color",
-                      class: { "tab-color-select ": _vm.tab === 2 },
-                      on: {
-                        click: function($event) {
-                          return _vm.onChangeTab(2)
-                        }
-                      }
-                    },
-                    [
-                      _c("h5", { staticClass: "text-center p-2" }, [
-                        _vm._v("みんなの写真")
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _vm.posts.length > 0
-                  ? _c(
-                      "div",
-                      { staticClass: "text-left bg-light" },
-                      [
-                        _c(
-                          "transition-group",
-                          { attrs: { name: "list", tag: "div" } },
-                          _vm._l(_vm.posts, function(post) {
-                            return _c(
-                              "div",
-                              {
-                                key: post.id,
-                                staticClass: "d-inline-block p-1",
-                                staticStyle: { overflow: "hidden" },
-                                attrs: { id: "postview" }
-                              },
-                              [
+                              _c("div", { staticClass: "mt-3" }, [
+                                _c("b", [_vm._v("住所")]),
+                                _c("br"),
+                                _vm._v(" "),
                                 _c(
-                                  "RouterLink",
+                                  "select",
                                   {
-                                    attrs: { to: "/posts/" + post.token },
-                                    nativeOn: {
-                                      mouseover: function($event) {
-                                        return _vm.mouseover($event)
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.user.address,
+                                        expression: "user.address"
+                                      }
+                                    ],
+                                    staticClass: "border bg-light p-1",
+                                    class: { "border-danger": _vm.errors },
+                                    attrs: { name: "pref" },
+                                    on: {
+                                      change: function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          _vm.user,
+                                          "address",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
                                       }
                                     }
                                   },
                                   [
+                                    _c("option", { attrs: { value: "" } }, [
+                                      _vm._v("選択してください")
+                                    ]),
+                                    _vm._v(" "),
                                     _c(
-                                      "div",
-                                      { staticClass: "post-image-form" },
-                                      [
-                                        post.image
-                                          ? _c("img", {
-                                              staticClass: "image",
-                                              staticStyle: { width: "100%" },
-                                              attrs: {
-                                                src: post.url + "thum.jpg",
-                                                alt: "画像がありません"
-                                              }
-                                            })
-                                          : _c("img", {
-                                              staticClass: "image",
-                                              staticStyle: { width: "100%" },
-                                              attrs: { src: "/image.jpg" }
-                                            })
-                                      ]
+                                      "option",
+                                      { attrs: { value: "北海道" } },
+                                      [_vm._v("北海道")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "青森県" } },
+                                      [_vm._v("青森県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "岩手県" } },
+                                      [_vm._v("岩手県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "宮城県" } },
+                                      [_vm._v("宮城県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "秋田県" } },
+                                      [_vm._v("秋田県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "山形県" } },
+                                      [_vm._v("山形県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "福島県" } },
+                                      [_vm._v("福島県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "茨城県" } },
+                                      [_vm._v("茨城県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "栃木県" } },
+                                      [_vm._v("栃木県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "群馬県" } },
+                                      [_vm._v("群馬県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "埼玉県" } },
+                                      [_vm._v("埼玉県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "千葉県" } },
+                                      [_vm._v("千葉県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      {
+                                        attrs: { value: "東京都", selected: "" }
+                                      },
+                                      [_vm._v("東京都")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "神奈川県" } },
+                                      [_vm._v("神奈川県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "新潟県" } },
+                                      [_vm._v("新潟県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "富山県" } },
+                                      [_vm._v("富山県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "石川県" } },
+                                      [_vm._v("石川県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "福井県" } },
+                                      [_vm._v("福井県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "山梨県" } },
+                                      [_vm._v("山梨県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "長野県" } },
+                                      [_vm._v("長野県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "岐阜県" } },
+                                      [_vm._v("岐阜県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "静岡県" } },
+                                      [_vm._v("静岡県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "愛知県" } },
+                                      [_vm._v("愛知県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "三重県" } },
+                                      [_vm._v("三重県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "滋賀県" } },
+                                      [_vm._v("滋賀県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "京都府" } },
+                                      [_vm._v("京都府")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "大阪府" } },
+                                      [_vm._v("大阪府")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "兵庫県" } },
+                                      [_vm._v("兵庫県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "奈良県" } },
+                                      [_vm._v("奈良県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "和歌山県" } },
+                                      [_vm._v("和歌山県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "鳥取県" } },
+                                      [_vm._v("鳥取県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "島根県" } },
+                                      [_vm._v("島根県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "岡山県" } },
+                                      [_vm._v("岡山県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "広島県" } },
+                                      [_vm._v("広島県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "山口県" } },
+                                      [_vm._v("山口県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "徳島県" } },
+                                      [_vm._v("徳島県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "香川県" } },
+                                      [_vm._v("香川県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "愛媛県" } },
+                                      [_vm._v("愛媛県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "高知県" } },
+                                      [_vm._v("高知県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "福岡県" } },
+                                      [_vm._v("福岡県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "佐賀県" } },
+                                      [_vm._v("佐賀県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "長崎県" } },
+                                      [_vm._v("長崎県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "熊本県" } },
+                                      [_vm._v("熊本県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "大分県" } },
+                                      [_vm._v("大分県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "宮崎県" } },
+                                      [_vm._v("宮崎県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "鹿児島県" } },
+                                      [_vm._v("鹿児島県")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "沖縄県" } },
+                                      [_vm._v("沖縄県")]
                                     )
                                   ]
                                 )
-                              ],
-                              1
-                            )
-                          }),
-                          0
-                        )
-                      ],
-                      1
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.posts.length === 0
-                  ? _c("div", { staticClass: "mt-5" }, [_vm._m(0)])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("transition", { attrs: { name: "fade" } }, [
-                  this.currentPage < this.lastPage
-                    ? _c(
-                        "div",
-                        {
-                          staticClass: "mt-3 border-top text-center ",
-                          staticStyle: { height: "500px" },
-                          attrs: { id: "imageButtom" }
-                        },
-                        [
-                          _vm.loading
-                            ? _c("span", { staticClass: "text-info" }, [
-                                _vm._v("読み込み中")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "mt-3" },
+                                [
+                                  _c(
+                                    "RouterLink",
+                                    {
+                                      attrs: {
+                                        to: "/users/" + _vm.id + "/edit"
+                                      }
+                                    },
+                                    [_vm._v("詳細設定")]
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-3" }, [
+                                _c("input", {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "submit", value: "Submit" }
+                                })
                               ])
-                            : _vm._e()
-                        ]
+                            ]
+                          )
+                        ])
+                      : _vm._e()
+                  ])
+                ],
+                1
+              )
+            : undefined,
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "mt-3" },
+            [
+              _c("div", { staticClass: "m-auto w-75 row" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "w-30 tab-color",
+                    class: { "tab-color-select": _vm.tab === 0 },
+                    on: {
+                      click: function($event) {
+                        return _vm.onChangeTab(0)
+                      }
+                    }
+                  },
+                  [
+                    _c("h5", { staticClass: "text-center p-2 mt-1" }, [
+                      _vm._v("自分の写真")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "w-30 tab-color",
+                    class: { "tab-color-select": _vm.tab === 1 },
+                    on: {
+                      click: function($event) {
+                        return _vm.onChangeTab(1)
+                      }
+                    }
+                  },
+                  [
+                    _c("h5", { staticClass: "text-center p-2  mt-1" }, [
+                      _vm._v("いいねした写真")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "w-30  tab-color",
+                    class: { "tab-color-select ": _vm.tab === 2 },
+                    on: {
+                      click: function($event) {
+                        return _vm.onChangeTab(2)
+                      }
+                    }
+                  },
+                  [
+                    _c("h5", { staticClass: "text-center p-2 mt-1" }, [
+                      _vm._v("みんなの写真")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm.posts.length > 0
+                ? _c(
+                    "div",
+                    { staticClass: "text-left bg-light" },
+                    [
+                      _c(
+                        "transition-group",
+                        { attrs: { name: "list", tag: "div" } },
+                        _vm._l(_vm.posts, function(post) {
+                          return _c(
+                            "div",
+                            {
+                              key: post.id,
+                              staticClass: "d-inline-block p-1",
+                              staticStyle: { overflow: "hidden" },
+                              attrs: { id: "postview" }
+                            },
+                            [
+                              _c(
+                                "RouterLink",
+                                {
+                                  attrs: { to: "/posts/" + post.token },
+                                  nativeOn: {
+                                    mouseover: function($event) {
+                                      return _vm.mouseover($event)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    { staticClass: "post-image-form" },
+                                    [
+                                      post.image
+                                        ? _c("img", {
+                                            staticClass: "image",
+                                            staticStyle: { width: "100%" },
+                                            attrs: {
+                                              src: post.url + "thum.jpg",
+                                              alt: "画像がありません"
+                                            }
+                                          })
+                                        : _c("img", {
+                                            staticClass: "image",
+                                            staticStyle: { width: "100%" },
+                                            attrs: { src: "/image.jpg" }
+                                          })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        }),
+                        0
                       )
-                    : _vm._e()
-                ])
-              ],
-              1
-            )
-          ],
-          1
-        )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.posts.length === 0
+                ? _c("div", { staticClass: "mt-5" }, [_vm._m(0)])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("transition", { attrs: { name: "fade" } }, [
+                this.currentPage < this.lastPage
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "mt-3 border-top text-center ",
+                        staticStyle: { height: "500px" },
+                        attrs: { id: "imageButtom" }
+                      },
+                      [
+                        _vm.loading
+                          ? _c("span", { staticClass: "text-info" }, [
+                              _vm._v("読み込み中")
+                            ])
+                          : _vm._e()
+                      ]
+                    )
+                  : _vm._e()
+              ])
+            ],
+            1
+          )
+        ])
       : _vm._e()
   ])
 }
@@ -29901,13 +30350,10 @@ function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log = function () {}; //ログの非表示
-
-
-            _context.next = 3;
+            _context.next = 2;
             return _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch('auth/currentUser');
 
-          case 3:
+          case 2:
             new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
               el: '#app',
               router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -29918,7 +30364,7 @@ function () {
               template: '<App />'
             });
 
-          case 4:
+          case 3:
           case "end":
             return _context.stop();
         }

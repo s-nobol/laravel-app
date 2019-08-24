@@ -180,6 +180,7 @@ export default {
                 // この後ログインする
                 this.$store.dispatch('auth/currentUser')
                 this.$router.push('/')
+                window.location.reload();
             }
             
             // バリテーションエラー

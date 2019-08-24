@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\MessagesRequest;
 use App\Message;
+use App\Post;
+use App\Report;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 // use Illuminate\Support\Facades\Storage;
@@ -13,13 +15,17 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 class DatabaseController extends Controller
 {
+    
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin');
-        // $this->authorizeResource(Comment::class, 'comment');   
+        $this->middleware('admin'); 
     }
 
+    //管理者か確認
+    public function get_admin_user(){
+        return true;
+    }
     
     // データベースを取得するコントローラー
     public function getColumn(string $id){
@@ -41,17 +47,17 @@ class DatabaseController extends Controller
         Message::create($request->all());
         return $request;
     }
+    
     //メッセージの取得
     public function getmessages(){
         return Message::all();
     }
+    
     //メッセージの削除
     public function deletemessages(Message $message){
         $message->delete();
         return "削除しました";
     }
-    
-    
     public function send_image_s3(Request $request){
         
         // 投稿写真の拡張子を取得する
@@ -69,9 +75,24 @@ class DatabaseController extends Controller
 
     }
     
-    // メール送信テスト
-    public function send_email(){
-        Mail::to('ka1301@outlook.jp')->send(new TestMail());
-        return "メールの送信完了";
+    
+    // 通報一覧取得
+    public function get_report(){
+        
+        $report = Report::orderBy('id', 'desc')->with(['post'])->paginate();
+        
+        return $report;
     }
+    
+    // 記事の削除
+    public function delete_post(string $id){
+        
+        $post = Post::where('id', $id)->first();
+        if($post){
+            $post->delete();
+            return "記事を削除しました";
+        }
+        return "削除できませんでした　IDを再度確認してください。";
+    }
+    
 }

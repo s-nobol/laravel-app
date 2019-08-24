@@ -107,3 +107,68 @@
         width: 100%; /* 幅 */
     }
 }
+
+
+// 記事の写真
+.post-image{
+    max-width: 700px;
+    max-height:  700px;
+    padding: 10px;
+}
+@media screen and (max-width: 479px) { 
+    
+    .post-image {
+        width: 100%;
+    }
+}
+
+// 記事のステータス
+.w-rsp-25{
+    width: 25%;
+}
+@media screen and (max-width: 800px) { 
+    .w-rsp-25{
+        width: 50%;
+    }
+}
+@media screen and (max-width: 479px) { 
+    
+    .w-rsp-25{
+        width: 100%;
+    }
+}
+
+
+// 記事のタイトル
+h1{
+    font-size: 35px;
+}
+@media screen and (max-width: 800px) { 
+        
+    h1{
+        font-size: 35px;
+    }
+}
+@media screen and (max-width: 479px) { 
+    
+    h1{
+        font-size: 25px;
+    }
+}
+
+
+// コメントフォーム
+
+.w-rsp-50{
+    width: 50%;
+}
+@media screen and (max-width: 800px) { 
+    .w-rsp-50{
+        width: 80%;
+    }
+}
+@media screen and (max-width: 479px) { 
+    .w-rsp-50{
+        width: 100%;
+    }
+}

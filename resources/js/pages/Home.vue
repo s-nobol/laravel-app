@@ -39,23 +39,6 @@
 
 
 <style type="text/css">
-/*.list-enter-active, .list-leave-active {*/
-/*  transition: all 1.3s;*/
-/*}*/
-/*.list-enter, .list-leave-to {*/
-/*  opacity: 0;*/
-/*  transform: translateY(30px);*/
-/*}*/
-/*.list-item {*/
-/*    transition-duration: 0.7s;*/
-/*    overflow: hidden;*/
-/*}*/
-
-/*.list-item :hover  {*/
-/*    transform: scale(1.2);*/
-/*    transition-duration: 0.7s;*/
-/*    overflow: hidden;*/
-/*}*/
 
 @media screen and (min-width: 800px) { /*ウィンドウ幅が767px以上の場合に適用*/
     #postview {

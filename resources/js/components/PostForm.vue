@@ -14,6 +14,10 @@
                 </div>
             </div>
             
+            <div v-if="uploadErrors">
+                <p class="text-danger ">{{ uploadErrors }}</p>
+            </div>
+            
             <div v-if="! preview " class="dashed text-center bg-light"  style="height: 250px; width: 380px; "
                 @click="imageForm"
                 @dragleave.prevent @dragover.prevent @drop.prevent="onDrop">
@@ -39,10 +43,9 @@
                 <div v-if="errors">
                         <!--タブ・カテゴリーなど-->
                         <div class="mt-2"> 
-                                <span v-if="errors.category"  class="text-danger">カテゴリーを選択してください</span>
-                            
-                                <label v-if="! errors.category" label for="">カテゴリー</label>
-                            
+                            <span v-if="errors.category"  class="text-danger">カテゴリーを選択してください</span>
+                        
+                            <label v-if="! errors.category" label for="">カテゴリー</label>
                             
                             <select name="" v-model="category">
                             <option v-for="item in categorys" :value="item.id">{{ item.name }}</option>
@@ -160,6 +163,7 @@ export default {
             title: '',
             description: '',
             errors: null,
+            uploadErrors: null,
             
             loading: false,
             acd: false
@@ -208,32 +212,46 @@ export default {
                 this.reset()
                 return false
             }
+            
             // バリテーションエラー
             if (response.status === 422) {
                 this.errors = response.data.errors
                 
                 if(this.errors.image){
+                    this.loading = false
                     this.reset()
                 }
             }
             
             this.loading = false
-            
         },
         
-        onPostUpload(){
-            // console.log("起動")
-        },
-        // 画面アップロード
         imageForm(){
             // 画像フォームがクリックされればinput起動
             document.getElementById('input-file').click();
         },
+        
+        // 画面アップロード
         onFileChange (event) {
-            if(event.target.files.length === 0 && ! event.target.files[0].type.match('image.*')) {
+            
+            // エラーをリセット
+            this.errors = null
+            this.uploadErrors = null
+            
+            // 画像ファイルか確認
+            if(event.target.files.length === 0 ){
+                this.reset()
+                this.uploadErrors ="ファイルがありません"
+                return false
+            }
+            if(! event.target.files[0].type.match('image.*')) {
+                console.log("画像ファイルではありません")
+                this.uploadErrors ="画像ファイルではありません"
                 this.reset()
                 return false
             }
+            
+            
             
             const reader = new FileReader()
             reader.onload = e => {
@@ -247,32 +265,41 @@ export default {
         // ドラックアンドドロップ
         onDrop: function(event){
 
-                if(event.dataTransfer.files.length > 1 ){
-                    console.log("ファイルは一つまでです")
-                    return false
-                }
-                
-                if( ! event.dataTransfer.files[0].type.match('image.*')) {
-                    console.log("画像ファイルではありません")
-                    this.reset()
-                    return false
-                }
+            // エラーをリセット
+            if(this.errors){
+                this.errors = null
+            }
+            if(event.dataTransfer.files.length > 1 ){
+                console.log("ファイルは一つまでです")
+                this.uploadErrors = "ファイルは一つまでです"
+                return false
+            }
+            
+            if( ! event.dataTransfer.files[0].type.match('image.*')) {
+                console.log("画像ファイルではありません")
+                this.uploadErrors = "画像ファイルではありません"
+                this.reset()
+                return false
+            }
+            
                     
-                const reader = new FileReader()
-                reader.onload = e => {
-                    this.preview = e.target.result
-                }
-                
-                reader.readAsDataURL(event.dataTransfer.files[0])
-                this.image = event.dataTransfer.files[0]
-                
-                this.getCategory() //カテゴリーの取得
+            const reader = new FileReader()
+            reader.onload = e => {
+                this.preview = e.target.result
+            }
+            
+            reader.readAsDataURL(event.dataTransfer.files[0])
+            this.image = event.dataTransfer.files[0]
+            
+            this.getCategory() //カテゴリーの取得
         },
         reset () {
             this.preview = ''
             this.image = null
             this.$el.querySelector('input[type="file"]').value = null
-        }
+        },
+        
+        onPostUpload(){},
     
     },
     created(){

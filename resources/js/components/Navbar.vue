@@ -2,7 +2,7 @@
 <div class="" >
     <nav class="navbar bg-white nav-form border-bottom " >
     
-        <div class="m-auto container  ">
+        <div class=" container  pl-0 pr-0">
                 <RouterLink class="navbar-brand text-dark " to="/">
                     <b>Laravel-app</b>
                 </RouterLink>
@@ -32,12 +32,12 @@
                             
                             
                             
-                                <small v-if="currentUser" class="text-dark" >{{ currentUser.name }}</small>
+                                <small v-if="currentUser" class="text-dark " >{{ currentUser.name }}</small>
                             </RouterLink>
                         </li>
                         
                         <li class="navbar-brand " id="navbar-user" style="cursor: hand; cursor:pointer;">
-                            <small v-if="currentUser" @click="logout"  class="text-dark" >ログアウト</small>
+                            <small v-if="currentUser" @click="logout"  class="text-dark " >ログアウト</small>
                         </li>
                         <li class="nav-item " id="navbar-menu">
                             <!--<a href="#" class="">-->
@@ -95,7 +95,7 @@
                     </RouterLink>
                 </div>
                 <div class="p-2">     
-                        <small v-if="currentUser" @click="logout" class="navbar-brand text-dark" 
+                        <small v-if="currentUser" @click="logout" class="navbar-brand text-dark " 
                         style="cursor: hand; cursor:pointer;">ログアウト</small>
                 </div>
             </div>

@@ -11255,6 +11255,66 @@ a.text-dark:focus {
   }
 }
 
+.post-image {
+  max-width: 700px;
+  max-height: 700px;
+  padding: 10px;
+}
+
+@media screen and (max-width: 479px) {
+  .post-image {
+    width: 100%;
+  }
+}
+
+.w-rsp-25 {
+  width: 25%;
+}
+
+@media screen and (max-width: 800px) {
+  .w-rsp-25 {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .w-rsp-25 {
+    width: 100%;
+  }
+}
+
+h1 {
+  font-size: 35px;
+}
+
+@media screen and (max-width: 800px) {
+  h1 {
+    font-size: 35px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  h1 {
+    font-size: 25px;
+  }
+}
+
+.w-rsp-50 {
+  width: 50%;
+}
+
+@media screen and (max-width: 800px) {
+  .w-rsp-50 {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .w-rsp-50 {
+    width: 100%;
+  }
+}
+
 .bg-whitesmoke {
   background-color: whitesmoke;
 }
@@ -11381,16 +11441,54 @@ a.text-dark:focus {
 
 .tab-color {
   color: white;
+  background-color: #5bd1d7;
+  border: solid 1px white;
+  border-radius: 25px 25px 0px 0px/25px 25px 0px 0px;
+  cursor: pointer;
   -webkit-transition-duration: 0.7s;
           transition-duration: 0.7s;
-  /*background-color: #3871A1;*/
-  background-color: #5bd1d7;
 }
 
 .tab-color-select {
   color: #3871A1;
+  background-color: whitesmoke;
+  border: solid 1px white;
+  border-radius: 25px 25px 0px 0px/25px 25px 0px 0px;
   -webkit-transition-duration: 0.7s;
           transition-duration: 0.7s;
-  background-color: white;
+}
+
+.tab-color h5 {
+  font-family: "Yu Gothic";
+}
+
+.text-yu {
+  font-family: "Yu Gothic";
+}
+
+/*改行を許可*/
+
+.break-word {
+  white-space: pre-line;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.text-over {
+  width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-over:hover {
+  width: 130px;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  overflow: visible;
+  text-overflow: initial;
+  white-space: pre-line;
 }
 

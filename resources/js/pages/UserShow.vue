@@ -1,65 +1,64 @@
 <template>
 <div class="text-center">
 
-        <div v-if="user" class="bg-white text-center">
+    <div v-if="user" class="bg-white text-center">
+    
         
+        <!--プロフィール画像-->
+        <div class=" pt-5">
+            <div class="m-auto rounded-circle image-form" 
+                style="width: 150px; height: 150px; overflow: hidden;" >
+                
+                <!--画像あり-->
+                <img v-if="user.image"
+                    :src="user.url"  
+                    class="image "  
+                    :class="{'image-hover' : imageHover }"
+                    @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
+                
+                <!--画像なし-->
+                <img v-if="! user.image"
+                    src="/noimage.jpg"  
+                    class="image "  
+                    :class="{'image-hover' : imageHover }"
+                    @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
+            </div>
+        </div>
+        
+        
+        
+        <!--ユーザーのステータス-->
+        <div　v-if="true"  class="mt-3 pb-4 text-center">
             
-            <!--プロフィール画像-->
-            <div class=" pt-5">
-                <div class="m-auto rounded-circle image-form" 
-                    style="width: 150px; height: 150px; overflow: hidden;" >
-                    
-                    <!--画像あり-->
-                    <img v-if="user.image"
-                        :src="user.url"  
-                        class="image "  
-                        :class="{'image-hover' : imageHover }"
-                        @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
-                    
-                    <!--画像なし-->
-                    <img v-if="! user.image"
-                        src="/noimage.jpg"  
-                        class="image "  
-                        :class="{'image-hover' : imageHover }"
-                        @mouseover="onHoverImage"  @mouseout="onDownImage"></img>
+            <div v-if="currentUser" class="">
+                <div v-if="user.id === currentUser.id ">
+                    <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
                 </div>
             </div>
             
             
+            <!--ユーザーステータス-->
             
-            <!--ユーザーのステータス-->
-            <div　v-if="true"  class="mt-3 text-center">
-                
-                <div v-if="currentUser" class="">
-                    <div v-if="user.id === currentUser.id ">
-                        <button class="btn btn-success" @click="Mode = ! Mode ">編集</button>
-                    </div>
-                </div>
-                
-                
-                <!--ユーザーステータス-->
-                
-                <!--名前-->
-                <h4><b>{{ user.name }}</b></h4>
-                
-                <!--性別-->
-                <h6 v-if="user.sex">
-                    <span v-if="user.sex == 1 "><b>男性</b></span>
-                    <span v-if="user.sex == 2 "><b>女性</b></span>
-                </h6>
-                
-                <!--住所-->
-                <h6 v-if="user.address">
-                    <b><i class="fas fa-map-marker-alt fa-lg  m-1"></i>{{ user.address }}</b>
-                </h6>
-                
-                <!--一言-->
-                <div v-if="user.message" class="m-auto w-25">
-                    <span>{{ user.message }}</span>
-                </div>
+            <!--名前-->
+            <h4><b>{{ user.name }}</b></h4>
+            
+            <!--性別-->
+            <h6 v-if="user.sex">
+                <span v-if="user.sex == 1 "><b>男性</b></span>
+                <span v-if="user.sex == 2 "><b>女性</b></span>
+            </h6>
+            
+            <!--住所-->
+            <h6 v-if="user.address">
+                <b><i class="fas fa-map-marker-alt fa-lg  m-1"></i>{{ user.address }}</b>
+            </h6>
+            
+            <!--一言-->
+            <div v-if="user.message" class="m-auto w-25">
+                <p class="break-word">{{ user.message }}</p>
             </div>
             
-            
+                
             <!--編集フォーム-->
             <transition name="slide_down">
             <div v-if="Mode" class=" user-form " >
@@ -150,21 +149,22 @@
                 
             </div>
             </transition>
+        </div>
+            
+            
             
         
         
         <!--記事の一覧-->
-        <div class="mt-5 ">
+        <div class="mt-3">
             <div class="m-auto w-75 row">
-                
-                
                 
                 <!--自分の写真-->
                 <div 
                     class="w-30 tab-color" 
                     :class="{ 'tab-color-select' : tab === 0 }"
                     @click="onChangeTab(0)">
-                    <h5 class="text-center p-2" >自分の写真</h5>
+                    <h5 class="text-center p-2 mt-1" >自分の写真</h5>
                 </div>
                 
                 <!--いいねした写真-->
@@ -172,7 +172,7 @@
                     class="w-30 tab-color" 
                     :class="{ 'tab-color-select' : tab === 1 }"
                     @click="onChangeTab(1)">
-                    <h5 class="text-center p-2">いいねした写真</h5>
+                    <h5 class="text-center p-2  mt-1">いいねした写真</h5>
                 </div>
                 
                 <!--みんなの写真-->
@@ -180,7 +180,7 @@
                     class="w-30  tab-color"
                     :class="{ 'tab-color-select ' : tab === 2 }"
                     @click="onChangeTab(2)">
-                    <h5 class="text-center p-2">みんなの写真</h5>
+                    <h5 class="text-center p-2 mt-1">みんなの写真</h5>
                 </div>
             
             </div>
