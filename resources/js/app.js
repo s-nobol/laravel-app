@@ -7,7 +7,7 @@ import store from './store'
 import App from './App.vue'
 
 const createApp = async () => {
-  console.log = function(){} //ログの非表示
+  // console.log = function(){} //ログの非表示
   
   await store.dispatch('auth/currentUser')
 
