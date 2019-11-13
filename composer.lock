@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9afb80e0c094c68d4f15d243f72dccb",
+    "content-hash": "4fcc15d2bf1ec6c875e5e643c930005b",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1203,16 +1203,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.25.1",
+            "version": "1.25.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "70e65a5470a42cfec1a7da00d30edb6e617e8dcf"
+                "reference": "d5e2fb341cb44f7e2ab639d12a1e5901091ec287"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/70e65a5470a42cfec1a7da00d30edb6e617e8dcf",
-                "reference": "70e65a5470a42cfec1a7da00d30edb6e617e8dcf",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/d5e2fb341cb44f7e2ab639d12a1e5901091ec287",
+                "reference": "d5e2fb341cb44f7e2ab639d12a1e5901091ec287",
                 "shasum": ""
             },
             "require": {
@@ -1277,7 +1277,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2019-09-06T13:49:17+00:00"
+            "time": "2019-11-13T10:00:05+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -5196,7 +5196,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.1.3"
+        "php": "^7.1.3",
+        "ext-gd": "*"
     },
     "platform-dev": []
 }
