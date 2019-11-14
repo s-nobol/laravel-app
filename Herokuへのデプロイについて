@@ -1,0 +1,42 @@
+
+インストール
+source <(curl -sL https://cdn.learnenough.com/heroku_install)
+
+
+ログイン
+heroku login
+
+
+ヘロクにアプリデプロイ
+git push heroku master 
+
+
+データベース作成
+heroku config:set DB_CONNECTION=pgsql
+heroku config:set DB_HOST=ec2-xxx_xxx_xxx_xxx.compute-1.amazonaws.com
+heroku config:set DB_DATABASE=test
+heroku config:set DB_USERNAME=
+heroku config:set DB_PASSWORD=
+ 
+ 
+マイグレーション 
+heroku config:set APP_KEY=$(php artisan --no-ansi key:generate --show)
+heroku run php artisan migrate
+heroku run php artisan db:seed
+
+
+AWS s3設定
+heroku config:set AWS_ACCESS_KEY_ID=
+heroku config:set AWS_SECRET_ACCESS_KEY=
+heroku config:set AWS_BUCKET=
+heroku config:set AWS_DEFAULT_REGION=
+
+GD設定(画像処理を行うため)
+composer.json
+"require": {
+    ...
+    ...
+    "ext-gd": "*"
+    "fzaninotto/faker": "^1.4",（Fakerのデモ）
+},
+composer update
