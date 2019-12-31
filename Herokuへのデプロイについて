@@ -11,10 +11,14 @@ heroku login
 git push heroku master 
 
 
+herokuにデータベース構築
+heroku addons:create jawsdb:kitefin （初期設定Mysql5.7)
+
+
 データベース作成
 heroku config:set DB_CONNECTION=pgsql
 heroku config:set DB_HOST=ec2-xxx_xxx_xxx_xxx.compute-1.amazonaws.com
-heroku config:set DB_DATABASE=test
+heroku config:set DB_DATABASE=
 heroku config:set DB_USERNAME=
 heroku config:set DB_PASSWORD=
  
@@ -30,6 +34,12 @@ heroku config:set AWS_ACCESS_KEY_ID=
 heroku config:set AWS_SECRET_ACCESS_KEY=
 heroku config:set AWS_BUCKET=
 heroku config:set AWS_DEFAULT_REGION=
+
+
+注意
+jawsdbを使うと初期設定でMysql5.7版が入っているので便利
+また、Add-onsをクリックするとリンク先のURLでPassword、Usernameを取得できる。
+
 
 GD設定(画像処理を行うため)
 composer.json
